@@ -693,10 +693,11 @@ class ProductSaleRepository extends \Doctrine\ORM\EntityRepository
         }
         $date = new \DateTime();
         $qb = $this->createQueryBuilder('ps');
-        $qb->select('SUM((ps.price*ps.qty)/:rate) AS total_price,
+        $qb->select('SUM(((ps.price - p.priceByn)*ps.qty)/:rate) AS total_price,
                             YEAR(ps.date) AS year,
                             MONTH(ps.date) AS month,
                             DAY(ps.date) AS day')
+           ->innerJoin(ProductStock::class, 'p', 'WITH', 'ps.productId=p.id')
            ->andWhere('MONTH(ps.date) = :month')
            ->andWhere('YEAR(ps.date) = :cur_year')
            ->setParameter('cur_year', $date->format('Y'))
