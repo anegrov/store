@@ -3,7 +3,6 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Repository\RateHistoryRepository;
-use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,11 +22,11 @@ class ImportController extends Controller
      * Step1 Action
      * 
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return type
      */
     public function step1Action(Request $request)
     {
-        /* @var $em EntityManager */
+        /* @var $em \EntityManager */
         $em = $this->getDoctrine()->getManager();
         $providers = $em->getRepository('AppBundle:Provider')
                        ->findAll();
@@ -36,11 +35,11 @@ class ImportController extends Controller
             "providers" => $providers
         ]);
     }
-
-
+    
     /**
+     * Step2 Action
+     *
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function step2Action(Request $request)
     {
@@ -50,7 +49,7 @@ class ImportController extends Controller
         // check provider
         if (empty($provider)) {
             $this->addFlash('notice',
-                ['status' => 'danger', 'message' => 'Поставщик отсутствует в базе!']
+                array('status' => 'danger', 'message' => 'Поставщик отсутствует в базе!')
             );
             return $this->redirectToRoute('app_import_step1', []);
         }
@@ -63,7 +62,7 @@ class ImportController extends Controller
     
     /**
      * Step3 Action
-     *
+     * 
      * @param Request $request
      */
     public function step3Action(Request $request)
