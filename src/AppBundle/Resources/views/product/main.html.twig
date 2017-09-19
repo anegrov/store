@@ -391,6 +391,7 @@
             });
 
             jQuery(".checkbox-style input").on('change', function(){
+
                 let cookieIds = jQuery.cookie("stock-checked-ids");
                 if ( cookieIds != undefined) {
                     var curIds = cookieIds.split(',');
@@ -402,6 +403,7 @@
                 var input = $(this).closest('div').find('input');
                 var selectId = input.val();
 
+
                 let qty = input.closest("tr").find('td').eq(2).find(".input-qty").val();
                 let object = {};
                 object[selectId] = qty;
@@ -412,6 +414,7 @@
                     if ($(this).closest('div').find('input').is(':checked')) {
                         // add new id in cookie
                         if (jQuery.inArray( add, curIds )<0) {
+
                             curIds.push(JSON.stringify(object));
                         }
 
@@ -430,7 +433,8 @@
                     }
                     jQuery.cookie("stock-checked-ids", curIds, { path: '/', expires: 7 });
                 }
-                jQuery('#checked-products').html(curIds.length);
+                console.log(curIds);
+                jQuery('#checked-products').html(curIds.length-1);
 
             });
             $.removeCookie('crossout-checked-ids', { path: '/' });
