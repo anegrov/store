@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <header>
+        <nav class="top-menu">
+            <ul>
+                <li {% if app.request.attributes.get('_route') == 'app' %}class="active"{% endif %}>
+                    <a href="{{ path('app') }}">Товары</a></li>
+                <li {% if app.request.attributes.get('_route') == 'app_product_sale_index' %}class="active"{% endif %}>
+                    <a href="{{ path('app_product_sale_index') }}">Проданные</a></li>
+                <li {% if app.request.attributes.get('_route') == 'app_not_crossout_list' %}class="active"{% endif %}>
+                    <a href="{{ path('app_not_crossout_list') }}">Несписанные</a></li>
+                <li {% if app.request.attributes.get('_route') == 'app_crossout_list' %}class="active"{% endif %}>
+                    <a href="{{ path('app_crossout_list') }}">Списанные</a></li>
+                {% if rate is defined or terms.rate is defined %}
+                    <li class="float-right">
+                        <a href="#">Курс доллара: {% if rate is defined %}{{ rate }}{% else %}{{ terms.rate }}{% endif %}</a>
+                    </li>
+                {% endif %}
+                <li class="float-right {% if app.request.attributes.get('_route') == 'app_stats_index' %}active{% endif %}">
+                    <a href="{{ path('app_stats_index') }}">Статистика</a></li>
+                <li class="float-right {% if app.request.attributes.get('_route') == 'app_profit_index' %}active{% endif %}">
+                    <a href="{{ path('app_profit_index') }}">Прибыль</a></li>
+            </ul>
+        </nav>
+    </header>
+    {% block stats %}{% endblock %}
+    {% block content %}{% endblock %}
+{% endblock %}

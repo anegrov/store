@@ -1,0 +1,23 @@
+AppBundle\Entity\Profit:
+    type: entity
+    table: null
+    repositoryClass: AppBundle\Repository\ProfitRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        date:
+            type: date
+            unique: true
+        income:
+            type: decimal
+            precision: 10
+            scale: '2'
+        outcome:
+            type: decimal
+            precision: 10
+            scale: '2'
+    lifecycleCallbacks: {  }

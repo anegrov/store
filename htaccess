@@ -1,0 +1,12 @@
+#RewriteBase /web/
+RewriteEngine on
+RewriteCond %{REQUEST_URI} !web/
+RewriteRule (.*) /web/$1 [L]
+
+AuthType Basic
+AuthName "Restricted Content"
+AuthUserFile <path_to_passwd>.htpasswd
+Require valid-user
+
+php_value memory_limit 256M
+php_value max_execution_time 300

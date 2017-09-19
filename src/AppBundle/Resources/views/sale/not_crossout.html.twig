@@ -1,0 +1,289 @@
+{% extends app.request.isXmlHttpRequest ? 'ajax.html.twig' : 'table.html.twig' %}
+
+{% block stats %}
+    <div class="top-info-2 like-table">
+        <ul>
+            <li>
+                <div class="info-title">
+                    <h4>Текущий месяц</h4>
+                </div>
+                <div class="info-body">
+                    <p>{{ stats.cur_mounth_price|number_format(2, '.', '') }}руб/{{ (stats.cur_mounth_price/rate)|number_format(2, '.', '') }}$</p>
+                    <p>{{ stats.cur_mounth_qty }}шт</p>
+                </div>
+            </li>
+            <li>
+                <div class="info-title">
+                    <h4>Прошлый месяц</h4>
+                </div>
+                <div class="info-body">
+                    <p>{{ stats.prev_mounth_price|number_format(2, '.', '') }}руб/{{ (stats.prev_mounth_price/rate)|number_format(2, '.', '') }}$</p>
+                    <p>{{ stats.prev_mounth_qty }}шт</p>
+                </div>
+            </li>
+            <li>
+                <div class="info-title">
+                    <h4>Текущий квартал</h4>
+                </div>
+                <div class="info-body">
+                    <p>{{ stats.cur_quarter_price|number_format(2, '.', '') }}руб/{{ (stats.cur_quarter_price/rate)|number_format(2, '.', '') }}$</p>
+                    <p>{{ stats.cur_quarter_qty }}шт</p>
+                </div>
+            </li>
+            <li>
+                <div class="info-title">
+                    <h4>Прошлый квартал</h4>
+                </div>
+                <div class="info-body">
+                    <p>{{ stats.prev_quarter_price|number_format(2, '.', '') }}руб/{{ (stats.prev_quarter_price/rate)|number_format(2, '.', '') }}$</p>
+                    <p>{{ stats.prev_quarter_qty }}шт</p>
+                </div>
+            </li>
+            <li>
+                <div class="info-title">
+                    <h4>год</h4>
+                </div>
+                <div class="info-body">
+                    <p>{{ stats.cur_year_price_byn|number_format(2, '.', '') }}руб/{{ (stats.cur_year_price_byn/rate)|number_format(2, '.', '') }}$</p>
+                    <p>{{ stats.cur_year_qty }}шт</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <div class="box {% if app.request.isXmlHttpRequest %}ajax-box{% endif %}">
+        {{ include('AppBundle:product:_filters.html.twig', {'action' : path("app_not_crossout_list"), 'terms': terms})  }}
+        {% if items|length > 0 %}
+            {% set route = app.request.attributes.get('_route') %}
+            {% if terms.priceFrom is not defined %}{% set terms = terms|merge({'priceFrom' : ""}) %}{% endif %}
+            {% if terms.sortCol is not defined %}{% set terms = terms|merge({'sortCol' : ""}) %}{% endif %}
+            <span class="text-uppercase">Выбрано</span>: <span id="checked-products">{{ ids|length }}</span> товаров
+            <section class="table-00">
+                <a name="table"></a>
+                <table id="table-search-sale">
+                    <thead>
+                        <tr>
+                            <th class="title-td txt-left td-border-right">
+                                <h3>Товары</h3>
+                            </th>
+                            <th class="td-sort">
+                                <h3>Количесвто шт</h3>
+                                <div class="sort-case">
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'total', 'sortOrder' : 'ASC'})) }}#table">
+                                        <span class="plus{% if terms.sortCol == "total" %} b-blk{% endif %}" {% if terms.sortCol == "total" and terms.sortOrder == "ASC" %}style="display:none"{% endif %}></span></a>
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'total', 'sortOrder' : 'DESC'})) }}#table">
+                                        <span class="minus{% if terms.sortCol == "total" %} b-blk{% endif %}" {% if terms.sortCol == "total" and terms.sortOrder == "DESC" %}style="display:none"{% endif %}></span></a>
+                                </div>
+                            </th>
+                            <th class="td-sort">
+                                <h3>Закупка руб.</h3>
+                                <div class="sort-case">
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'price-purchase-min-byn', 'sortOrder' : 'ASC'})) }}#table">
+                                        <span class="plus{% if terms.sortCol == "price-purchase-min-byn" %} b-blk{% endif %}" {% if terms.sortCol == "price-purchase-min-byn" and terms.sortOrder == "ASC" %}style="display:none"{% endif %}></span></a>
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'price-purchase-min-byn', 'sortOrder' : 'DESC'})) }}#table">
+                                        <span class="minus{% if terms.sortCol == "price-purchase-min-byn" %} b-blk{% endif %}" {% if terms.sortCol == "price-purchase-min-byn" and terms.sortOrder == "DESC" %}style="display:none"{% endif %}></span></a>
+                                </div>
+                            </th>
+                            <th class="td-sort">
+                                <h3>Закупка $</h3>
+                                <div class="sort-case">
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'price-purchase-min', 'sortOrder' : 'ASC'})) }}#table">
+                                        <span class="plus{% if terms.sortCol == "price-purchase-min" %} b-blk{% endif %}" {% if terms.sortCol == "price-purchase-min" and terms.sortOrder == "ASC" %}style="display:none"{% endif %}></span></a>
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'price-purchase-min', 'sortOrder' : 'DESC'})) }}#table">
+                                        <span class="minus{% if terms.sortCol == "price-purchase-min" %} b-blk{% endif %}" {% if terms.sortCol == "price-purchase-min" and terms.sortOrder == "DESC" %}style="display:none"{% endif %}></span></a>
+                                </div>
+                            </th>
+                            <th class="td-sort">
+                                <h3>Продажа руб.</h3>
+                                <div class="sort-case">
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'price-sale-min-byn', 'sortOrder' : 'ASC'})) }}#table">
+                                        <span class="plus{% if terms.sortCol == "price-sale-min-byn" %} b-blk{% endif %}" {% if terms.sortCol == "price-sale-min-byn" and terms.sortOrder == "ASC" %}style="display:none"{% endif %}></span></a>
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'price-sale-min-byn', 'sortOrder' : 'DESC'})) }}#table">
+                                        <span class="minus{% if terms.sortCol == "price-sale-min-byn" %} b-blk{% endif %}" {% if terms.sortCol == "price-sale-min-byn" and terms.sortOrder == "DESC" %}style="display:none"{% endif %}></span></a>
+                                </div>
+                            </th>
+                            <th class="td-sort">
+                                <h3>Продажа $</h3>
+                                <div class="sort-case">
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'price-sale-min', 'sortOrder' : 'ASC'})) }}#table">
+                                        <span class="plus{% if terms.sortCol == "price-sale-min" %} b-blk{% endif %}" {% if terms.sortCol == "price-sale-min" and terms.sortOrder == "ASC" %}style="display:none"{% endif %}></span></a>
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'price-sale-min', 'sortOrder' : 'DESC'})) }}#table">
+                                        <span class="minus{% if terms.sortCol == "price-sale-min" %} b-blk{% endif %}" {% if terms.sortCol == "price-sale-min" and terms.sortOrder == "DESC" %}style="display:none"{% endif %}></span></a>
+                                </div>
+                            </th>
+                            <th class="td-sort">
+                                <h3>Дата Продажи</h3>
+                                <div class="sort-case">
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'date', 'sortOrder' : 'ASC'})) }}#table">
+                                        <span class="plus{% if terms.sortCol == "date" %} b-blk{% endif %}" {% if terms.sortCol == "date" and terms.sortOrder == "ASC" %}style="display:none"{% endif %}></span></a>
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'date', 'sortOrder' : 'DESC'})) }}#table">
+                                        <span class="minus{% if terms.sortCol == "date" %} b-blk{% endif %}" {% if terms.sortCol == "date" and terms.sortOrder == "DESC" %}style="display:none"{% endif %}></span></a>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr class="bg-color">
+                            <td></td>
+                            <td>
+                                <span class="mark-lg">{{ total.qty }}</span>
+                            </td>
+                            <td>
+                                <span class="mark-lg">{{ total.purchase_price_byn|number_format(2, '.', '') }}</span>
+                            </td>
+                            <td class="txt-left">
+                                <span class="mark-lg">{{ total.purchase_price|number_format(2, '.', '') }}</span>
+                            </td>
+                            <td class="txt-left">
+                                <span class="mark-lg">{{ total.sale_price|number_format(2, '.', '') }}</span>
+                            </td>
+                            <td>
+                                <span class="mark-lg">{{ (total.sale_price/rate)|number_format(2, '.', '') }}</span>
+                            </td>
+                            <td></td>
+                        </tr>
+                        {% for item in items %}
+                            {% if item.0 is defined %}
+                                {% set productSale = item.0 %}
+                            {% else %}
+                                {% set productSale = item %}
+                            {% endif %}
+                            <tr>
+                                <td class="title-tr txt-left td-border-right plus">
+                                    <div class="checkbox-style">
+                                        <input id="checkbox-{{ productSale.id }}" name="productNotCrossout[{{ productSale.id }}]" {% if productSale.id in ids %}checked="checked"{% endif %} value="{{ productSale.id }}" type="checkbox" />
+                                        <label for="checkbox-{{ productSale.id }}">
+                                            <span class="checkbox ckeckbox-group"></span></label>
+                                    </div>
+                                    <span class="product-title">{{ productSale.product.title }}</span>
+                                    <input type="hidden" name="id[]" value="{{ productSale.id }}" />
+                                </td>
+                                <td>
+                                    <span>{{ productSale.qty }}</span>
+                                </td>
+                                <td class="txt-left">
+                                    <span class="priceByn-purchase">{{ productSale.product.priceByn|number_format(2, '.', '') }}</span>
+                                </td>
+                                <td>
+                                    <span class="price-purchase">{{ productSale.product.price|number_format(2, '.', '') }}</span>
+                                </td>
+                                <td class="txt-left">
+                                    <span class="priceByn-sale">{{ productSale.price|number_format(2, '.', '') }}</span>
+                                </td>
+                                <td>
+                                    <span class="price-sale">{{ (productSale.priceUsd)|number_format(2, '.', '') }}</span>
+                                </td>
+                                <td>
+                                    {{ productSale.date|date("d-m-Y") }}
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        {% else %}
+            <p class="color-base"><span class="text-uppercase">Нет данных</span></p>
+        {% endif %}
+
+        <div class="text-right">
+            {% if not app.request.isXmlHttpRequest %}
+                <select id="select-limit" class="select-base">
+                    <option {% if terms.limit == 10 %}selected="selected"{% endif %}>10</option>
+                    <option {% if terms.limit == 20 %}selected="selected"{% endif %}>20</option>
+                    <option {% if terms.limit == 30 %}selected="selected"{% endif %}>30</option>
+                    <option {% if terms.limit == 40 %}selected="selected"{% endif %}>40</option>
+                    <option {% if terms.limit == 50 %}selected="selected"{% endif %}>50</option>
+                </select>
+            {% endif %}
+            {{ knp_pagination_render(items) }}
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $(function(){
+
+            $('.datepicker').datepicker({
+                format: 'dd-mm-yyyy',
+            });
+
+            $("a[href='#']").on('click', function(){return false;});
+
+            $(".checkbox.ckeckbox-group").click(function(){
+                $(this).closest("tr").next().find('table tr td.title-tr .checkbox-style .checkbox').click();
+            });
+
+            $("#check-for-crossout").on('click', function(){
+                var query = '';
+                let cookieIds = jQuery.cookie("not-crossout-checked-ids");
+                if ( cookieIds != undefined) {
+                    var curIds = cookieIds.split(',');
+                }
+                else {
+                    var curIds = [];
+                }
+                for(var i=0;i<curIds.length;i++){
+                    query += 'ids[]=' + curIds[i] + '&';
+                }
+                location.href='{{ path('app_crossout') }}' + '?' + query;
+                return false;
+            });
+
+            $(document).on('click', '.export', function(){
+                let url = '{{ path('app_export_not_crossout') }}';
+                let form = $("#form-filter");
+                form.attr('action', url);
+                form.append('<input type="hidden" name="export" value="step1" />');
+                form.submit();
+            });
+
+            jQuery(function(){
+                jQuery("#filter-button").on('click', function(){
+                    jQuery('input[name=export]').remove();
+                    jQuery(this).closest('form').attr('action', '{{ path("app_not_crossout_list") }}');
+                });
+            });
+
+            jQuery(".checkbox-style input").on('change', function(){
+                let cookieIds = jQuery.cookie("not-crossout-checked-ids");
+                if ( cookieIds != undefined) {
+                    var curIds = cookieIds.split(',');
+                }
+                else {
+                    var curIds = [];
+                }
+
+                var input = $(this).closest('div').find('input');
+                var selectId = input.val();
+                // check if checkbox is not "checkAll"
+                if (selectId != 'checkbox-bunch-all' && input.attr('id').indexOf('checkbox-bunch') < 0 ) {
+                    if ($(this).closest('div').find('input').is(':checked')) {
+                        // add new id in cookie
+                        if (jQuery.inArray( selectId, curIds )<0) {
+                            curIds.push(selectId);
+                        }
+                    }
+                    else {
+                        // remove id from cookie
+                        curIds = jQuery.grep(curIds, function(value) {
+                            return value != selectId;
+                        });
+                    }
+                    jQuery.cookie("not-crossout-checked-ids", curIds, { path: '/', expires: 7 });
+                }
+                jQuery('#checked-products').html(curIds.length);
+
+            });
+            $.removeCookie('crossout-checked-ids', { path: '/' });
+            $.removeCookie('sale-checked-ids', { path: '/' });
+            $.removeCookie('stock-checked-ids', { path: '/' });
+        });
+    </script>
+{% endblock %}

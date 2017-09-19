@@ -1,0 +1,36 @@
+{% extends 'import.html.twig' %}
+
+{% block title %}Редактирование Поставщика{% endblock %}
+
+{% block content %}
+    <div class="case-form-import color-base">
+        {{ form_start(editForm) }}
+        {{ form_row(editForm._token) }}
+        {{ form_errors(editForm) }}
+
+        <table border=0 cellpadding=5 cellspacing=1 width=100% class="table-form table table-condensed">
+            <tr>
+                <td width="18%" valign="top">{{ form_label(editForm.title) }}:</td>
+                <td valign="top">{{ form_widget(editForm.title) }}</td>
+            </tr>
+            <tr bgcolor="#E0E0E0">
+                <td colspan="2" align="center">
+                    <button type="submit" class="btn-main" name="save">Сохранить</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    {#</form>#}
+                    {#{{ form_start(delete_form, { 'attr': {'style': 'display: inline-block;'} }) }}#}
+                    {#{{ form_row(delete_form._token) }}#}
+                    {#{{ form_errors(delete_form) }}#}
+                    {#<input type="submit" onclick="return confirm('Точно удалить?')" value="Удалить" name="delete">#}
+                    {#</form>#}
+                </td>
+            </tr>
+        </table>
+        </form>
+        <div class="f-case">
+            <a href="{{ path('app_provider_index') }}" class="btn-main">
+                Список
+            </a>
+        </div>
+    </div>
+{% endblock %}

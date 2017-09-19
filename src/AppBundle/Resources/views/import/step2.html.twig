@@ -1,0 +1,36 @@
+{% extends 'import.html.twig' %}
+
+{% block title %}ИМПОРТ ТОВАРА{% endblock %}
+
+{% block content %}            
+    <div class="case-form-import color-base">
+        <form action="{{ path('app_import_step3') }}" method="POST" enctype="multipart/form-data">
+            
+            <input type="hidden" name="provider_id" value="{{ provider_id }}" />
+            <input type="hidden" name="has_documents" value="{{ has_documents }}" />
+            
+            <div class="f-case">
+                <h2 class="title-simple-lg">Импорт excel файла</h2>
+            </div>
+
+            <div class="f-case btnFile">
+                <input id="btn-file" name="excel" type="file">
+                <label for="btn-file">Выбираем файл</label>
+            </div>
+
+            <div class="f-case">
+                <button type="submit" class="btn-main">Далее</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        jQuery(function(){
+            jQuery("#btn-file").change(function(){
+                jQuery(".btnFile label").html( jQuery(this).val().split(/(\\|\/)/g).pop() );
+            });
+        });
+    </script>
+{% endblock %}

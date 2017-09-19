@@ -1,0 +1,102 @@
+{% extends 'export.html.twig' %}
+
+{% block content %}
+    {% if items|length > 0 %}
+        <table id="product-stock-table">
+            <thead>
+            <tr>
+                <th width="480px">
+                    <h3 >Товары</h3>
+                </th>
+                <th >
+                    <h3>Наличие,<br/> шт</h3>
+                </th>
+                <th >
+                    <h3>Резерв,<br/> шт</h3>
+                </th>
+                <th >
+                    <h3>Диапазон цен, руб.</h3>
+                </th>
+                <th >
+                    <h3>Диапазон<br/> цен,$</h3>
+                </th>
+                <th >
+                    <h3>Цена&nbsp;последнего товара, руб.</h3>
+                </th>
+                <th >
+                    <h3>Дата&nbsp;поставки последнего</h3>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in items %}
+                {% if item.0 is defined %}
+                    {% set bunch = item.0 %}
+                    {% if item.last_date is defined %}{% set last_date = item.last_date %}{% else %}{% set last_date = bunch.lastDate %}{% endif %}
+                {% else %}
+                    {% set bunch = item %}
+                {% endif %}
+                <tr  data-category="{{ bunch.id }}">
+                    <td class="title-tr txt-left td-border-right {% if bunch.lastProduct is defined and bunch.lastProduct.dateDiff|date("%m") > 0 %}title-right-offset{% endif %}">
+                        <a href="#" >{{ bunch.title }}</a>
+                    </td>
+                    <td>
+                        <a href="#">{{ bunch.total }}</a>
+                    </td>
+                    <td>
+                        <a href="#">0</a>
+                    </td>
+                    <td >
+                        <a href="#">{% if bunch.maxPriceByn != bunch.minPriceByn %}{{ bunch.minPriceByn|number_format(2, ',', '') }}-{{ bunch.maxPriceByn|number_format(2, ',', '') }}{% else %}{{ bunch.minPriceByn|number_format(2, ',', '') }}{% endif %}</a>
+                    </td>
+                    <td>
+                        <a href="#">{% if bunch.maxPrice != bunch.minPrice %}{{ bunch.minPrice|number_format(2, ',', '') }}-{{ bunch.maxPrice|number_format(2, ',', '') }}{% else %}{{ bunch.minPrice|number_format(2, ',', '') }}{% endif %}</a>
+                    </td>
+                    <td>
+                        <a href="#">{{ bunch.lastProductPrice|number_format(2, ',', '') }}</a>
+                    </td>
+                    <td>
+                        <a href="#">{% if bunch.lastProduct is not null %}{{ bunch.lastProduct.created|date("d-m-Y") }}{% endif %}</a>
+                    </td>
+                </tr>
+                <tr data-category="{{ bunch.id }}" >
+                    <td colspan="8">
+                        <table>
+                            <tbody>
+                            {% for product in bunch.getProducts() %}
+                                <tr>
+                                    <td>
+
+                                        {{ product.title }}
+                                    </td>
+                                    <td width="88px">
+                                        <input type="text"  name="qty" value="{{ product.qty }}" />
+                                    </td>
+                                    <td width="79px">
+                                        <a href="#">0</a>
+                                    </td>
+                                    <td  width="108px">
+                                        <a href="#">{{ product.priceByn|number_format(2, ',', '') }}</a>
+                                    </td>
+                                    <td width="101px">
+                                        <a href="#">{{ product.price|number_format(2, ',', '') }}</a>
+                                    </td>
+                                    <td width="148px">
+                                        <a href="#">{{ product.priceByn|number_format(2, ',', '') }}</a>
+                                    </td>
+                                    <td width="141px">
+                                        <a href="#">{{ product.created|date("d-m-Y") }}</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p ><span >Нет данных</span></p>
+    {% endif %}
+{% endblock %}

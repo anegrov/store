@@ -1,0 +1,441 @@
+{% extends 'table.html.twig' %}
+
+{% block content %}
+
+    <div class="box">
+        {{ include('AppBundle:product:_filters.html.twig', {'action' : path("app"),'terms': terms})  }}
+        {% if items|length > 0 %}
+            {% set route = app.request.attributes.get('_route') %}
+            {% if terms.priceFrom is not defined %}{% set terms = terms|merge({'priceFrom' : ""}) %}{% endif %}
+            {% if terms.sortCol is not defined %}{% set terms = terms|merge({'sortCol' : ""}) %}{% endif %}
+            <span class="text-uppercase">Выбрано</span>: <span id="checked-products">{{ ids|length }}</span> товаров
+            <section class="table-00">
+                <a name="table"></a>
+                <table id="product-stock-table">
+                    <thead>
+                        <tr>
+                            <th class="title-td title-tr txt-left td-border-right th-point">
+                                <div class="drop-category-title drop-all-category">
+                                    <span class="title-tr"></span>
+                                </div>
+                                <div class="checkbox-style">
+                                    <input id="checkbox-bunch-all" type="checkbox">
+                                    <label for="checkbox-bunch-all"><span class="checkbox ckeckbox-all-group"></span></label>
+                                </div>
+                                <h3 class="product-item">Товары</h3>
+                                <div class="sort-case">
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'title', 'sortOrder' : 'ASC'})) }}#table">
+                                        <span class="plus{% if terms.sortCol == "title" %} b-blk{% endif %}" {% if terms.sortCol == "title" and terms.sortOrder == "ASC" %}style="display:none"{% endif %}></span></a>
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'title', 'sortOrder' : 'DESC'})) }}#table">
+                                        <span class="minus{% if terms.sortCol == "title" %} b-blk{% endif %}" {% if terms.sortCol == "title" and terms.sortOrder == "DESC" %}style="display:none"{% endif %}></span></a>
+                                </div>
+                            </th>
+                            <th class="td-border-right txt-center">
+                                <i class="ico-star-title"></i>
+                            </th>
+                            <th class="td-sort total">
+                                <h3>Наличие,<br/> шт</h3>
+                                <div class="sort-case">
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'total', 'sortOrder' : 'ASC'})) }}#table">
+                                        <span class="plus{% if terms.sortCol == "total" %} b-blk{% endif %}" {% if terms.sortCol == "total" and terms.sortOrder == "ASC" %}style="display:none"{% endif %}></span></a>
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'total', 'sortOrder' : 'DESC'})) }}#table">
+                                        <span class="minus{% if terms.sortCol == "total" %} b-blk{% endif %}" {% if terms.sortCol == "total" and terms.sortOrder == "DESC" %}style="display:none"{% endif %}></span></a>
+                                </div>
+                            </th>
+                            <th class="td-sort reserve">
+                                <h3>Резерв,<br/> шт</h3>
+                                <div class="sort-case">
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'reserve', 'sortOrder' : 'ASC'})) }}#table">
+                                        <span class="plus{% if terms.sortCol == "reserve" %} b-blk{% endif %}" {% if terms.sortCol == "reserve" and terms.sortOrder == "ASC" %}style="display:none"{% endif %}></span></a>
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'reserve', 'sortOrder' : 'DESC'})) }}#table">
+                                        <span class="minus{% if terms.sortCol == "reserve" %} b-blk{% endif %}" {% if terms.sortCol == "reserve" and terms.sortOrder == "DESC" %}style="display:none"{% endif %}></span></a>
+                                </div>
+                            </th>
+                            <th class="td-sort range-prece-byn">
+                                <h3>Диапазон цен, руб.</h3>
+                                <div class="sort-case">
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'price-min-byn', 'sortOrder' : 'ASC'})) }}#table">
+                                        <span class="plus{% if terms.sortCol == "price-min-byn" %} b-blk{% endif %}" {% if terms.sortCol == "price-min-byn" and terms.sortOrder == "ASC" %}style="display:none"{% endif %}></span></a>
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'price-min-byn', 'sortOrder' : 'DESC'})) }}#table">
+                                        <span class="minus{% if terms.sortCol == "price-min-byn" %} b-blk{% endif %}" {% if terms.sortCol == "price-min-byn" and terms.sortOrder == "DESC" %}style="display:none"{% endif %}></span></a>
+                                </div>
+                            </th>
+                            <th class="td-sort">
+                                <h3>Диапазон<br/> цен,$</h3>
+                                <div class="sort-case">
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'price-min', 'sortOrder' : 'ASC'})) }}#table">
+                                        <span class="plus{% if terms.sortCol == "price-min" %} b-blk{% endif %}" {% if terms.sortCol == "price-min" and terms.sortOrder == "ASC" %}style="display:none"{% endif %}></span></a>
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'price-min', 'sortOrder' : 'DESC'})) }}#table">
+                                        <span class="minus{% if terms.sortCol == "price-min" %} b-blk{% endif %}" {% if terms.sortCol == "price-min" and terms.sortOrder == "DESC" %}style="display:none"{% endif %}></span></a>
+                                </div>
+                            </th>
+                            <th class="td-sort last-price">
+                                <h3>Цена&nbsp;последнего товара, руб.</h3>
+                                <div class="sort-case">
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'last-price', 'sortOrder' : 'ASC'})) }}#table">
+                                        <span class="plus{% if terms.sortCol == "last-price" %} b-blk{% endif %}" {% if terms.sortCol == "last-price" and terms.sortOrder == "ASC" %}style="display:none"{% endif %}></span></a>
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'last-price', 'sortOrder' : 'DESC'})) }}#table">
+                                        <span class="minus{% if terms.sortCol == "last-price" %} b-blk{% endif %}" {% if terms.sortCol == "last-price" and terms.sortOrder == "DESC" %}style="display:none"{% endif %}></span></a>
+                                </div>
+                            </th>
+                            <th class="td-sort last-date">
+                                <h3>Дата&nbsp;поставки последнего</h3>
+                                <div class="sort-case">
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'last-date', 'sortOrder' : 'ASC'})) }}#table">
+                                        <span class="plus{% if terms.sortCol == "last-date" %} b-blk{% endif %}" {% if terms.sortCol == "last-date" and terms.sortOrder == "ASC" %}style="display:none"{% endif %}></span></a>
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'last-date', 'sortOrder' : 'DESC'})) }}#table">
+                                        <span class="minus{% if terms.sortCol == "last-date" %} b-blk{% endif %}"  {% if terms.sortCol == "last-date" and terms.sortOrder == "DESC" %}style="display:none"{% endif %}></span></a>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-color">
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <span class="mark-lg">{{ total.qty }}</span>
+                            </td>
+                            <td></td>
+                            <td>
+                                <span class="mark-lg">{{ total.price_byn  }}</span>
+                            </td>
+                            <td>
+                                <span class="mark-lg">{{ total.price  }}</span>
+                            </td>
+                            <td></td>
+                        </tr>
+                        {% for item in items %}
+                            {% if item.0 is defined %}
+                                {% set bunch = item.0 %}
+                                {% if item.last_date is defined %}{% set last_date = item.last_date %}{% else %}{% set last_date = bunch.lastDate %}{% endif %}
+                            {% else %}
+                                {% set bunch = item %}
+                            {% endif %}
+                            <tr class="td-border-top drop-category-title" data-category="{{ bunch.id }}">
+                                <td class="title-tr txt-left td-border-right {% if bunch.lastProduct is defined and bunch.lastProduct.dateDiff|date("%m") > 0 %}title-right-offset{% endif %}">
+                                    <div class="checkbox-style">
+                                        <input id="checkbox-bunch-{{ bunch.id }}" name="bunch[{{ bunch.id }}]" type="checkbox" value="{{ bunch.id }}">
+                                        <label for="checkbox-bunch-{{ bunch.id }}"><span class="checkbox ckeckbox-group"></span></label>
+                                    </div>
+                                    <a href="#" class="product-item">{{ bunch.title }}</a>
+                                    {% if bunch.lastProduct is defined and bunch.lastProduct.dateDiff|date("%m") > 0 %}
+                                        <div class="product-item-time">
+                                            <span class="color-orange">{{ bunch.lastProduct.dateDiff|date("%m ") }}мес</span>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if bunch.ball == constant('AppBundle\\Entity\\ProductStock::RED_BALL') %}
+                                        <span class="point-1 pointer"></span>
+                                    {% elseif bunch.ball == constant('AppBundle\\Entity\\ProductStock::BLUE_BALL') %}
+                                        <span class="point-2 pointer"></span>
+                                    {% elseif bunch.ball == constant('AppBundle\\Entity\\ProductStock::GREEN_BALL') %}
+                                        <span class="point-3 pointer"></span>
+                                    {% endif %}
+                                </td>
+
+                                <td class="td-border-right stars-case">
+
+                                    <div class="checkbox-style-star checkbox-style-star-blue">
+                                        <input id="star.1.{{ bunch.id }}" value="1" type="checkbox" {% if bunch.star1 %}checked="checked"{% endif %}>
+                                        <label for="star.1.{{ bunch.id }}"><span class="checkbox" data-bunchid="{{ bunch.id }}" data-starname="star1"></span></label>
+                                    </div>
+                                    <div class="checkbox-style-star checkbox-style-star-yellow">
+                                        <input id="star.2.{{ bunch.id }}" value="1" type="checkbox" {% if bunch.star2 %}checked="checked"{% endif %}>
+                                        <label for="star.2.{{ bunch.id }}"><span class="checkbox" data-bunchid="{{ bunch.id }}" data-starname="star2"></span></label>
+                                    </div>
+                                    <div class="checkbox-style-star checkbox-style-star-violet">
+                                        <input id="star.3.{{ bunch.id }}" value="1" type="checkbox" {% if bunch.star3 %}checked="checked"{% endif %}>
+                                        <label for="star.3.{{ bunch.id }}"><span class="checkbox" data-bunchid="{{ bunch.id }}" data-starname="star3"></span></label>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <a href="#">{{ bunch.total }}</a>
+                                </td>
+                                <td>
+                                    <a href="#">0</a>
+                                </td>
+                                <td class="txt-left">
+                                    <a href="#">{% if bunch.maxPriceByn != bunch.minPriceByn %}{{ bunch.minPriceByn|number_format(2, ',', '') }}-{{ bunch.maxPriceByn|number_format(2, ',', '') }}{% else %}{{ bunch.minPriceByn|number_format(2, ',', '') }}{% endif %}</a>
+                                </td>
+                                <td>
+                                    <a href="#">{% if bunch.maxPrice != bunch.minPrice %}{{ bunch.minPrice|number_format(2, ',', '') }}-{{ bunch.maxPrice|number_format(2, ',', '') }}{% else %}{{ bunch.minPrice|number_format(2, ',', '') }}{% endif %}</a>
+                                </td>
+                                <td>
+                                    <a href="#">{{ bunch.lastProductPrice|number_format(2, ',', '') }}</a>
+                                </td>
+                                <td>
+                                    <a href="#">{% if last_date is defined %} {{ last_date }} {% else %} {{ bunch.lastProduct.created|date("d-m-Y") }}{% endif %}</a>
+                                </td>
+                            </tr>
+                            {% set class = '' %}
+                            {% for i in bunch.getProductIds() %}
+                                {% if i in ids|keys %}
+                                    {% set class = 'open' %}
+                                {% endif %}
+                            {% endfor %}
+                            <tr data-category="{{ bunch.id }}" class="sub-category {{ class }}">
+                                <td colspan="8">
+                                    <table>
+                                        <tbody>
+                                            {% for product in bunch.getProducts() %}
+                                                <tr>
+                                                    <td class="title-tr txt-left td-border-right {% if product.dateDiff|date("%m") > 0 %}title-right-offset{% endif %}" >
+                                                        <div class="checkbox-style padding10-left">
+                                                            <input id="checkbox-{{ product.id }}" name="product[{{ product.id }}]" {% if product.id in ids|keys %}checked="checked"{% endif %} value="{{ product.id }}" type="checkbox" />
+                                                            <label for="checkbox-{{ product.id }}"><span class="checkbox"></span></label>
+                                                        </div>
+
+                                                        <a href="#" class="product-item{% if product.documents == 0 %} blue{% endif %}">{{ product.title }}</a>
+
+                                                        {% if product.dateDiff|date("%m") > 0 %}
+                                                            <div class="product-item-time">
+                                                                <span class="color-orange">{{ product.dateDiff|date("%m ") }}мес</span>
+                                                            </div>
+                                                        {% endif %}
+
+                                                        {#{% if product.ball == constant('AppBundle\\Entity\\ProductStock::RED_BALL') %}#}
+                                                            {#<span class="point-1 pointer"></span>#}
+                                                        {#{% elseif product.ball == constant('AppBundle\\Entity\\ProductStock::BLUE_BALL') %}#}
+                                                            {#<span class="point-2 pointer"></span>#}
+                                                        {#{% elseif product.ball == constant('AppBundle\\Entity\\ProductStock::GREEN_BALL') %}#}
+                                                            {#<span class="point-3 pointer"></span>#}
+                                                        {#{% endif %}#}
+                                                    </td>
+
+                                                    <td class="td-border-right stars-case">
+                                                        {#<div class="checkbox-style-star checkbox-style-star-blue">#}
+                                                            {#<input id="star.1.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star1 %}checked="checked"{% endif %}>#}
+                                                            {#<label for="star.1.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star1"></span></label>#}
+                                                        {#</div>#}
+                                                        {#<div class="checkbox-style-star checkbox-style-star-yellow">#}
+                                                            {#<input id="star.2.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star2 %}checked="checked"{% endif %} />#}
+                                                            {#<label for="star.2.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star2"></span></label>#}
+                                                        {#</div>#}
+                                                        {#<div class="checkbox-style-star checkbox-style-star-violet">#}
+                                                            {#<input id="star.3.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star3 %}checked="checked"{% endif %}>#}
+                                                            {#<label for="star.3.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star3"></span></label>#}
+                                                        {#</div>#}
+
+                                                    </td>
+                                                    <td width="88px">
+                                                        <input type="text" class="input-text input-qty" name="qty" value="{{ product.qty }}" />
+                                                    </td>
+                                                    <td width="79px">
+                                                        {#<a href="#">0</a>#}
+                                                    </td>
+                                                    <td class="txt-left" width="108px">
+                                                        <a href="#">{{ product.priceByn|number_format(2, ',', '') }}</a>
+                                                    </td>
+                                                    <td width="101px">
+                                                        <a href="#">{{ product.price|number_format(2, ',', '') }}</a>
+                                                    </td>
+                                                    <td width="148px">
+                                                        <a href="#">{{ product.priceByn|number_format(2, ',', '') }}</a>
+                                                    </td>
+                                                    <td width="141px">
+                                                        <a href="#">{{ product.created|date("d-m-Y") }}</a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        {% else %}
+            <p class="color-base"><span class="text-uppercase">Нет данных</span></p>
+        {% endif %}
+
+        <div class="text-right">
+            <select id="select-limit" class="select-base">
+                <option {% if terms.limit == 10 %}selected="selected"{% endif %}>10</option>
+                <option {% if terms.limit == 20 %}selected="selected"{% endif %}>20</option>
+                <option {% if terms.limit == 30 %}selected="selected"{% endif %}>30</option>
+                <option {% if terms.limit == 40 %}selected="selected"{% endif %}>40</option>
+                <option {% if terms.limit == 50 %}selected="selected"{% endif %}>50</option>
+            </select>
+            {{ knp_pagination_render(items) }}
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $(function(){
+
+            $(".ckeckbox-all-group").on('click', function(){
+                var input = $(this).closest(".checkbox-style").find("input");
+
+                $(".checkbox-style input + label .checkbox").parent().parent().find("input[type=checkbox]").each(function(){
+                    if ($(this).attr("id") != 'checkbox-bunch-all') {
+                        if ($(this).is(":checked") == input.is(":checked")) {
+
+                            $(this).parent().find(".checkbox").click();
+                        }
+                    }
+                });
+            });
+
+            $(".drop-all-category").on('click', function(){
+                if (jQuery(this).hasClass("open")) {
+                    jQuery('.drop-category-title').removeClass("open");
+                    jQuery('.sub-category').removeClass('open');
+                }
+                else {
+                    jQuery('.drop-category-title').addClass("open");
+                    jQuery('.sub-category').addClass('open');
+                }
+            });
+
+            $('.datepicker').datepicker({
+                format: 'dd-mm-yyyy',
+            });
+
+            $("a[href='#']").on('click', function(){return false;});
+
+            $(".checkbox.ckeckbox-group").click(function(){
+                $(this).closest("tr").next().find('table tr td.title-tr .checkbox-style .checkbox').click();
+            });
+
+            $(".checkbox-style-star .checkbox").on('click', function(){
+                input = $(this).closest(".checkbox-style-star").find("input");
+                if (input.get(0).checked == true) {
+                    input.get(0).checked = false;
+                    starValue = 0;
+                } else {
+                    input.get(0).checked = true;
+                    starValue = 1;
+                }
+                $.ajax({
+                    url : '{{ path('app_product_star') }}',
+                    method: "POST",
+                    data : {'starName' : $(this).attr('data-starname'), 'bunchId' : $(this).attr('data-bunchid'), 'starValue' : starValue},
+                    success: function (data) {
+
+                    }
+                });
+
+                return false;
+            });
+
+            $("#check-for-sale").on('click', function(){
+                var query = '';
+
+                let cookieIds = jQuery.cookie("stock-checked-ids");
+                if ( cookieIds != undefined) {
+                    var curIds = cookieIds.split(',');
+                }
+                else {
+                    var curIds = [];
+                }
+
+                for(var i=0;i<curIds.length;i++){
+                    if (curIds[i] != "") {
+                        let parsedVal = JSON.parse(curIds[i]);
+                        for(j in parsedVal) { var qty = parsedVal[j]; var id = j;}
+                        query += 'ids[]=' + id + '&qty[]=' + qty + '&';
+                    }
+                }
+                location.href='{{ path('app_product_check_sale') }}' + '?' + query;
+
+                {#$(".checkbox-style input:checked + label .checkbox").parent().parent().find("input[type=checkbox]").each(function(){#}
+                    {#if ($(this).parent().find("span.checkbox").hasClass('ckeckbox-group') == false) {#}
+                        {#qty = $(this).closest("tr").find('td').eq(2).find(".input-qty").val();#}
+                        {#query += 'ids[]=' + $(this).val() + '&qty[]=' + qty + '&';#}
+                    {#}#}
+                {#});#}
+                {#location.href='{{ path('app_product_check_sale') }}' + '?' + query;#}
+            });
+
+            $(".title-tr .pointer").on('click', function(){
+                var self = $(this);
+                $.ajax({
+                    url : '{{ path('app_product_ball_change_ajax') }}',
+                    method: "POST",
+                    data : {'id' : $(this).parent().find('input[type=checkbox]').val() },
+                    success: function (data) {
+                        if (data.status == "success") {
+                            if (data.ball == 'blue') {
+                                self.removeClass("point-1").addClass("point-2");
+                            }
+                            else if (data.ball == 'green') {
+                                self.removeClass("point-2").addClass("point-3");
+                            }
+                            else {
+                                self.remove();
+                            }
+                        }
+                    }
+                });
+            });
+
+            $(document).on('click', '.export', function(){
+                let url = '{{ path('app_export') }}';
+                let form = $("#form-filter");
+                form.attr('action', url);
+                form.append('<input type="hidden" name="export" value="step1" />');
+                form.submit();
+            });
+
+            jQuery(function(){
+                jQuery("#filter-button").on('click', function(){
+                    jQuery('input[name=export]').remove();
+                    jQuery(this).closest('form').attr('action', '{{ path("app") }}');
+                });
+            });
+
+            jQuery(".checkbox-style input").on('change', function(){
+                let cookieIds = jQuery.cookie("stock-checked-ids");
+                if ( cookieIds != undefined) {
+                    var curIds = cookieIds.split(',');
+                }
+                else {
+                    var curIds = [];
+                }
+
+                var input = $(this).closest('div').find('input');
+                var selectId = input.val();
+
+                let qty = input.closest("tr").find('td').eq(2).find(".input-qty").val();
+                let object = {};
+                object[selectId] = qty;
+                var add = JSON.stringify(object);
+
+                // check if checkbox is not "checkAll"
+                if (selectId != 'checkbox-bunch-all' && input.attr('id').indexOf('checkbox-bunch') < 0 ) {
+                    if ($(this).closest('div').find('input').is(':checked')) {
+                        // add new id in cookie
+                        if (jQuery.inArray( add, curIds )<0) {
+                            curIds.push(JSON.stringify(object));
+                        }
+
+//                        if (jQuery.inArray( selectId, curIds )<0) {
+//                            let qty = input.closest("tr").find('td').eq(2).find(".input-qty").val();
+//                            let object = {};
+//                            object[selectId] = qty;
+//                            curIds.push(JSON.stringify(object));
+//                        }
+                    }
+                    else {
+                        // remove id from cookie
+                        curIds = jQuery.grep(curIds, function(value) {
+                            return value != add;
+                        });
+                    }
+                    jQuery.cookie("stock-checked-ids", curIds, { path: '/', expires: 7 });
+                }
+                jQuery('#checked-products').html(curIds.length);
+
+            });
+            $.removeCookie('crossout-checked-ids', { path: '/' });
+            $.removeCookie('not-crossout-checked-ids', { path: '/' });
+            $.removeCookie('sale-checked-ids', { path: '/' });
+        });
+    </script>
+{% endblock %}

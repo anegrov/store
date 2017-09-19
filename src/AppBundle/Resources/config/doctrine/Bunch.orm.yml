@@ -1,0 +1,51 @@
+AppBundle\Entity\Bunch:
+    type: entity
+    table: null
+    repositoryClass: AppBundle\Repository\BunchRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+            length: 255
+        total:
+            type: integer
+            nullable: true
+        availability:
+            type: boolean
+        created:
+            type: date
+            gedmo:
+              timestampable:
+                on: create
+        updated:
+            type: date
+            nullable: true
+            gedmo:
+              timestampable:
+                on: update
+        star1:
+            type: boolean
+            default: false
+        star2:
+            type: boolean
+            default: false
+        star3:
+            type: boolean
+            default: false
+        ball:
+            type: string
+            nullable: true
+            columnDefinition: ENUM('red', 'blue', 'green')
+    oneToMany:
+        products:
+            targetEntity: ProductStock
+            mappedBy: bunch
+        productsSale:
+            targetEntity: ProductSale
+            mappedBy: bunch
+    lifecycleCallbacks: {  }

@@ -1,0 +1,44 @@
+AppBundle\Entity\ProductSale:
+    type: entity
+    table: null
+    repositoryClass: AppBundle\Repository\ProductSaleRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        productId:
+            type: integer
+            column: product_id
+        bunchId:
+            type: integer
+            column: bunch_id
+        qty:
+            type: integer
+        price:
+            type: decimal
+            precision: 10
+            scale: '2'
+        priceUsd:
+            type: decimal
+            precision: 10
+            scale: '2'
+        date:
+            type: date
+        disabledRedBall:
+            type: boolean
+            default: false
+    manyToOne:
+        bunch:
+            targetEntity: Bunch
+            joinColumn:
+                name: bunch_id
+                referencedColumnName: id
+        product:
+            targetEntity: ProductStock
+            joinColumn:
+                name: product_id
+                referencedColumnName: id
+    lifecycleCallbacks: {  }

@@ -1,0 +1,62 @@
+{% extends 'import.html.twig' %}
+
+{% block title %}ИМПОРТ ТОВАРА{% endblock %}
+
+{% block content %}
+    <div class="box">
+        <div class="page-case">
+            <p class="text-center color-blue text-uppercase">Поставщик: {{ provider.title }}</p>
+            <p class="text-center color-blue text-uppercase">100% совпадение</p>
+            <section class="table-00 color-base">
+                <form action="{{ path('app_import_step4') }}" method="post" >
+                    <input type="hidden" name="provider_id" value="{{ provider.id }}" />
+                    <input type="hidden" name="has_documents" value="{{ has_documents }}" />
+                    <input type="hidden" name="filename" value="{{ filename }}" />
+                    {% if data is not empty %}
+                        <table border="1" width="100%" style="font-size: small">
+                            <thead>
+                                <tr>
+                                    <th class="title-td txt-left">
+                                        <h3>Товары</h3>
+                                    </th>
+                                    <th>
+                                        <h3><span class="text-uppercase">Наличие</span></h3>
+                                    </th>
+                                    <th>
+                                        <h3>Цена, руб</h3>
+                                    </th>
+                                    <th>
+                                        <h3>Цена, $</h3>
+                                    </th>
+                                    <th>
+                                        <h3><span class="text-uppercase">Приход</span></h3>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for values in data %}
+                                <tr>
+                                    <td class="title-tr txt-left td-border-right">
+                                        <a href="#" class="product-item">
+                                            {{ values['Наименование'] }}
+                                        </a>
+                                    </td>
+                                    <td>{{ values['db_item'].total }}</td>
+                                    <td>{{ values['Цена, руб.']|number_format(2) }}</td>
+                                    <td>{{ values['Цена, $']|number_format(2) }}</td>
+                                    <td>{{ values['Количество'] }}</td>
+                                </tr>
+                            </tbody>
+                            {% endfor %}
+                        </table>
+                    {% else %}
+                        <center><b>СХОЖИХ ТОВАРОВ НЕТ</b></center>
+                    {% endif %}
+                    <div class="text-right">
+                        <button type="submit" class="btn-base">Далее</button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,25 @@
+AppBundle\Entity\Provider:
+    type: entity
+    table: null
+    repositoryClass: AppBundle\Repository\ProviderRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+            length: 255
+        created:
+            type: date
+            gedmo:
+              timestampable:
+                on: create
+        updated:
+            type: date
+            gedmo:
+              timestampable:
+                on: update
+    lifecycleCallbacks: {  }

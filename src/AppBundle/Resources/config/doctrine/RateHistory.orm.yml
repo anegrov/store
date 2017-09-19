@@ -1,0 +1,19 @@
+AppBundle\Entity\RateHistory:
+    type: entity
+    table: null
+    repositoryClass: AppBundle\Repository\RateHistoryRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        abbreviation:
+            type: string
+            length: '3'
+        rate:
+            type: float
+        date:
+            type: date
+    lifecycleCallbacks: {  }

@@ -1,0 +1,32 @@
+{% extends 'import.html.twig' %}
+
+{% block title %}ИМПОРТ ТОВАРА{% endblock %}
+
+{% block content %}
+    <div class="box">
+        <div class="page-case">
+            <p class="text-center color-blue text-uppercase">ИМПОРТ ПРОШЕЛ УСПЕШНО</p>
+            <section class="table-00 color-base">
+                <table class="import-finish">
+                    <tr>
+                        <td>Импортированно тоаров со 100% совпадением :</td>
+                        <td> {{ countOldProductInserted }}</td>
+                    </tr>
+                    <tr>
+                        <td>Импортированно тоаров со менее 100% совпадением :</td>
+                        <td> {{ countNewProductInserted }}</td>
+                    </tr>
+                    <tr>
+                        <td>Созданно групп у товарам :</td>
+                        <td> {{ countBunchCreated }}</td>
+                    </tr>
+                </table>
+            </section>
+            <section class="table-00 color-base">
+                    <div class="text-right">
+                        <a href="{{ path('app') }}"><button type="button" class="btn-base">OK</button></a>
+                    </div>
+            </section>
+        </div>
+    </div>
+{% endblock %}

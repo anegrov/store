@@ -1,0 +1,415 @@
+{% extends 'table.html.twig' %}
+
+{% block title %}Статистика{% endblock %}
+
+{% block stats %}
+    <div class="top-info-2 like-table">
+        <input id="rate" type="hidden" name="rate" value="{{ rate }}" />
+        <ul>
+            <li>
+                <div class="info-body">
+                    <p>КАССА - <span class="color-blue" style="font-size: 14px;">{{ totalStock.price_byn|number_format(2, '.', '') }} руб.</span>/{{ totalStock.price|number_format(2, '.', '') }} $</p>
+                    <p>В НАЛИЧИИ - {{ totalStock.qty }} шт.</p>
+                </div>
+            </li>
+            <li>
+                <div class="info-body">
+                    <p>НЕ СПИСАННЫЕ - <span class="color-blue" style="font-size: 14px;">{{ totalNotCrossout.purchase_price_byn|number_format(2, '.', '') }} руб.</span>/{{ totalNotCrossout.purchase_price|number_format(2, '.', '') }} $</p>
+                    <p>НЕДОСТАЧА - {{ totalNotCrossout.qty }} шт.</p>
+                </div>
+            </li>
+            <li>
+                <div class="info-body">
+                    <p>СОБСТВЕННЫЕ СРЕДСТВА - <span id="own_funds">{{ (totalStock.price - involvedFunds)|number_format(2, '.', '') }}</span> $</p>
+                    <p>ПРИВЛЕЧЕННЫЕ СРЕДСТВА -  <input id="involved_funds" type="text" pattern="\d+(\.\d{2})?" name="involved_funds" value="{{ involvedFunds }}" />$</p>
+                </div>
+            </li>
+            <li>
+                <div class="info-body">
+                    <p>ПРИБЫЛЬ - <span class="color-blue" style="font-size: 14px;">{{ totalSale.profit_byn|number_format(2, '.', '') }} руб.</span>/{{ totalSale.profit|number_format(2, '.', '') }} $</p>
+                    <p>ВСЕГО - {{ totalSale.qty }} шт.</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="padding-top20">
+        <ul class="stats-ul-table stats-padding-left">
+            <li class="stats-title-li">
+                Проданные
+            </li>
+            <li>
+                <div class="top-info-2 like-table">
+                    <ul>
+                        <li>
+                            <div class="info-title">
+                                <h4>Текущий месяц</h4>
+                            </div>
+                            <div class="info-body">
+                                <p>{{ statsSale.cur_mounth_price|number_format(2, '.', '') }}руб/{{ (statsSale.cur_mounth_price/rate)|number_format(2, '.', '') }}$</p>
+                                <p>{{ statsSale.cur_mounth_qty }}шт</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="info-title">
+                                <h4>Прошлый месяц</h4>
+                            </div>
+                            <div class="info-body">
+                                <p>{{ statsSale.prev_mounth_price|number_format(2, '.', '') }}руб/{{ (statsSale.prev_mounth_price/rate)|number_format(2, '.', '') }}$</p>
+                                <p>{{ statsSale.prev_mounth_qty }}шт</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="info-title">
+                                <h4>год</h4>
+                            </div>
+                            <div class="info-body">
+                                <p>{{ statsSale.cur_year_price_byn|number_format(2, '.', '') }}руб/{{ (statsSale.cur_year_price_byn/rate)|number_format(2, '.', '') }}$</p>
+                                <p>{{ statsSale.cur_year_qty }}шт</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+
+        <ul class="stats-ul-table stats-padding-left">
+            <li class="stats-title-li">
+                Списанные
+            </li>
+            <li>
+                <div class="top-info-2 like-table">
+                    <ul>
+                        <li>
+                            <div class="info-title">
+                                <h4>Текущий месяц</h4>
+                            </div>
+                            <div class="info-body">
+                                <p>{{ statsCrossout.cur_mounth_price|number_format(2, '.', '') }}руб/{{ (statsCrossout.cur_mounth_price/rate)|number_format(2, '.', '') }}$</p>
+                                <p>{{ statsCrossout.cur_mounth_qty }}шт</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="info-title">
+                                <h4>Прошлый месяц</h4>
+                            </div>
+                            <div class="info-body">
+                                <p>{{ statsCrossout.prev_mounth_price|number_format(2, '.', '') }}руб/{{ (statsCrossout.prev_mounth_price/rate)|number_format(2, '.', '') }}$</p>
+                                <p>{{ statsCrossout.prev_mounth_qty }}шт</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="info-title">
+                                <h4>год</h4>
+                            </div>
+                            <div class="info-body">
+                                <p>{{ statsCrossout.cur_year_price_byn|number_format(2, '.', '') }}руб/{{ (statsCrossout.cur_year_price_byn/rate)|number_format(2, '.', '') }}$</p>
+                                <p>{{ statsCrossout.cur_year_qty }}шт</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="table-w">
+        <a name="products-stock"></a>
+        <table>
+            <thead>
+            <tr>
+                <th colspan="13">Товары в наличии всего:{{ totalStock.qty }}шт. {{ totalStock.price_byn }}руб. {{ totalStock.price }}$</th>
+            </tr>
+            <tr class="tr-w">
+                <th {% if stockMonth == 1 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'stockMonth' : 1, 'notCrossoutMonth' : notCrossoutMonth}) }}#products-stock">Январь</a></th>
+                <th {% if stockMonth == 2 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'stockMonth' : 2, 'notCrossoutMonth' : notCrossoutMonth}) }}#products-stock">Февраль</a></th>
+                <th {% if stockMonth == 3 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'stockMonth' : 3, 'notCrossoutMonth' : notCrossoutMonth}) }}#products-stock">Март</a></th>
+                <th {% if stockMonth == 4 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'stockMonth' : 4, 'notCrossoutMonth' : notCrossoutMonth}) }}#products-stock">Апрель</a></th>
+                <th {% if stockMonth == 5 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'stockMonth' : 5, 'notCrossoutMonth' : notCrossoutMonth}) }}#products-stock">Май</a></th>
+                <th {% if stockMonth == 6 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'stockMonth' : 6, 'notCrossoutMonth' : notCrossoutMonth}) }}#products-stock">Июнь</a></th>
+                <th {% if stockMonth == 7 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'stockMonth' : 7, 'notCrossoutMonth' : notCrossoutMonth}) }}#products-stock">Июль</a></th>
+                <th {% if stockMonth == 8 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'stockMonth' : 8, 'notCrossoutMonth' : notCrossoutMonth}) }}#products-stock">Август</a></th>
+                <th {% if stockMonth == 9 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'stockMonth' : 9, 'notCrossoutMonth' : notCrossoutMonth}) }}#products-stock">Сентябрь</a></th>
+                <th {% if stockMonth == 10 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'stockMonth' : 10, 'notCrossoutMonth' : notCrossoutMonth}) }}#products-stock">Октябрь</a></th>
+                <th {% if stockMonth == 11 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'stockMonth' : 11, 'notCrossoutMonth' : notCrossoutMonth}) }}#products-stock">Ноябрь</a></th>
+                <th {% if stockMonth == 12 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'stockMonth' : 12, 'notCrossoutMonth' : notCrossoutMonth}) }}#products-stock">Декабрь</a></th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="2">1 НЕДЕЛЯ</td>
+                    <td colspan="2">2 НЕДЕЛЯ</td>
+                    <td colspan="2">3 НЕДЕЛЯ</td>
+                    <td colspan="2">4 НЕДЕЛЯ</td>
+                    <td colspan="2">5 НЕДЕЛЯ</td>
+                    <td class="td-total" colspan="2">ИТОГО</td>
+                </tr>
+                <tr>
+                    {% set total_weeks_stock_byn = 0 %}
+                    {% set total_weeks_stock_qty = 0 %}
+                    {% for i in 1..5 %}
+                        {% if statsWeeksStock[i] is defined %}
+                            <td colspan="2">{{ statsWeeksStock[i]['total_price_byn']|number_format(2, '.', '') }} руб.</td>
+                            {% set total_weeks_stock_byn = total_weeks_stock_byn + statsWeeksStock[i]['total_price_byn'] %}
+                            {% set total_weeks_stock_qty = total_weeks_stock_qty + statsWeeksStock[i]['total_qty'] %}
+                        {% else %}
+                            <td colspan="2">-</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td class="td-total" colspan="2">{{ total_weeks_stock_byn|number_format(2, '.', '') }} руб.</td>
+                </tr>
+                <tr>
+                    {% set total_weeks_stock = 0 %}
+                    {% for i in 1..5 %}
+                        {% if statsWeeksStock[i] is defined %}
+                            <td colspan="2">{{ statsWeeksStock[i]['total_price']|number_format(2, '.', '') }} $</td>
+                            {% set total_weeks_stock = total_weeks_stock + statsWeeksStock[i]['total_price'] %}
+                        {% else %}
+                            <td colspan="2">-</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td class="td-total" colspan="2">{{ total_weeks_stock|number_format(2, '.', '') }} $</td>
+                </tr>
+                <tr>
+                    {% for i in 1..5 %}
+                        {% if statsWeeksStock[i] is defined %}
+                            <td colspan="2">{{ (statsWeeksStock[i]['total_qty'])|number_format(2, '.', '') }} шт.</td>
+                        {% else %}
+                            <td colspan="2">-</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td class="td-total" colspan="2">{{ total_weeks_stock_qty }} шт.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="table-w">
+        <a name="products-not-crossout"></a>
+        <table>
+            <thead>
+            <tr>
+                <th colspan="13">Товары несписанные Всего:{{ totalNotCrossout.qty }} шт. {{ totalNotCrossout.purchase_price_byn }} руб. {{ totalNotCrossout.purchase_price }}$</th>
+            </tr>
+            <tr class="tr-w">
+                <th {% if notCrossoutMonth == 1 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'notCrossoutMonth' : 1, 'stockMonth' : stockMonth}) }}#products-not-crossout">Январь</a></th>
+                <th {% if notCrossoutMonth == 2 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'notCrossoutMonth' : 2, 'stockMonth' : stockMonth}) }}#products-not-crossout">Февраль</a></th>
+                <th {% if notCrossoutMonth == 3 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'notCrossoutMonth' : 3, 'stockMonth' : stockMonth}) }}#products-not-crossout">Март</a></th>
+                <th {% if notCrossoutMonth == 4 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'notCrossoutMonth' : 4, 'stockMonth' : stockMonth}) }}#products-not-crossout">Апрель</a></th>
+                <th {% if notCrossoutMonth == 5 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'notCrossoutMonth' : 5, 'stockMonth' : stockMonth}) }}#products-not-crossout">Май</a></th>
+                <th {% if notCrossoutMonth == 6 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'notCrossoutMonth' : 6, 'stockMonth' : stockMonth}) }}#products-not-crossout">Июнь</a></th>
+                <th {% if notCrossoutMonth == 7 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'notCrossoutMonth' : 7, 'stockMonth' : stockMonth}) }}#products-not-crossout">Июль</a></th>
+                <th {% if notCrossoutMonth == 8 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'notCrossoutMonth' : 8, 'stockMonth' : stockMonth}) }}#products-not-crossout">Август</a></th>
+                <th {% if notCrossoutMonth == 9 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'notCrossoutMonth' : 9, 'stockMonth' : stockMonth}) }}#products-not-crossout">Сентябрь</a></th>
+                <th {% if notCrossoutMonth == 10 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'notCrossoutMonth' : 10, 'stockMonth' : stockMonth}) }}#products-not-crossout">Октябрь</a></th>
+                <th {% if notCrossoutMonth == 11 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'notCrossoutMonth' : 11, 'stockMonth' : stockMonth}) }}#products-not-crossout">Ноябрь</a></th>
+                <th {% if notCrossoutMonth == 12 %}class="th-w-active"{% endif %}>
+                    <a href="{{ path('app_stats_index', {'notCrossoutMonth' : 12, 'stockMonth' : stockMonth}) }}#products-not-crossout">Декабрь</a></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td colspan="2">1 НЕДЕЛЯ</td>
+                <td colspan="2">2 НЕДЕЛЯ</td>
+                <td colspan="2">3 НЕДЕЛЯ</td>
+                <td colspan="2">4 НЕДЕЛЯ</td>
+                <td colspan="2">5 НЕДЕЛЯ</td>
+                <td class="td-total" colspan="2">ИТОГО</td>
+            </tr>
+            <tr>
+                {% set total_weeks_not_crossout = 0 %}
+                {% set total_weeks_not_crossout_qty = 0 %}
+                {% for i in 1..5 %}
+                    {% if statsWeeksNotCrossout[i] is defined %}
+                        <td colspan="2">{{ statsWeeksNotCrossout[i]['total_price']|number_format(2, '.', '') }} руб.</td>
+                        {% set total_weeks_not_crossout = total_weeks_not_crossout + statsWeeksNotCrossout[i]['total_price'] %}
+                        {% set total_weeks_not_crossout_qty = total_weeks_not_crossout_qty + statsWeeksNotCrossout[i]['total_qty'] %}
+                    {% else %}
+                        <td colspan="2">-</td>
+                    {% endif %}
+                {% endfor %}
+                <td class="td-total" colspan="2">{{ total_weeks_not_crossout|number_format(2, '.', '') }} руб.</td>
+            </tr>
+            <tr>
+                {% for i in 1..5 %}
+                    {% if statsWeeksNotCrossout[i] is defined %}
+                        <td colspan="2">{{ (statsWeeksNotCrossout[i]['total_price']/rate)|number_format(2, '.', '') }} $</td>
+                    {% else %}
+                        <td colspan="2">-</td>
+                    {% endif %}
+                {% endfor %}
+                <td class="td-total" colspan="2">{{ (total_weeks_not_crossout|number_format(2, '.', '')/rate)|number_format(2, '.', '') }} $</td>
+            </tr>
+            <tr>
+                {% for i in 1..5 %}
+                    {% if statsWeeksNotCrossout[i] is defined %}
+                        <td colspan="2">{{ (statsWeeksNotCrossout[i]['total_qty'])|number_format(2, '.', '') }} шт.</td>
+                    {% else %}
+                        <td colspan="2">-</td>
+                    {% endif %}
+                {% endfor %}
+                <td class="td-total" colspan="2">{{ total_weeks_not_crossout_qty }} шт.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="table-w th-dark">
+        <table>
+            <thead>
+            <tr>
+                <th colspan="13">Товары проданные Всего:{{ totalSale.qty }} шт. {{ totalSale.purchase_price_byn }} руб. {{ totalSale.purchase_price }}$</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>Январь</th>
+                <th>Февраль</th>
+                <th>Март</th>
+                <th>Апрель</th>
+                <th>Май</th>
+                <th>Июнь</th>
+                <th>Июль</th>
+                <th>Август</th>
+                <th>Сентябрь</th>
+                <th>Октябрь</th>
+                <th>Ноябрь</th>
+                <th>Декабрь</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><h3>Количесвто шт</h3></td>
+                {% for i in 1..12 %}
+                    {% if statsSaleByMonth[i] is defined %}
+                        <td>{{ statsSaleByMonth[i]['total_qty'] }}</td>
+                    {% else %}
+                        <td>-</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            <tr>
+                <td><h3>Сумма&nbsp;цен&nbsp;закупка<br>руб.</h3></td>
+                {% for i in 1..12 %}
+                    {% if statsSaleByMonth[i] is defined %}
+                        <td>{{ statsSaleByMonth[i]['total_price']|number_format(2, '.', '') }}</td>
+                    {% else %}
+                        <td>-</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            <tr>
+                <td><h3>Сумма&nbsp;цен&nbsp;закупка<br>$</h3></td>
+                {% for i in 1..12 %}
+                    {% if statsSaleByMonth[i] is defined %}
+                        <td>{{ (statsSaleByMonth[i]['total_price']/rate)|number_format(2, '.', '') }}</td>
+                    {% else %}
+                        <td>-</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="table-w th-dark">
+        <table>
+            <thead>
+            <tr>
+                <th colspan="13">Товары списанные Всего:{{ totalCrossout.qty }} шт. {{ totalCrossout.purchase_price_byn }} руб. {{ totalCrossout.purchase_price }}$</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>Январь</th>
+                <th>Февраль</th>
+                <th>Март</th>
+                <th>Апрель</th>
+                <th>Май</th>
+                <th>Июнь</th>
+                <th>Июль</th>
+                <th>Август</th>
+                <th>Сентябрь</th>
+                <th>Октябрь</th>
+                <th>Ноябрь</th>
+                <th>Декабрь</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><h3>Количесвто шт</h3></td>
+                {% for i in 1..12 %}
+                    {% if statsCrossoutByMonth[i] is defined %}
+                        <td>{{ statsCrossoutByMonth[i]['total_qty'] }}</td>
+                    {% else %}
+                        <td>-</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            <tr>
+                <td><h3>Сумма&nbsp;цен&nbsp;закупка<br>руб.</h3></td>
+                {% for i in 1..12 %}
+                    {% if statsCrossoutByMonth[i] is defined %}
+                        <td>{{ statsCrossoutByMonth[i]['total_price_byn']|number_format(2, '.', '') }}</td>
+                    {% else %}
+                        <td>-</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            <tr>
+                <td><h3>$</h3></td>
+                {% for i in 1..12 %}
+                    {% if statsCrossoutByMonth[i] is defined %}
+                        <td>{{ statsCrossoutByMonth[i]['total_price']|number_format(2, '.', '') }}</td>
+                    {% else %}
+                        <td>-</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        jQuery(function(){
+            jQuery('#involved_funds').on('change', function(){
+                var self = $(this);
+                $.ajax({
+                    url : '{{ path('app_config_change') }}',
+                    method: "POST",
+                    data : {'name':'involved_funds','value':jQuery(this).val()},
+                    success: function (data) {
+                        if ( typeof data.status != undefined && data.status == 'error' ) {
+                            alert('Error');
+                        }
+                        if ( typeof data.involved_funds != undefined ) {
+                            let ownFunds = jQuery("#own_funds").text()*1;
+                            jQuery("#own_funds").html(ownFunds - self.val()*1);
+                        }
+                    }
+                })
+            });
+        });
+    </script>
+{% endblock %}

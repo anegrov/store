@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}СКЛАД{% endblock %}</title>
+        <link rel="stylesheet" href="{{ asset('bundles/app/css/css.css') }}" />
+        <link rel="stylesheet" href="{{ asset('bundles/app/css/bootstrap.css') }}" />
+        <link rel="stylesheet" href="{{ asset('bundles/app/css/datepicker.css') }}" />
+        <link rel="stylesheet" href="{{ asset('bundles/app/css/style-project.css') }}" />
+        <link rel="stylesheet" href="{{ asset('bundles/app/css/select2.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('bundles/app/css/default.css') }}" />
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        
+        <script type="text/javascript" src="{{ asset('bundles/app/js/jquery.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/app/js/jquery.cookie.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/app/js/bootstrap.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/app/js/bootstrap-datepicker_002.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/app/js/bootstrap-datepicker.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/app/js/project.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/app/js/select_dizain.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/app/js/select2/select2.min.js') }}"></script>
+        {% block javascripts %}{% endblock %}
+    </head>
+    <body>
+        {{ include('notice.html.twig') }}
+        {% block page_name %}{%endblock%}
+        {% block body %}{% endblock %}
+    </body>
+</html>

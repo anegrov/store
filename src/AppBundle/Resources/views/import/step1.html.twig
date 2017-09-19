@@ -1,0 +1,59 @@
+{% extends 'import.html.twig' %}
+
+{% block title %}ИМПОРТ ТОВАРА{% endblock %}
+
+{% block content %}
+    <div class="case-form-import color-base">
+        <form action="{{ path('app_import_step2') }}" method="GET">
+            <div class="f-case">
+                <div class="select-2-case select-i">
+                    <select name="provider_id" class="js-select2">
+                        {% for provider in providers %}
+                            <option value="{{ provider.id }}">{{ provider.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="f-case">	
+                <a href="{{ path('app_provider_index') }}">
+                    <button type="button" class="btn-base-lg">Поставщики</button>
+                </a>
+            </div>
+
+            <div class="f-case">
+                <h2 class="title-simple">Наличие документов</h2>
+
+                <div class="grid grid-80 radio-style-lg-case">		
+                    <div class="grid grid-50">
+
+                        <div class="radio-style">
+                            <input id="category-yes" name="has_documents" value="1" name="category" checked="checked" type="radio">
+                            <label for="category-yes">да<span class="radio-lg"></span></label>
+                        </div>
+                    </div>
+                    <div class="grid grid-50">
+                        <div class="radio-style">
+                            <input id="category-no" name="has_documents" value="0" name="category" type="radio">
+                            <label for="category-no">нет<span class="radio-lg"></span></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="f-case">
+                <button type="submit" class="btn-main">Далее</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+	$(document).ready(function() {
+            $(".js-select2").select2({
+                maximumSelectionLength: 2
+            });
+	});
+    </script>
+{% endblock %}

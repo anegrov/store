@@ -1,0 +1,70 @@
+<table {% if tableId is defined %}id="{{ tableId }}"{% endif %} class="table-search">
+    <thead>
+    <tr>
+        <th class="title-td txt-left td-border-right">
+            <h3>Товары</h3>
+        </th>
+        <th>
+            <h3>Колличество<br>шт.</h3>
+        </th>
+        <th>
+            <h3>Цена закупки<br>руб.</h3>
+        </th>
+        <th>
+            <h3>Цена закупки<br>$</h3>
+        </th>
+        <th>
+            <h3>Цена продажи<br>руб.</h3>
+        </th>
+        <th>
+            <h3>Прибыль<br>руб./$</h3>
+        </th>
+        <th>
+            <h3>Дата продажи</h3>
+            <input class="common-datepicker input-text datepicker input-table-datepicker" type="text" name="date[]" value="{{ "now"|date("d-m-Y") }}" />
+        </th>
+        <th>
+            <h3></h3>
+        </th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% if items|length > 0 %}
+        {% for key,product in items %}
+            <tr>
+                <td class="title-tr txt-left td-border-right plus-cursor">
+                    {{ product.title }}
+                    <input type="hidden" name="id[]" value="{{ product.id }}" />
+                </td>
+                <td>
+                    <input type="number" name="qty[]" value="{% if qty[key] is defined %}{{ qty[key] }}{% else %}{{ product.qty }}{% endif %}" class="input-text input-qty" />
+                </td>
+                <td>
+                    <span class="priceByn-purchase">{{ product.priceByn|number_format(2, '.', '') }}</span>
+                </td>
+                <td>
+                    <span class="price-purchase">{{ product.price|number_format(2, '.', '') }}</span>
+                </td>
+                <td>
+                    <input class="input-text priceSale" type="text" pattern="\d+(\.\d{2})?" name="price[]" value="{% if price[key] is defined %}{{ price[key] }}{% else %}{{ product.priceByn|number_format(2, '.', '') }}{% endif %}" />
+                </td>
+                <td><span class="profit">-</span></td>
+                <td>
+                    <input class="input-text datepicker input-table-datepicker" type="text" name="date[]" value="{% if date[key] is defined %}{{ date[key] }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}" />
+                </td>
+                <td>
+                    <div class="checkbox-style">
+                        <input id="checkbox-{{ product.id }}" name="product[{{ product.id }}]" type="checkbox" />
+                        <label for="checkbox-{{ product.id }}"><span class="checkbox"></span></label>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="8">Товаров нет</td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>

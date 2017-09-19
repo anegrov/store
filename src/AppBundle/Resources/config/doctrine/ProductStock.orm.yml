@@ -1,0 +1,89 @@
+AppBundle\Entity\ProductStock:
+    type: entity
+    table: null
+    repositoryClass: AppBundle\Repository\ProductStockRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+            length: 255
+        bunchId:
+            type: integer
+            column: bunch_id
+            nullable: true
+        providerId:
+            type: integer
+            column: provider_id
+        price:
+            type: decimal
+            precision: 10
+            scale: '2'
+        priceByn:
+            type: decimal
+            precision: 10
+            scale: '2'
+            column: price_byn
+        selfcost:
+            type: decimal
+            precision: 10
+            scale: '2'
+        qty:
+            type: integer
+        nds:
+            type: float
+        weightQty:
+            type: float
+            column: weight_qty
+        weight:
+            type: float
+        star1:
+            type: boolean
+            default: false
+        star2:
+            type: boolean
+            default: false
+        star3:
+            type: boolean
+            default: false
+        ball:
+            type: string
+            nullable: true
+            columnDefinition: ENUM('red', 'blue', 'green')
+        sale:
+            type: boolean
+            options:
+              default: false
+        scrap:
+            type: boolean
+            options:
+              default: false
+        documents:
+            type: boolean
+            default: 1
+        created:
+            type: date
+            gedmo:
+              timestampable:
+                on: create
+        updated:
+            type: date
+            nullable: true
+            gedmo:
+              timestampable:
+                on: update
+    manyToOne:
+        bunch:
+            targetEntity: Bunch
+            joinColumn:
+                name: bunch_id
+                referencedColumnName:
+    oneToMany:
+        productsSale:
+            targetEntity: ProductSale
+            mappedBy: bunch
+    lifecycleCallbacks: {  }

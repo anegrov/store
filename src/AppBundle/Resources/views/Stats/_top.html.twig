@@ -1,0 +1,70 @@
+<div class="top-info like-table">
+    <ul>
+        <li>
+            <p>Касса - <span class="color-blue">100000,67 руб/ </span> 40000,33 $</p>
+            <p>В наличии - <span class="color-blue">1000 шт</span></p>
+        </li>
+        <li>
+            <p>Касса - <span class="color-blue">100000,67 руб/ </span> 40000,33 $</p>
+            <p>В наличии - <span class="color-blue">1000 шт</span></p>
+        </li>
+        <li>
+            <p>Собственные средства - <span class="color-blue">100000,67 руб/ </span> 40000,33 $</p>
+            <p>Привлеченные средства - <span class="color-blue">1000 шт</span></p>
+
+        </li>
+        <li>
+            <p>Прибыль - <span class="color-blue">100000,67 руб/ </span> 40000,33 $</p>
+            <p>Всего - <span class="color-blue">1000 шт</span></p>
+        </li>
+    </ul>
+</div>
+<div class="page-case">
+    <section class="table-00">
+        <table>
+            <thead>
+            <tr>
+                <th class="title-td txt-left td-border-right">
+                    <h3>Товары</h3>
+                </th>
+                <th>
+                    <h3>Колличество<br>шт.</h3>
+                </th>
+                <th>
+                    <h3>Цена продажи<br>руб.</h3>
+                </th>
+                <th>
+                    <h3>Удалить</h3>
+                </th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for key,product in items %}
+                <tr>
+                    <td class="title-tr txt-left td-border-right">
+                        <a href="#">{{ product.title }}</a>
+                    </td>
+                    <td>
+                        <a href="#">{{ qty[key] }}</a>
+                    </td>
+                    <td>
+                        <a href="#">{{ product.priceByn }}</a>
+                    </td>
+                    <td>
+                        <div class="checkbox-style">
+                            <input id="checkbox-0.1" type="checkbox">
+                            <label for="checkbox-0.1"><span class="checkbox"></span></label>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+        <div class="text-right">
+            <button type="button" class="btn-base btn-wide">Списать</button>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,24 @@
+AppBundle\Entity\Config:
+    type: entity
+    table: null
+    repositoryClass: AppBundle\Repository\ConfigRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+        value:
+            type: string
+            length: 255
+        date:
+            type: date
+            nullable: false
+            gedmo:
+              timestampable:
+                on: update
+    lifecycleCallbacks: {  }

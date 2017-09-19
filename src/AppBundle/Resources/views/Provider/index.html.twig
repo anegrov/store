@@ -1,0 +1,39 @@
+{% extends 'import.html.twig' %}
+
+{% block title %}Поставщики{% endblock %}
+
+{% block content %}
+    <div class="case-form-import color-base">
+        <table border=0 cellpadding=5 cellspacing=1 width=100% class="table-form table table-condensed">
+            {% for entity in entities %}
+                <tr>
+                    <td width="18%" valign="top">{{ entity.title }}</td>
+                    <td valign="top-operation">
+                        <a href="{{ path('app_provider_edit', { 'id': entity.id }) }}">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </a>
+                        &nbsp;
+                        <a href="{{ path('app_provider_delete', { 'id': entity.id }) }}" onclick="return confirm('Точно удалить?')">
+                            <i class="glyphicon glyphicon-remove"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="f-case">
+            <a href="{{ path('app_import_step1') }}" class="btn-main">
+                Назад
+            </a>
+            <a href="{{ path('app_provider_create') }}" class="btn-main">
+                Добавить
+            </a>
+        </div>
+    </div>
+
+    <style>
+        table td a {
+            display: inline-block !important;
+            color: rgb(80, 126, 141);
+        }
+    </style>
+{% endblock %}

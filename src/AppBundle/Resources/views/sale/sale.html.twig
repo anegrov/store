@@ -1,0 +1,191 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<h1 class="title-lg">Продажа</h1>
+
+<div class="box">
+    <div class="page-case">
+        <section class="table-00">
+            <form action="{{ path('app_product_sale') }}" method="post">
+                <input type="hidden" name="rate" value="{{ rate }}" />
+                <input id="redirect" type="hidden" name="redirect" value="app" />
+                {{ include('AppBundle:product:_table_for_sale_products.html.twig', {'items': items, 'ids' : ids, 'qty' : qty, 'price' : price, "tableId" : "table-sale"})  }}
+                <div class="text-right">
+                    <a href="{{ path('app') }}"><button type="button" class="btn-base btn-wide">Отмена</button></a>
+                    <button id="remove-products" type="button" class="btn-base btn-wide">Удалить</button>
+                    <button type="submit" class="btn-base btn-wide">Продать</button>
+                    <button id="crossout" type="button" class="btn-base btn-wide">Списать</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <div class="row page-case msg" style="display: none">
+        <div class="col-lg-5">
+            <div>
+                <span style="color:red;">Колличество преывшает имеющееся на складе. Ниже список тоаров из этой атегории, если таковые имеются.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row page-case">
+        <div class="col-lg-5">
+            <div class="search-box">
+                <input name="title" value="" placeholder="Поиск по товару артикулу" type="text">
+                <button id="button-search" type="button"></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-case">
+        <section class="table-00">
+            <div id="search-result"></div>
+            <div class="text-right">
+                <button id="add-products" type="button" class="btn-transp btn-wide">Добавить</button>
+            </div>
+        </section>
+    </div>
+
+    {#<div class="text-right">#}
+        {#<select class="select-base">#}
+            {#<option>10</option>#}
+            {#<option>20</option>#}
+            {#<option>30</option>#}
+        {#</select>#}
+
+        {#<ul class="pagination">#}
+            {#<!--#}
+            {#<li class="page-item page-first">#}
+                {#<a class="page-link" href="#"></a>#}
+            {#</li>#}
+            {#<li class="page-item page-left">#}
+                {#<a class="page-link" href="#"></a>#}
+            {#</li> -->#}
+            {#<li class="page-item active">#}
+                {#<a class="page-link" href="#">1 <span class="sr-only">(current)</span></a>#}
+            {#</li>#}
+            {#<li class="page-item"><a class="page-link" href="#">2</a></li>#}
+            {#<li class="page-item"><a class="page-link" href="#">3</a></li>#}
+            {#<li class="page-item"><a class="page-link" href="#">4</a></li>#}
+            {#<li class="page-item"><a class="page-link" href="#">5</a></li>#}
+            {#<li class="page-item page-right">#}
+                {#<a class="page-link" href="#"></a>#}
+            {#</li>#}
+            {#<li class="page-item page-last">#}
+                {#<a class="page-link" href="#"></a>#}
+            {#</li>#}
+        {#</ul>#}
+    {#</div>#}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery("#button-search").on('click', function(){
+            val = jQuery(this).parent().find('input').val();
+            ids = [];
+            jQuery(".table-search").eq(0).find(".title-tr input[type=hidden]").each(function(){
+                ids.push(jQuery(this).val());
+            });
+            if (val.length > 1) {
+                jQuery.ajax({
+                    url: '{{ path('app_product_seach') }}',
+                    method: 'GET',
+                    data: { title: val, unless: ids },
+                    success: function(html) {
+                        jQuery(".table-00 #search-result").html(html);
+                    }
+                });
+            }
+        });
+
+        jQuery("#crossout").on("click", function(){
+            jQuery(this).closest("form").find("#redirect").val("crossout");
+            jQuery(this).closest("form").submit();
+        });
+
+        jQuery(document).on('click', '#remove-products', function(){
+            jQuery(".table-search").find(".checkbox-style input:checked").closest("tr").remove();
+        });
+
+        jQuery("#add-products").on('click', function () {
+            jQuery(".table-search .checkbox-style input:checked").closest("tr").each(function(){
+                var row = jQuery(this).clone();
+                jQuery("#table-sale").append(row);
+                jQuery("#table-sale").find(row).find(".checkbox-style span.checkbox").click();
+            });
+        });
+
+        jQuery('.datepicker').datepicker({
+            format: 'dd-mm-yyyy',
+        });
+
+        jQuery(document).on('click', '.plus-cursor', function(){
+            if (jQuery(this).closest("tr").find(".input-qty").val()>1) {
+                row = jQuery(this).closest("tr").clone();
+                jQuery(this).closest("tr").find(".input-qty").val( (jQuery(this).closest("tr").find(".input-qty").val()/2).toFixed(0) );
+                row.find(".input-qty").val( (row.find(".input-qty").val()/2).toFixed(0) );
+                id = row.find(".checkbox-style input").attr("id") + row.parent().find("tr").length;
+                row.find(".checkbox-style input").attr("id", id);
+                row.find(".checkbox-style label").attr("for", id);
+                jQuery(this).closest("tr").after( row );
+                jQuery(".priceSale").change();
+                jQuery('.datepicker').datepicker("destroy").datepicker({
+                    format: 'dd-mm-yyyy',
+                });
+            }
+        });
+
+        jQuery(document).on('change', '.priceSale, .input-qty', function(){
+            let priceBynPurchase = jQuery(this).closest("tr").find(".priceByn-purchase").text()*1;
+            let pricePurchase = jQuery(this).closest("tr").find(".price-purchase").text()*1;
+            let qty = jQuery(this).closest("tr").find(".input-qty").val()*1;
+            let rate = jQuery("input[name=rate]").val()*1;
+
+            priceByn = jQuery(this).closest("tr").find(".priceSale").val();
+            jQuery(this).closest("tr").find(".profit").html( (qty*(priceByn-priceBynPurchase)).toFixed(2) + '/' + (qty*(priceByn-priceBynPurchase)/rate).toFixed(2) );
+            jQuery(this).closest("tr").find(".profit").text();
+        });
+
+        jQuery(".priceSale").change();
+
+        jQuery(".common-datepicker").change(function(){
+            jQuery(".page-case .table-00 .datepicker").each(function(){
+                if (!jQuery(this).hasClass(".common-datepicker")) {
+                    jQuery(this).val( jQuery(".common-datepicker").val() );
+                }
+            });
+        });
+
+        jQuery(document).on("change", ".common-datepicker" ,function(){
+            jQuery(".page-case .table-00 .datepicker").each(function(){
+                if (!jQuery(this).hasClass(".common-datepicker")) {
+                    jQuery(this).val( jQuery(".common-datepicker").val() );
+                }
+            });
+        });
+
+        jQuery(document).on("change",".input-text.input-qty", function(){
+            var self = jQuery(this);
+            var qty = jQuery(this).val();
+            var id = jQuery(this).closest('tr').find(".title-tr input[type=hidden]").val();
+            var data = {'id': id, 'qty': qty };
+            jQuery.ajax({
+                url: '{{ path('app_check_qty') }}',
+                data: data,
+                dataType: 'json',
+                method: 'GET',
+                success: function(response){
+                    if (response.status == "error") {
+                        self.closest("tr").find(".input-qty").val(qty-1);
+                        jQuery(".row.page-case.msg").show();
+                        jQuery("#search-result").html(response.html);
+                    }
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

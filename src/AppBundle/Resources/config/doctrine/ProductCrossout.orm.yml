@@ -1,0 +1,37 @@
+AppBundle\Entity\ProductCrossout:
+    type: entity
+    table: null
+    repositoryClass: AppBundle\Repository\ProductCrossoutRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        productSaleId:
+            type: integer
+            column: product_sale_id
+        productSaleCrossoutId:
+            type: integer
+            column: product_sale_crossout_id
+        qty:
+            type: integer
+        price:
+            type: decimal
+            precision: 10
+            scale: '2'
+        date:
+            type: date
+    manyToOne:
+        productSale:
+            targetEntity: ProductSale
+            joinColumn:
+                name: product_sale_id
+                referencedColumnName: id
+        productSaleCrossout:
+            targetEntity: ProductSale
+            joinColumn:
+                name: product_sale_crossout_id
+                referencedColumnName: id
+    lifecycleCallbacks: {  }

@@ -1,0 +1,224 @@
+{% extends 'table.html.twig' %}
+
+{% block title %}Прибыль{% endblock %}
+
+{% block content %}
+    <div class="table-w profit-head color-blue">
+        {% set year_total = 0 %}
+        {% set year_total_byn = 0 %}
+        <center><h1 class="color-blue h1-profit">Прибыль</h1></center>
+        <table>
+            <thead>
+            <tr>
+                <th>
+                    <a href="{{ path('app_profit_month', {'month' : 1}) }}">Январь</a></th>
+                <th>
+                    <a href="{{ path('app_profit_month', {'month' : 2}) }}">Февраль</a></th>
+                <th>
+                    <a href="{{ path('app_profit_month', {'month' : 3}) }}">Март</a></th>
+                <th>
+                    <a href="{{ path('app_profit_month', {'month' : 4}) }}">Апрель</a></th>
+                <th>
+                    <a href="{{ path('app_profit_month', {'month' : 5}) }}">Май</a></th>
+                <th>
+                    <a href="{{ path('app_profit_month', {'month' : 6}) }}">Июнь</a></th>
+                <th>
+                    <a href="{{ path('app_profit_month', {'month' : 7}) }}">Июль</a></th>
+                <th>
+                    <a href="{{ path('app_profit_month', {'month' : 8}) }}">Август</a></th>
+                <th>
+                    <a href="{{ path('app_profit_month', {'month' : 9}) }}">Сентябрь</a></th>
+                <th>
+                    <a href="{{ path('app_profit_month', {'month' : 10}) }}">Октябрь</a></th>
+                <th>
+                    <a href="{{ path('app_profit_month', {'month' : 11}) }}">Ноябрь</a></th>
+                <th>
+                    <a href="{{ path('app_profit_month', {'month' : 12}) }}">Декабрь</a></th>
+                <th>Итого</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                {% for i in 1..12 %}
+                    {% if statsSale[i] is defined %}
+                        <td>{{ statsSale[i]['total_price_byn']|number_format(2, '.', '') }} руб.</td>
+                        {% set year_total_byn = year_total_byn + statsSale[i]['total_price_byn'] %}
+                    {% else %}
+                        <td>-</td>
+                    {% endif %}
+                {% endfor %}
+                <td>{{ year_total_byn|number_format(2, '.', '') }} руб.</td>
+            </tr>
+            <tr>
+                {% for i in 1..12 %}
+                    {% if statsSale[i] is defined %}
+                        <td>{{ statsSale[i]['total_price']|number_format(2, '.', '') }} $</td>
+                        {% set year_total = year_total + statsSale[i]['total_price'] %}
+                    {% else %}
+                        <td>-</td>
+                    {% endif %}
+                {% endfor %}
+                <td>{{ year_total|number_format(2, '.', '') }} $</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="box">
+        <center><h1 class="color-blue h1-profit">
+            {% if date|date("m") == '01' %}Январь
+            {% elseif date|date("m") == '02' %}Февраль
+            {% elseif date|date("m") == '03' %}Март
+            {% elseif date|date("m") == '04' %}Апрель
+            {% elseif date|date("m") == '05' %}Май
+            {% elseif date|date("m") == '06' %}Июнь
+            {% elseif date|date("m") == '07' %}Июль
+            {% elseif date|date("m") == '08' %}Август
+            {% elseif date|date("m") == '09' %}Сентябрь
+            {% elseif date|date("m") == '10' %}Окрябрь
+            {% elseif date|date("m") == '11' %}Ноябрь
+            {% elseif date|date("m") == '12' %}Декабрь
+            {% endif %}
+        </h1></center>
+        <form id="profit-change" action="{{ path('app_profit_change') }}" method="POST">
+            <input type="hidden" value="{{ date|date("m") }}" name="month" />
+            <section class="table-00 profit-content-center">
+                <table class="profit-table" style="display:inline-block" >
+                    {% set sum_product = 0 %}
+                    {% set sum_income = 0 %}
+                    {% set sum_outcome = 0 %}
+                    <thead>
+                    <tr>
+                        <th style="width:17px"></th>
+                        <th style="width:120px">Товары</th>
+                        <th style="width:120px">Прочее</th>
+                        <th style="width:120px">Расходы</th>
+                        <th style="width:120px" class="color-blue">Итого</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in 1..16 %}
+                            <tr>
+                                <td><b>{{ i }}</b></td>
+                                <td class="td-border-right">
+                                    {% if profit[i]['profit'] is defined %}{{ profit[i]['profit']|number_format(2, '.', '')  }}{% endif %}
+                                </td>
+                                <td class="td-border-right">
+                                    <input type="text" pattern="\d+(\.\d{2})?" name="profit[{{ i }}][income]" value="{% if profit[i]['income'] is defined %}{{ profit[i]['income']|number_format(2, '.', '')  }}{% endif %}" />
+                                </td>
+                                <td class="td-border-right">
+                                    <input type="text" pattern="\d+(\.\d{2})?" name="profit[{{ i }}][outcome]" value="{% if profit[i]['outcome'] is defined %}{{ profit[i]['outcome']|number_format(2, '.', '')  }}{% endif %}" />
+                                </td>
+                                <td class="">
+                                    {% if profit[i]['total'] is defined %}{{ profit[i]['total']|number_format(2, '.', '')  }}{% endif %}
+                                </td>
+                            </tr>
+                            {% set sum_product = sum_product + profit[i]['profit'] %}
+                            {% set sum_income = sum_income + profit[i]['income'] %}
+                            {% set sum_outcome = sum_outcome + profit[i]['outcome'] %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <table class="profit-table" style="display:inline-block">
+                    <thead>
+                        <tr>
+                            <th style="width:16px"></th>
+                            <th style="width:120px">Товары</th>
+                            <th style="width:120px">Прочее</th>
+                            <th style="width:120px">Расходы</th>
+                            <th style="width:120px" class="color-blue">Итого</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in 17..31 %}
+                            {% if profit[i]['profit'] is defined %}
+                                <tr>
+                                    <td><b>{{ i }}</b></td>
+                                    <td class="td-border-right">
+                                        {% if profit[i]['profit'] is defined %}{{ profit[i]['profit']|number_format(2, '.', '')  }}{% endif %}
+                                    </td>
+                                    <td class="td-border-right">
+                                        <input type="text" pattern="\d+(\.\d{2})?" name="profit[{{ i }}][income]" value="{% if profit[i]['income'] is defined %}{{ profit[i]['income']|number_format(2, '.', '') }}{% endif %}" />
+                                    </td>
+                                    <td class="td-border-right">
+                                        <input type="text" pattern="\d+(\.\d{2})?" name="profit[{{ i }}][outcome]" value="{% if profit[i]['outcome'] is defined %}{{ profit[i]['outcome']|number_format(2, '.', '')  }}{% endif %}" />
+                                    </td>
+                                    <td class="">
+                                        {% if profit[i]['total'] is defined %}{{ profit[i]['total']|number_format(2, '.', '')  }}{% endif %}
+                                    </td>
+                                </tr>
+                                {% set sum_product = sum_product + profit[i]['profit'] %}
+                                {% set sum_income = sum_income + profit[i]['income'] %}
+                                {% set sum_outcome = sum_outcome + profit[i]['outcome'] %}
+                            {% else %}
+                                <tr>
+                                    <td style="height: 38px;"></td><td></td><td></td><td></td><td></td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        <tr>
+                            <td></td>
+                            <td id="product-sum">{{ sum_product }}</td>
+                            <td id="income-sum">{{ sum_income }}</td>
+                            <td id="outcome-sum">{{ sum_outcome }}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </form>
+        <div style="float:right;margin-right:11%;">
+            Итого <input id="month-total" style="background-color: #00bdd6;color: #fff;text-align: right;" type="number" name="total" value="" readonly="readonly" />
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $(function() {
+
+            function recalcMonthTotal()
+            {
+                var total = 0, income_sum = 0, outcome_sum = 0;
+                $(".profit-table tr").each(function(){
+                    if ($(this).find('td:first-child').text() != "") {
+                        total = total + $(this).find('td:last-child').text()*1;
+                    }
+                });
+                $(".profit-table td#product-sum").html(total.toFixed(2));
+                $("#month-total").val(total.toFixed(2));
+
+                $(".profit-table tr").each(function(){
+                    if ($(this).find('td:first-child').text() != "") {
+                        income_sum = income_sum + $(this).find('td').eq(2).find("input").val()*1;
+                    }
+                });
+                $(".profit-table td#income-sum").html(income_sum.toFixed(2));
+
+                $(".profit-table tr").each(function(){
+                    if ($(this).find('td:first-child').text() != "") {
+                        outcome_sum = outcome_sum + $(this).find('td').eq(3).find("input").val()*1;
+                    }
+                });
+                $(".profit-table td#outcome-sum").html(outcome_sum.toFixed(2));
+            }
+
+            $(".profit-table input").on('change', function(){
+                var self = $(this);
+                $(this).closest('tr').find('td:last-child').html('<img width="16px" src={{ asset('bundles/app/img/loading.gif') }} />');
+                var data = $("#profit-change").serialize();
+                $.ajax({
+                    url : '{{ path('app_profit_change') }}',
+                    method: "POST",
+                    data : data,
+                    success: function (data) {
+                        let day = self.closest('tr').find('td:first-child').text();
+                        self.closest('tr').find('td:last-child').html(data[day]['total']);
+                        recalcMonthTotal();
+                    }
+                });
+            });
+
+            recalcMonthTotal();
+        });
+    </script>
+{% endblock %}

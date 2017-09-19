@@ -1,0 +1,113 @@
+app:
+    path:   /
+    defaults: { _controller: AppBundle:Product:index }
+    methods:  [GET, HEAD]
+
+app_product_star:
+    path:   /products/star
+    defaults: { _controller: AppBundle:Product:star }
+    methods: [POST]
+
+app_product_names:
+    path:   /products/names
+    defaults: { _controller: AppBundle:Product:names }
+    methods:  [GET, HEAD]
+
+app_product_seach:
+    path:   /products/seach
+    defaults: { _controller: AppBundle:Product:seachAjax }
+    methods:  [GET]
+
+app_import_step1:
+    path:     /import/step/1
+    defaults: { _controller: AppBundle:Import:step1 }
+    methods:  [GET, HEAD]
+
+app_import_step2:
+    path:     /import/step/2
+    defaults: { _controller: AppBundle:Import:step2 }
+    methods:  [GET, HEAD]
+    
+app_import_step3:
+    path:     /import/step/3
+    defaults: { _controller: AppBundle:Import:step3 }
+    methods:  [POST]
+    
+app_import_step4:
+    path:     /import/step/4
+    defaults: { _controller: AppBundle:Import:step4 }
+    methods:  [POST]
+    
+app_import_step5:
+    path:     /import/step/5
+    defaults: { _controller: AppBundle:Import:step5 }
+    methods:  [POST]
+
+app_import_step6:
+    path:     /import/step/6
+    defaults: { _controller: AppBundle:Import:step6 }
+    methods:  [POST]
+
+app_import_back:
+    path:     /import/back
+    defaults: { _controller: AppBundle:Import:back }
+    methods:  [POST]
+
+app_product_check_sale:
+    path: /products/sale/check
+    defaults: { _controller: AppBundle:Sale:selectProducts }
+    methods: [GET]
+
+app_product_sale_index:
+    path: /products/sale/index
+    defaults: { _controller: AppBundle:Sale:index }
+    methods: [GET]
+
+app_product_sale_ajax_select2_search:
+    path: /products/sale/select2/search
+    defaults: { _controller: AppBundle:Sale:ajaxSelect2Search }
+    methods: [GET]
+
+app_product_sale_ball_remove_ajax:
+    path: /products/sale/ball/remove
+    defaults: { _controller: AppBundle:Sale:ajaxBallRemove }
+    methods: [POST]
+
+app_product_sale:
+    path: /products/sale
+    defaults: { _controller: AppBundle:Sale:sale }
+    methods: [POST]
+
+app_product_ball_change_ajax:
+    path: /products/ball/change
+    defaults: { _controller: AppBundle:Product:ballChange }
+    methods: [POST]
+
+app_crossout:
+    path: /products/crossout
+    defaults: { _controller: AppBundle:Crossout:crossout }
+    methods: [GET]
+
+app_crossout_do:
+    path: /products/crossout/do
+    defaults: { _controller: AppBundle:Crossout:do }
+    methods: [POST]
+
+app_crossout_list:
+    path: /products/crossout/list
+    defaults: { _controller: AppBundle:Crossout:list }
+    methods: [GET]
+
+app_not_crossout_list:
+    path: /products/non-crossout/list
+    defaults: { _controller: AppBundle:Sale:listNotCrossout }
+    methods: [GET]
+
+app_check_qty:
+    path: /products/sale/check/qty
+    defaults: { _controller: AppBundle:Sale:checkQty }
+    methods: [GET]
+
+app_main:
+    resource: "@AppBundle/Controller/"
+    type:     annotation

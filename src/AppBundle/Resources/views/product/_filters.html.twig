@@ -1,0 +1,107 @@
+<form id="form-filter" action="{{ action }}#table" method="GET">
+    <div class="row page-case">
+        <div class="col-lg-6 width40">
+            <div class="search-box">
+                <input name="title" value="{% if terms.title is defined %}{{ terms.title }}{% endif %}" placeholder="Поиск по товару артикулу" type="text" />
+                <button type="submit" class="button-search"></button>
+            </div>
+        </div>
+        {% set route = app.request.attributes.get('_route') %}
+        {% if not app.request.isXmlHttpRequest %}
+            {% if route == 'app' %}
+                <div class="col-lg-6 inner-right btn-group">
+                    <a id="check-for-sale" href="#" class="btn-transp">отметить продажу</a>
+                    <button type="button" class="btn-base export">Экспортировать</button>
+                    <a href="{{ path('app_import_step1') }}"><button type="button" class="btn-simle">импортировать</button></a>
+                </div>
+            {% endif %}
+            {% if route == 'app_crossout_list' %}
+                <div class="col-lg-6 inner-right btn-group">
+                    <a href="{{ path('app_import_step1') }}">
+                        <button type="button" class="btn-base">Импортировать</button></a>
+                    <button type="button" class="btn-base export">Экспортировать</button>
+                    {#<button type="button" class="btn-base">В накладную</button>#}
+                </div>
+            {% endif %}
+            {% if route == 'app_product_sale_index' %}
+                <div class="col-lg-6 inner-right btn-group width60">
+                    <a id="check-for-crossout" href="{{ path('app_crossout') }}">
+                        <button type="button" class="btn-base">Списать</button></a>
+                    <button id="remove-from-site" type="button" class="btn-base {% if terms.removeFromSite is defined and terms.removeFromSite == 1%}checked{% endif %}">Снять с сайта</button>
+                    <input id="filter-removeFromSite" name="removeFromSite" type="checkbox" value="1" {% if terms.removeFromSite is defined and terms.removeFromSite == 1%}checked="checked"{% endif %} style="display: none;" />
+                    <a href="{{ path('app_import_step1') }}">
+                        <button type="button" class="btn-base">Импортировать</button></a>
+                    <button type="button" class="btn-base export">Экспортировать</button>
+                </div>
+            {% endif %}
+            {% if route == 'app_not_crossout_list' %}
+                <div class="col-lg-6 inner-right btn-group width60">
+                    <a id="check-for-crossout" href="#">
+                        <button type="button" class="btn-base">Списать</button></a>
+                    <a href="{{ path('app_import_step1') }}">
+                        <button type="button" class="btn-base">Импортировать</button></a>
+                    <button type="button" class="btn-base export">Экспортировать</button>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="col-lg-6 inner-right btn-group width60">
+                <button type="button" class="btn-base check-products">Выбрать</button>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="filter-mp">
+
+        <input type="hidden" name="limit" value="{{ terms.limit }}">
+        <input type="hidden" name="sortCol" value="{% if terms.sortCol is defined %}{{ terms.sortCol }}{% endif %}"/>
+        <input type="hidden" name="sortOrder" value="{% if terms.sortOrder is defined %}{{ terms.sortOrder }}{% endif %}"/>
+
+        <button id="reset-filter" type="reset" class="select-base">Все</button>
+
+        {#<select class="select-base">#}
+            {#<option selected="selected">Операция</option>#}
+            {#<option>Операция 2</option>#}
+            {#<option>Операция 3</option>#}
+            {#<option>Операция 4</option>#}
+        {#</select>#}
+
+        {% if route != 'app_not_crossout_list' and route != 'app_crossout_list' %}
+            <select name="documents" class="select-base">
+                <option value="" selected="selected">Документы</option>
+                <option {% if terms.documents is defined and terms.documents == 1 %}selected="selected"{% endif %} value="1">Да</option>
+                <option {% if terms.documents is defined and terms.documents is same as('0') %}selected="selected"{% endif %} value="0">Нет</option>
+            </select>
+        {% endif %}
+
+        <input class="select-base w100" name="priceFrom" type="text" value="{% if terms.priceFrom is defined %}{{ terms.priceFrom }}{% endif %}" placeholder="Цена От" />
+        <input class="select-base w100" name="priceTo" type="text" value="{% if terms.priceTo is defined %}{{ terms.priceTo }}{% endif %}" placeholder="Цена До" />
+        <input class="select-base datepicker w100" name="dateFrom" type="text" value="{% if terms.dateFrom is defined %}{{ terms.dateFrom }}{% endif %}" placeholder="Дата От" />
+        <input class="select-base datepicker w100" name="dateTo" type="text" value="{% if terms.dateTo is defined %}{{ terms.dateTo }}{% endif %}" placeholder="Дата До" />
+        <select name="providerId" class="select-base select-color">
+            <option value="" selected="selected">Поставщик</option>
+            {% for provider in providers %}
+                <option value="{{ provider.id }}" {% if terms.providerId is defined and terms.providerId == provider.id %}selected="selected"{% endif %}>{{ provider.title }}</option>
+            {% endfor %}
+        </select>
+        <button id="filter-button" type="submit" class="btn-base v-align-top">Фильтровать</button>
+    </div>
+</form>
+<script type="text/javascript">
+    jQuery(function(){
+        jQuery("#reset-filter").on('click', function(){
+            jQuery(this).closest('form').find("input.select-base, .search-box input, select.select-base").val("");
+            jQuery(this).closest('form').find("input[type=checkbox]").removeAttr("checked");
+            jQuery("#form-filter").submit();
+        });
+        jQuery("#remove-from-site").on('click', function () {
+            var checkBox = $("#filter-removeFromSite");
+            checkBox.prop("checked", !checkBox.prop("checked"));
+            jQuery("#filter-button").click();
+        });
+        jQuery("#select-limit").on('change', function(){
+            jQuery("#form-filter").find("input[name=limit]").val($(this).val());
+            jQuery.cookie("limit-perpage", $(this).val(), { expires : 10 });
+            jQuery("#form-filter").submit();
+        });
+    });
+</script>

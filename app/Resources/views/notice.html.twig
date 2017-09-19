@@ -1,0 +1,14 @@
+{% set transMessages = {
+'Bad credentials.': 'Неверный телефон или код подтверждения. Пример телефона: 380443838843'
+} %}
+
+{% block main %}
+    {% for flashMessage in app.session.flashbag.get('notice') %}
+        <div class="alert alert-{{ flashMessage.status }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            {{ flashMessage.message|trans(transMessages, "security") }}
+        </div>
+    {% endfor %}
+{% endblock %}

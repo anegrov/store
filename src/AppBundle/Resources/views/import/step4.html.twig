@@ -1,0 +1,107 @@
+{% extends 'import.html.twig' %}
+
+{% block title %}ИМПОРТ ТОВАРА{% endblock %}
+
+{% block content %}
+    
+    <div class="box">
+        <div class="page-case">
+            <p class="text-center color-blue text-uppercase">менее 100% совпадение</p>
+            <section class="table-00 color-base">
+                <form id="import-form-step5" action="{{ path('app_import_step5') }}" method="post" >
+                    <input type="hidden" name="provider_id" value="{{ provider_id }}" />
+                    <input type="hidden" name="has_documents" value="{{ has_documents }}" />
+                    <input type="hidden" name="limit" value="{{ limit }}" />
+                    <input type="hidden" name="offset" value="{{ offset }}" />
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="title-td txt-left td-border-right-bold" style="width: 420px">
+                                    <h3>Товары</h3>
+                                </th>
+                                <th class="td-border-right">
+                                    <h3><span class="text-uppercase">Количество</span></h3>
+                                </th>
+                                <th class="td-border-right"  style="width: 420px" >
+                                    <h3><span class="text-uppercase">Схожие товары</span></h3>
+                                </th>
+                                <th class="td-border-right">
+                                    <i class="ico-link"></i>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for values in data %}
+                                <tr>
+                                    {% set title = "" %}
+                                    {% for titl,val in values %}
+                                        {% set title = "" %}
+                                        {% if titl == "Наименование" %}
+                                            <td class="title-tr txt-left td-border-right-bold">
+                                                <a href="#" class="product-item">{{ val }}</a>
+                                                <input type="hidden" value="{{ val }}" name="title[]" />
+                                            </td>
+                                            {% set title = val %}
+                                        {% elseif titl == "Количество" %}
+                                            <td class="td-border-right">
+                                                <a href="#">{{ val }}</a>
+                                            </td>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <td class="td-border-right txt-left">
+                                        <select name="similar-product[]" class="js-similar-product" style="width: 100%">
+                                            <option value="{{ title }}">{{ title }}</option>
+                                        </select>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="text-right">
+                        <p class="color-base">
+                            <span class="text-uppercase">Страница</span> {{ currentPage }} из {{ allPages }}</p>
+                        {% if offset > 0 %}
+                            <button type="button" class="btn-base back">Назад</button>
+                        {% endif %}
+                        <button type="submit" class="btn-base">Далее</button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".js-similar-product").select2({
+                language: "ru",
+                minimumInputLength: 2,
+                tags: [],
+                ajax: {
+                    url: "{{ path('app_product_names') }}",
+                    dataType: 'json',
+                    type: "GET",
+                    quietMillis: 50,
+                    data: function (term) {
+                        return {
+                            term: term
+                        };
+                    },
+                    processResults : function(data){
+                        return {
+                            results: data.results
+                        }
+                    }
+                }
+            });
+
+            $(".back").on('click', function(){
+                action = '{{ path('app_import_back') }}';
+                $("#import-form-step5").attr("action", action);
+                $("#import-form-step5").submit();
+            });
+        });
+    </script>
+{% endblock %}
