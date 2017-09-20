@@ -55,6 +55,8 @@ class ProductController extends Controller
             }
         }
 
+
+
         return $this->render('AppBundle:product:main.html.twig', [
             'items'     => $pagination,
             'total'     => $total,

@@ -119,9 +119,13 @@
                                         <label for="checkbox-bunch-{{ bunch.id }}"><span class="checkbox ckeckbox-group"></span></label>
                                     </div>
                                     <a href="#" class="product-item">{{ bunch.title }}</a>
-                                    {% if bunch.lastProduct is defined and bunch.lastProduct.dateDiff|date("%m") > 0 %}
+                                    {% if bunch.lastProduct is defined and bunch.lastProduct.dateDiff|date("%m") > 2 and bunch.lastProduct.dateDiff|date("%m") < 6 %}
                                         <div class="product-item-time">
-                                            <span class="color-orange">{{ bunch.lastProduct.dateDiff|date("%m ") }}мес</span>
+                                            <span class="color-orange">3 мес</span>
+                                        </div>
+                                    {% elseif bunch.lastProduct is defined and bunch.lastProduct.dateDiff|date("%m") > 5%}
+                                        <div class="product-item-time">
+                                            <span class="color-orange">6 мес</span>
                                         </div>
                                     {% endif %}
 
@@ -189,9 +193,13 @@
 
                                                         <a href="#" class="product-item{% if product.documents == 0 %} blue{% endif %}">{{ product.title }}</a>
 
-                                                        {% if product.dateDiff|date("%m") > 0 %}
+                                                        {% if product.dateDiff|date("%m") > 2  and product.dateDiff|date("%m") < 6%}
                                                             <div class="product-item-time">
-                                                                <span class="color-orange">{{ product.dateDiff|date("%m ") }}мес</span>
+                                                                <span class="color-orange"> 3 мес</span>
+                                                            </div>
+                                                        {% elseif  product.dateDiff|date("%m") > 5 %}
+                                                            <div class="product-item-time">
+                                                                <span class="color-orange"> 6 мес</span>
                                                             </div>
                                                         {% endif %}
 
@@ -447,7 +455,7 @@
                         arr.splice(i,1);
                     }
                 });
-             
+
 
                 jQuery('#checked-products').html(curIds.length);
 
