@@ -399,7 +399,7 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
         }
         else {
             // default sort
-            $qb->orderBy('last_date', 'DESC');
+            $qb->orderBy('last_date', 'ASC');
             $qb->addOrderBy('b.id', 'ASC');
         }
 
@@ -461,4 +461,5 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
 
         return $total;
     }
+
 }
