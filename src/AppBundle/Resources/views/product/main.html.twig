@@ -129,13 +129,18 @@
                                         </div>
                                     {% endif %}
 
+
+
                                     {% if bunch.ball == constant('AppBundle\\Entity\\ProductStock::RED_BALL') %}
-                                        <span class="point-1 pointer"></span>
+                                        <div class=" pointer"><span class="point-1"></span></div>
                                     {% elseif bunch.ball == constant('AppBundle\\Entity\\ProductStock::BLUE_BALL') %}
-                                        <span class="point-2 pointer"></span>
+                                        <div class=" pointer"><span class="point-3"></span></div>
                                     {% elseif bunch.ball == constant('AppBundle\\Entity\\ProductStock::GREEN_BALL') %}
-                                        <span class="point-3 pointer"></span>
+                                        <div class=" pointer"><span class="point-3"></span></div>
+                                    {% else %}
+                                        <div class=" pointer"><span class=""></span></div>
                                     {% endif %}
+
                                 </td>
 
                                 <td class="td-border-right stars-case">
@@ -373,13 +378,15 @@
                     success: function (data) {
                         if (data.status == "success") {
                             if (data.ball == 'blue') {
-                                self.removeClass("point-1").addClass("point-2");
+                                self.find('span').removeClass("point-1").addClass("point-2");
                             }
                             else if (data.ball == 'green') {
-                                self.removeClass("point-2").addClass("point-3");
+                                self.find('span').removeClass("point-2").addClass("point-3");
                             }
                             else {
-                                self.remove();
+                                self.find('span').removeClass('point-1');
+                                self.find('span').removeClass('point-2');
+                                self.find('span').removeClass('point-3');
                             }
                         }
                     }

@@ -580,7 +580,7 @@ select.styled { position: relative; width: 190px; opacity: 0; filter: alpha(opac
     width: 418px;
 }
 .point-1, .point-2, .point-3 {
-    top: 17px;
+
 }
 
 .v-align-top {
@@ -686,6 +686,9 @@ table.import-finish tr td{
 }
 .pointer {
     cursor: pointer;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
 }
 .table-00 a.blue {
     color: #00c7db;
