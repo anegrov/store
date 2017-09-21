@@ -254,7 +254,7 @@ class ProductController extends Controller
         elseif ( $item->getBall() == ProductStock::GREEN_BALL ) {
             $item->setBall( NULL );
         }elseif ($item->getBall() == NULL){
-            $item->setBall(ProductStock::GREEN_BALL);
+            $item->setBall(ProductStock::RED_BALL);
         }
 
         $em->persist($item);

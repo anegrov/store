@@ -383,6 +383,8 @@
                             }
                             else if (data.ball == 'green') {
                                 self.find('span').removeClass("point-2").addClass("point-3");
+                            }else if(data.ball == 'red'){
+                                self.find('span').addClass("point-1");
                             }
                             else {
                                 self.find('span').removeClass('point-1');
