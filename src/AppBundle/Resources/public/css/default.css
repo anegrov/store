@@ -653,6 +653,7 @@ table.import-finish tr td{
 }
 .td-sort h3 {
     padding-right: 14px;
+    text-align: left;
 }
 .td-sort.last-price h3 {
     width: 128px;
