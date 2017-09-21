@@ -119,9 +119,13 @@
                                         <label for="checkbox-bunch-{{ bunch.id }}"><span class="checkbox ckeckbox-group"></span></label>
                                     </div>
                                     <a href="#" class="product-item">{{ bunch.title }}</a>
-                                    {% if bunch.lastProduct is defined and bunch.lastProduct.dateDiff|date("%m") > 0 %}
+                                    {% if bunch.lastProduct is defined and bunch.lastProduct.dateDiff|date("%m") > 2 and bunch.lastProduct.dateDiff|date("%m") < 6 %}
                                         <div class="product-item-time">
-                                            <span class="color-orange">{{ bunch.lastProduct.dateDiff|date("%m ") }}мес</span>
+                                            <span class="color-orange">3 мес</span>
+                                        </div>
+                                    {% elseif bunch.lastProduct is defined and bunch.lastProduct.dateDiff|date("%m") > 5%}
+                                        <div class="product-item-time">
+                                            <span class="color-orange">6 мес</span>
                                         </div>
                                     {% endif %}
 
@@ -190,11 +194,15 @@
 
                                                             <a href="#" class="product-item{% if product.documents == 0 %} blue{% endif %}">{{ product.title }}</a>
 
-                                                            {% if product.dateDiff|date("%m") > 0 %}
-                                                                <div class="product-item-time">
-                                                                    <span class="color-orange">{{ product.dateDiff|date("%m ") }}мес</span>
-                                                                </div>
-                                                            {% endif %}
+                                                        {% if product.dateDiff|date("%m") > 2  and product.dateDiff|date("%m") < 6%}
+                                                            <div class="product-item-time">
+                                                                <span class="color-orange"> 3 мес</span>
+                                                            </div>
+                                                        {% elseif  product.dateDiff|date("%m") > 5 %}
+                                                            <div class="product-item-time">
+                                                                <span class="color-orange"> 6 мес</span>
+                                                            </div>
+                                                        {% endif %}
 
                                                             {#{% if product.ball == constant('AppBundle\\Entity\\ProductStock::RED_BALL') %}#}
                                                                 {#<span class="point-1 pointer"></span>#}
@@ -337,6 +345,7 @@
                     var curIds = [];
                 }
 
+
                 for(var i=0;i<curIds.length;i++){
                     if (curIds[i] != "") {
                         let parsedVal = JSON.parse(curIds[i]);
@@ -394,6 +403,8 @@
 
             jQuery(".checkbox-style input").on('change', function(){
                 let cookieIds = jQuery.cookie("stock-checked-ids");
+
+
                 if ( cookieIds != undefined) {
                     var curIds = cookieIds.split(',');
                 }
@@ -401,8 +412,13 @@
                     var curIds = [];
                 }
 
+
+
                 var input = $(this).closest('div').find('input');
+
                 var selectId = input.val();
+
+
 
                 let qty = input.closest("tr").find('td').eq(2).find(".input-qty").val();
                 let object = {};
@@ -429,12 +445,24 @@
                         curIds = jQuery.grep(curIds, function(value) {
                             return value != add;
                         });
+
                     }
                     jQuery.cookie("stock-checked-ids", curIds, { path: '/', expires: 7 });
                 }
                 jQuery('#checked-products').html(curIds.length);
 
+                curIds.forEach(function (t,i,arr) {
+                    if (t === ""){
+                        arr.splice(i,1);
+                    }
+                });
+
+
+                jQuery('#checked-products').html(curIds.length);
+
             });
+
+
             $.removeCookie('crossout-checked-ids', { path: '/' });
             $.removeCookie('not-crossout-checked-ids', { path: '/' });
             $.removeCookie('sale-checked-ids', { path: '/' });
