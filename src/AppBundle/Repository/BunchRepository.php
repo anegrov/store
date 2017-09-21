@@ -330,6 +330,7 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
         $qb->groupBy('b.id');
 
         $qb->andWhere('b.total <> 0');
+        $qb->andWhere('p.qty <> 0');
 
         // filters data
         if (isset($terms['documents']) && $terms['documents'] != "") {
