@@ -24,7 +24,7 @@ class AppExtension extends \Twig_Extension
 
         usort($values, function ($a, $b) use ($sortRule) {
             if ($a->getCreated() == $b->getCreated()) return 0;
-            if ($sortRule === 'ASC'){
+            if ($sortRule === 'ASC') {
                 return $a->getCreated() < $b->getCreated() ? -1 : 1;
             } else {
                 return $a->getCreated() > $b->getCreated() ? -1 : 1;

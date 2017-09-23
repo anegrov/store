@@ -17,17 +17,17 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
 {
     /**
      * findSimilarNames
-     * 
+     *
      * @param type $title
      */
     public function findSimilarNames($title)
     {
         $result = $this->createQueryBuilder('b')
-           ->where('b.title LIKE :title')
-           ->setParameter('title', '%' . $title . '%')
-           ->getQuery()
-           ->getResult();
-        
+            ->where('b.title LIKE :title')
+            ->setParameter('title', '%' . $title . '%')
+            ->getQuery()
+            ->getResult();
+
         return $result;
     }
 
@@ -46,10 +46,10 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
         }
 
         $result = $this->createQueryBuilder('p')
-             ->where('p.bunch_id = :bunch_id')
-             ->setParameter('bunch_id', $bunch_id)
-             ->getQuery()
-             ->getResult();
+            ->where('p.bunch_id = :bunch_id')
+            ->setParameter('bunch_id', $bunch_id)
+            ->getQuery()
+            ->getResult();
 
         return $result;
     }
@@ -150,7 +150,7 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
         }
         if (isset($terms['providerId']) && !empty($terms['providerId'])) {
             $defined = false;
-            foreach($qb->getDQLPart('join')['b'] as $item) {
+            foreach ($qb->getDQLPart('join')['b'] as $item) {
                 if ($item->getJoin() == ProductStock::class) $defined = true;
             }
             if ($defined === false) {
@@ -161,14 +161,14 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
         }
         if (isset($terms['title']) && !empty($terms['title'])) {
             $defined = false;
-            foreach($qb->getDQLPart('join')['b'] as $item) {
+            foreach ($qb->getDQLPart('join')['b'] as $item) {
                 if ($item->getJoin() == ProductStock::class) $defined = true;
             }
             if ($defined === false) {
                 $qb->innerJoin(ProductStock::class, 'p', 'WITH', 'ps.productId=p.id');
             }
             $qb->andWhere('p.title LIKE :title')
-                ->setParameter('title', '%'.$terms['title'].'%');
+                ->setParameter('title', '%' . $terms['title'] . '%');
         }
 
         // sort by data
@@ -176,7 +176,7 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
             $order = $terms['sortOrder'] ? $terms['sortOrder'] : 'ASC';
             if ($terms['sortCol'] == 'price-purchase-min-byn') {
                 $defined = false;
-                foreach($qb->getDQLPart('join')['b'] as $item) {
+                foreach ($qb->getDQLPart('join')['b'] as $item) {
                     if ($item->getJoin() == ProductStock::class) $defined = true;
                 }
                 if ($defined === false) {
@@ -188,7 +188,7 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
             }
             if ($terms['sortCol'] == 'price-purchase-min') {
                 $defined = false;
-                foreach($qb->getDQLPart('join')['b'] as $item) {
+                foreach ($qb->getDQLPart('join')['b'] as $item) {
                     if ($item->getJoin() == ProductStock::class) $defined = true;
                 }
                 if ($defined === false) {
@@ -246,7 +246,7 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
         }
         if (isset($terms['providerId']) && !empty($terms['providerId'])) {
             $defined = false;
-            foreach($qb->getDQLPart('join')['b'] as $item) {
+            foreach ($qb->getDQLPart('join')['b'] as $item) {
                 if ($item->getJoin() == ProductStock::class) $defined = true;
             }
             if ($defined === false) {
@@ -257,14 +257,14 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
         }
         if (isset($terms['title']) && !empty($terms['title'])) {
             $defined = false;
-            foreach($qb->getDQLPart('join')['b'] as $item) {
+            foreach ($qb->getDQLPart('join')['b'] as $item) {
                 if ($item->getJoin() == ProductStock::class) $defined = true;
             }
             if ($defined === false) {
                 $qb->innerJoin(ProductStock::class, 'p', 'WITH', 'ps.productId=p.id');
             }
             $qb->andWhere('p.title LIKE :title')
-                ->setParameter('title', '%'.$terms['title'].'%');
+                ->setParameter('title', '%' . $terms['title'] . '%');
         }
 
         // sort by data
@@ -361,7 +361,7 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
         }
         if (isset($terms['title']) && !empty($terms['title'])) {
             $qb->andWhere('p.title LIKE :title')
-                ->setParameter('title', '%'.$terms['title'].'%');
+                ->setParameter('title', '%' . $terms['title'] . '%');
         }
 
         // sort by data
@@ -397,8 +397,7 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
                 $qb->addSelect('AVG(p.price) AS avg_price');
                 $qb->orderBy('avg_price', $order);
             }
-        }
-        else {
+        } else {
             // default sort
             $qb->orderBy('DATE_FORMAT(MAX(p.created), \'%Y%m%d\')', 'DESC');
         }
@@ -416,18 +415,17 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
     {
         $em = $this->getEntityManager();
         $qb = $this->createQueryBuilder('b')
-                    ->select('SUM(p.qty) AS qty')
-                    ->leftJoin(ProductStock::class, 'p', 'WITH', 'p.bunchId=b.id')
-                    ->where('b.id = :id')
-                    ->setParameter('id', $bunch->getId())
-                    ->groupBy('b.id');
+            ->select('SUM(p.qty) AS qty')
+            ->leftJoin(ProductStock::class, 'p', 'WITH', 'p.bunchId=b.id')
+            ->where('b.id = :id')
+            ->setParameter('id', $bunch->getId())
+            ->groupBy('b.id');
 
         $result = $qb->getQuery()->getResult();
 
         if (!empty($result)) {
             $bunch->setTotal($result[0]['qty']);
-        }
-        else {
+        } else {
             $bunch->setTotal(0);
         }
 
