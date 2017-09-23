@@ -346,12 +346,12 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
             $qb->setParameter('price_to', $terms['priceTo']);
         }
         if (isset($terms['dateFrom']) && !empty($terms['dateFrom'])) {
-            $dateFrom = \DateTime::createFromFormat('Y.m.d', $terms['dateFrom']);
+            $dateFrom = \DateTime::createFromFormat('d-m-Y', $terms['dateFrom']);
             $qb->andWhere('p.created >= :date_from');
             $qb->setParameter('date_from', $dateFrom->format('Y-m-d 00:00:00'));
         }
         if (isset($terms['dateTo']) && !empty($terms['dateTo'])) {
-            $dateTo = \DateTime::createFromFormat('Y.m.d', $terms['dateTo']);
+            $dateTo = \DateTime::createFromFormat('d-m-Y', $terms['dateTo']);
             $qb->andWhere('p.created <= :date_to');
             $qb->setParameter('date_to', $dateTo->format('Y-m-d 23:59:59'));
         }

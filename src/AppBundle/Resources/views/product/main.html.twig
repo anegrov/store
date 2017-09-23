@@ -217,9 +217,231 @@
                                     <tbody>
                                     {% for product in bunch.getProducts() | usort(terms.sortCol == "last-date" and terms.sortOrder == "ASC" ? "ASC" : "DESC") %}
                                         {% if product.qty > 0 %}
-                                            {% if terms.priceForm is defined and terms.priceTo is defined %}
-                                                {% if product.priceByn >= terms.priceFrom and product.priceByn <= terms.priceTo %}
 
+                                            {% for i in 0..(product.qty-1) %}
+                                                {% if terms.priceForm is defined and terms.priceTo is defined %}
+                                                    {% if product.priceByn >= terms.priceFrom and product.priceByn <= terms.priceTo %}
+
+                                                        <tr>
+                                                            <td class="title-tr txt-left td-border-right {% if product.dateDiff|date("%m") > 0 %}title-right-offset{% endif %}">
+                                                                <div class="checkbox-style padding10-left">
+                                                                    <input id="checkbox-{{ product.id }}"
+                                                                           name="product[{{ product.id }}]"
+                                                                           {% if product.id in ids|keys %}checked="checked"{% endif %}
+                                                                           value="{{ product.id }}" type="checkbox"/>
+                                                                    <label for="checkbox-{{ product.id }}"><span
+                                                                                class="checkbox"></span></label>
+                                                                </div>
+
+                                                                <a href="#"
+                                                                   class="product-item{% if product.documents == 0 %} blue{% endif %}">{{ product.title }}</a>
+
+                                                                {% if product.dateDiff|date("%m") > 2  and product.dateDiff|date("%m") < 6 %}
+                                                                    <div class="product-item-time">
+                                                                        <span class="color-orange"> 3 мес</span>
+                                                                    </div>
+                                                                {% elseif  product.dateDiff|date("%m") > 5 %}
+                                                                    <div class="product-item-time">
+                                                                        <span class="color-orange"> 6 мес</span>
+                                                                    </div>
+                                                                {% endif %}
+
+                                                                {#{% if product.ball == constant('AppBundle\\Entity\\ProductStock::RED_BALL') %}#}
+                                                                {#<span class="point-1 pointer"></span>#}
+                                                                {#{% elseif product.ball == constant('AppBundle\\Entity\\ProductStock::BLUE_BALL') %}#}
+                                                                {#<span class="point-2 pointer"></span>#}
+                                                                {#{% elseif product.ball == constant('AppBundle\\Entity\\ProductStock::GREEN_BALL') %}#}
+                                                                {#<span class="point-3 pointer"></span>#}
+                                                                {#{% endif %}#}
+                                                            </td>
+
+                                                            <td class="td-border-right stars-case">
+                                                                {#<div class="checkbox-style-star checkbox-style-star-blue">#}
+                                                                {#<input id="star.1.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star1 %}checked="checked"{% endif %}>#}
+                                                                {#<label for="star.1.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star1"></span></label>#}
+                                                                {#</div>#}
+                                                                {#<div class="checkbox-style-star checkbox-style-star-yellow">#}
+                                                                {#<input id="star.2.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star2 %}checked="checked"{% endif %} />#}
+                                                                {#<label for="star.2.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star2"></span></label>#}
+                                                                {#</div>#}
+                                                                {#<div class="checkbox-style-star checkbox-style-star-violet">#}
+                                                                {#<input id="star.3.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star3 %}checked="checked"{% endif %}>#}
+                                                                {#<label for="star.3.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star3"></span></label>#}
+                                                                {#</div>#}
+
+                                                            </td>
+                                                            <td width="88px">
+                                                                <input type="text" class="input-text input-qty"
+                                                                       name="qty"
+                                                                       value="1"/>
+                                                            </td>
+                                                            <td width="79px">
+                                                                {#<a href="#">0</a>#}
+                                                            </td>
+                                                            <td class="txt-left" width="108px">
+                                                                <a href="#">{{ product.priceByn|number_format(2, ',', '') }}</a>
+                                                            </td>
+                                                            <td width="101px">
+                                                                <a href="#">{{ product.price|number_format(2, ',', '') }}</a>
+                                                            </td>
+                                                            <td width="148px">
+                                                                <a href="#">{{ product.priceByn|number_format(2, ',', '') }}</a>
+                                                            </td>
+                                                            <td width="141px">
+                                                                <a href="#">{{ product.created|date("d-m-Y") }}</a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endif %}
+                                                {% elseif terms.priceFrom is defined %}
+
+                                                    {% if product.priceByn >= terms.priceFrom %}
+
+                                                        <tr>
+                                                            <td class="title-tr txt-left td-border-right {% if product.dateDiff|date("%m") > 0 %}title-right-offset{% endif %}">
+                                                                <div class="checkbox-style padding10-left">
+                                                                    <input id="checkbox-{{ product.id }}"
+                                                                           name="product[{{ product.id }}]"
+                                                                           {% if product.id in ids|keys %}checked="checked"{% endif %}
+                                                                           value="{{ product.id }}" type="checkbox"/>
+                                                                    <label for="checkbox-{{ product.id }}"><span
+                                                                                class="checkbox"></span></label>
+                                                                </div>
+
+                                                                <a href="#"
+                                                                   class="product-item{% if product.documents == 0 %} blue{% endif %}">{{ product.title }}</a>
+
+                                                                {% if product.dateDiff|date("%m") > 2  and product.dateDiff|date("%m") < 6 %}
+                                                                    <div class="product-item-time">
+                                                                        <span class="color-orange"> 3 мес</span>
+                                                                    </div>
+                                                                {% elseif  product.dateDiff|date("%m") > 5 %}
+                                                                    <div class="product-item-time">
+                                                                        <span class="color-orange"> 6 мес</span>
+                                                                    </div>
+                                                                {% endif %}
+
+                                                                {#{% if product.ball == constant('AppBundle\\Entity\\ProductStock::RED_BALL') %}#}
+                                                                {#<span class="point-1 pointer"></span>#}
+                                                                {#{% elseif product.ball == constant('AppBundle\\Entity\\ProductStock::BLUE_BALL') %}#}
+                                                                {#<span class="point-2 pointer"></span>#}
+                                                                {#{% elseif product.ball == constant('AppBundle\\Entity\\ProductStock::GREEN_BALL') %}#}
+                                                                {#<span class="point-3 pointer"></span>#}
+                                                                {#{% endif %}#}
+                                                            </td>
+
+                                                            <td class="td-border-right stars-case">
+                                                                {#<div class="checkbox-style-star checkbox-style-star-blue">#}
+                                                                {#<input id="star.1.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star1 %}checked="checked"{% endif %}>#}
+                                                                {#<label for="star.1.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star1"></span></label>#}
+                                                                {#</div>#}
+                                                                {#<div class="checkbox-style-star checkbox-style-star-yellow">#}
+                                                                {#<input id="star.2.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star2 %}checked="checked"{% endif %} />#}
+                                                                {#<label for="star.2.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star2"></span></label>#}
+                                                                {#</div>#}
+                                                                {#<div class="checkbox-style-star checkbox-style-star-violet">#}
+                                                                {#<input id="star.3.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star3 %}checked="checked"{% endif %}>#}
+                                                                {#<label for="star.3.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star3"></span></label>#}
+                                                                {#</div>#}
+
+                                                            </td>
+                                                            <td width="88px">
+                                                                <input type="text" class="input-text input-qty"
+                                                                       name="qty"
+                                                                       value="1"/>
+                                                            </td>
+                                                            <td width="79px">
+                                                                {#<a href="#">0</a>#}
+                                                            </td>
+                                                            <td class="txt-left" width="108px">
+                                                                <a href="#">{{ product.priceByn|number_format(2, ',', '') }}</a>
+                                                            </td>
+                                                            <td width="101px">
+                                                                <a href="#">{{ product.price|number_format(2, ',', '') }}</a>
+                                                            </td>
+                                                            <td width="148px">
+                                                                <a href="#">{{ product.priceByn|number_format(2, ',', '') }}</a>
+                                                            </td>
+                                                            <td width="141px">
+                                                                <a href="#">{{ product.created|date("d-m-Y") }}</a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endif %}
+                                                {% elseif terms.priceTo is defined %}
+
+
+                                                    {% if product.priceByn <= terms.priceTo %}
+
+                                                        <tr>
+                                                            <td class="title-tr txt-left td-border-right {% if product.dateDiff|date("%m") > 0 %}title-right-offset{% endif %}">
+                                                                <div class="checkbox-style padding10-left">
+                                                                    <input id="checkbox-{{ product.id }}"
+                                                                           name="product[{{ product.id }}]"
+                                                                           {% if product.id in ids|keys %}checked="checked"{% endif %}
+                                                                           value="{{ product.id }}" type="checkbox"/>
+                                                                    <label for="checkbox-{{ product.id }}"><span
+                                                                                class="checkbox"></span></label>
+                                                                </div>
+
+                                                                <a href="#"
+                                                                   class="product-item{% if product.documents == 0 %} blue{% endif %}">{{ product.title }}</a>
+
+                                                                {% if product.dateDiff|date("%m") > 2  and product.dateDiff|date("%m") < 6 %}
+                                                                    <div class="product-item-time">
+                                                                        <span class="color-orange"> 3 мес</span>
+                                                                    </div>
+                                                                {% elseif  product.dateDiff|date("%m") > 5 %}
+                                                                    <div class="product-item-time">
+                                                                        <span class="color-orange"> 6 мес</span>
+                                                                    </div>
+                                                                {% endif %}
+
+                                                                {#{% if product.ball == constant('AppBundle\\Entity\\ProductStock::RED_BALL') %}#}
+                                                                {#<span class="point-1 pointer"></span>#}
+                                                                {#{% elseif product.ball == constant('AppBundle\\Entity\\ProductStock::BLUE_BALL') %}#}
+                                                                {#<span class="point-2 pointer"></span>#}
+                                                                {#{% elseif product.ball == constant('AppBundle\\Entity\\ProductStock::GREEN_BALL') %}#}
+                                                                {#<span class="point-3 pointer"></span>#}
+                                                                {#{% endif %}#}
+                                                            </td>
+
+                                                            <td class="td-border-right stars-case">
+                                                                {#<div class="checkbox-style-star checkbox-style-star-blue">#}
+                                                                {#<input id="star.1.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star1 %}checked="checked"{% endif %}>#}
+                                                                {#<label for="star.1.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star1"></span></label>#}
+                                                                {#</div>#}
+                                                                {#<div class="checkbox-style-star checkbox-style-star-yellow">#}
+                                                                {#<input id="star.2.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star2 %}checked="checked"{% endif %} />#}
+                                                                {#<label for="star.2.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star2"></span></label>#}
+                                                                {#</div>#}
+                                                                {#<div class="checkbox-style-star checkbox-style-star-violet">#}
+                                                                {#<input id="star.3.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star3 %}checked="checked"{% endif %}>#}
+                                                                {#<label for="star.3.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star3"></span></label>#}
+                                                                {#</div>#}
+
+                                                            </td>
+                                                            <td width="88px">
+                                                                <input type="text" class="input-text input-qty"
+                                                                       name="qty"
+                                                                       value="1"/>
+                                                            </td>
+                                                            <td width="79px">
+                                                                {#<a href="#">0</a>#}
+                                                            </td>
+                                                            <td class="txt-left" width="108px">
+                                                                <a href="#">{{ product.priceByn|number_format(2, ',', '') }}</a>
+                                                            </td>
+                                                            <td width="101px">
+                                                                <a href="#">{{ product.price|number_format(2, ',', '') }}</a>
+                                                            </td>
+                                                            <td width="148px">
+                                                                <a href="#">{{ product.priceByn|number_format(2, ',', '') }}</a>
+                                                            </td>
+                                                            <td width="141px">
+                                                                <a href="#">{{ product.created|date("d-m-Y") }}</a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endif %}
+                                                {% else %}
                                                     <tr>
                                                         <td class="title-tr txt-left td-border-right {% if product.dateDiff|date("%m") > 0 %}title-right-offset{% endif %}">
                                                             <div class="checkbox-style padding10-left">
@@ -270,7 +492,7 @@
                                                         </td>
                                                         <td width="88px">
                                                             <input type="text" class="input-text input-qty" name="qty"
-                                                                   value="{{ product.qty }}"/>
+                                                                   value="1"/>
                                                         </td>
                                                         <td width="79px">
                                                             {#<a href="#">0</a>#}
@@ -289,225 +511,7 @@
                                                         </td>
                                                     </tr>
                                                 {% endif %}
-                                            {% elseif terms.priceFrom is defined %}
-
-                                                {% if product.priceByn >= terms.priceFrom %}
-
-                                                    <tr>
-                                                        <td class="title-tr txt-left td-border-right {% if product.dateDiff|date("%m") > 0 %}title-right-offset{% endif %}">
-                                                            <div class="checkbox-style padding10-left">
-                                                                <input id="checkbox-{{ product.id }}"
-                                                                       name="product[{{ product.id }}]"
-                                                                       {% if product.id in ids|keys %}checked="checked"{% endif %}
-                                                                       value="{{ product.id }}" type="checkbox"/>
-                                                                <label for="checkbox-{{ product.id }}"><span
-                                                                            class="checkbox"></span></label>
-                                                            </div>
-
-                                                            <a href="#"
-                                                               class="product-item{% if product.documents == 0 %} blue{% endif %}">{{ product.title }}</a>
-
-                                                            {% if product.dateDiff|date("%m") > 2  and product.dateDiff|date("%m") < 6 %}
-                                                                <div class="product-item-time">
-                                                                    <span class="color-orange"> 3 мес</span>
-                                                                </div>
-                                                            {% elseif  product.dateDiff|date("%m") > 5 %}
-                                                                <div class="product-item-time">
-                                                                    <span class="color-orange"> 6 мес</span>
-                                                                </div>
-                                                            {% endif %}
-
-                                                            {#{% if product.ball == constant('AppBundle\\Entity\\ProductStock::RED_BALL') %}#}
-                                                            {#<span class="point-1 pointer"></span>#}
-                                                            {#{% elseif product.ball == constant('AppBundle\\Entity\\ProductStock::BLUE_BALL') %}#}
-                                                            {#<span class="point-2 pointer"></span>#}
-                                                            {#{% elseif product.ball == constant('AppBundle\\Entity\\ProductStock::GREEN_BALL') %}#}
-                                                            {#<span class="point-3 pointer"></span>#}
-                                                            {#{% endif %}#}
-                                                        </td>
-
-                                                        <td class="td-border-right stars-case">
-                                                            {#<div class="checkbox-style-star checkbox-style-star-blue">#}
-                                                            {#<input id="star.1.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star1 %}checked="checked"{% endif %}>#}
-                                                            {#<label for="star.1.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star1"></span></label>#}
-                                                            {#</div>#}
-                                                            {#<div class="checkbox-style-star checkbox-style-star-yellow">#}
-                                                            {#<input id="star.2.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star2 %}checked="checked"{% endif %} />#}
-                                                            {#<label for="star.2.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star2"></span></label>#}
-                                                            {#</div>#}
-                                                            {#<div class="checkbox-style-star checkbox-style-star-violet">#}
-                                                            {#<input id="star.3.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star3 %}checked="checked"{% endif %}>#}
-                                                            {#<label for="star.3.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star3"></span></label>#}
-                                                            {#</div>#}
-
-                                                        </td>
-                                                        <td width="88px">
-                                                            <input type="text" class="input-text input-qty" name="qty"
-                                                                   value="{{ product.qty }}"/>
-                                                        </td>
-                                                        <td width="79px">
-                                                            {#<a href="#">0</a>#}
-                                                        </td>
-                                                        <td class="txt-left" width="108px">
-                                                            <a href="#">{{ product.priceByn|number_format(2, ',', '') }}</a>
-                                                        </td>
-                                                        <td width="101px">
-                                                            <a href="#">{{ product.price|number_format(2, ',', '') }}</a>
-                                                        </td>
-                                                        <td width="148px">
-                                                            <a href="#">{{ product.priceByn|number_format(2, ',', '') }}</a>
-                                                        </td>
-                                                        <td width="141px">
-                                                            <a href="#">{{ product.created|date("d-m-Y") }}</a>
-                                                        </td>
-                                                    </tr>
-                                                {% endif %}
-                                            {% elseif terms.priceTo is defined %}
-
-
-                                                {% if product.priceByn <= terms.priceTo %}
-
-                                                    <tr>
-                                                        <td class="title-tr txt-left td-border-right {% if product.dateDiff|date("%m") > 0 %}title-right-offset{% endif %}">
-                                                            <div class="checkbox-style padding10-left">
-                                                                <input id="checkbox-{{ product.id }}"
-                                                                       name="product[{{ product.id }}]"
-                                                                       {% if product.id in ids|keys %}checked="checked"{% endif %}
-                                                                       value="{{ product.id }}" type="checkbox"/>
-                                                                <label for="checkbox-{{ product.id }}"><span
-                                                                            class="checkbox"></span></label>
-                                                            </div>
-
-                                                            <a href="#"
-                                                               class="product-item{% if product.documents == 0 %} blue{% endif %}">{{ product.title }}</a>
-
-                                                            {% if product.dateDiff|date("%m") > 2  and product.dateDiff|date("%m") < 6 %}
-                                                                <div class="product-item-time">
-                                                                    <span class="color-orange"> 3 мес</span>
-                                                                </div>
-                                                            {% elseif  product.dateDiff|date("%m") > 5 %}
-                                                                <div class="product-item-time">
-                                                                    <span class="color-orange"> 6 мес</span>
-                                                                </div>
-                                                            {% endif %}
-
-                                                            {#{% if product.ball == constant('AppBundle\\Entity\\ProductStock::RED_BALL') %}#}
-                                                            {#<span class="point-1 pointer"></span>#}
-                                                            {#{% elseif product.ball == constant('AppBundle\\Entity\\ProductStock::BLUE_BALL') %}#}
-                                                            {#<span class="point-2 pointer"></span>#}
-                                                            {#{% elseif product.ball == constant('AppBundle\\Entity\\ProductStock::GREEN_BALL') %}#}
-                                                            {#<span class="point-3 pointer"></span>#}
-                                                            {#{% endif %}#}
-                                                        </td>
-
-                                                        <td class="td-border-right stars-case">
-                                                            {#<div class="checkbox-style-star checkbox-style-star-blue">#}
-                                                            {#<input id="star.1.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star1 %}checked="checked"{% endif %}>#}
-                                                            {#<label for="star.1.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star1"></span></label>#}
-                                                            {#</div>#}
-                                                            {#<div class="checkbox-style-star checkbox-style-star-yellow">#}
-                                                            {#<input id="star.2.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star2 %}checked="checked"{% endif %} />#}
-                                                            {#<label for="star.2.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star2"></span></label>#}
-                                                            {#</div>#}
-                                                            {#<div class="checkbox-style-star checkbox-style-star-violet">#}
-                                                            {#<input id="star.3.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star3 %}checked="checked"{% endif %}>#}
-                                                            {#<label for="star.3.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star3"></span></label>#}
-                                                            {#</div>#}
-
-                                                        </td>
-                                                        <td width="88px">
-                                                            <input type="text" class="input-text input-qty" name="qty"
-                                                                   value="{{ product.qty }}"/>
-                                                        </td>
-                                                        <td width="79px">
-                                                            {#<a href="#">0</a>#}
-                                                        </td>
-                                                        <td class="txt-left" width="108px">
-                                                            <a href="#">{{ product.priceByn|number_format(2, ',', '') }}</a>
-                                                        </td>
-                                                        <td width="101px">
-                                                            <a href="#">{{ product.price|number_format(2, ',', '') }}</a>
-                                                        </td>
-                                                        <td width="148px">
-                                                            <a href="#">{{ product.priceByn|number_format(2, ',', '') }}</a>
-                                                        </td>
-                                                        <td width="141px">
-                                                            <a href="#">{{ product.created|date("d-m-Y") }}</a>
-                                                        </td>
-                                                    </tr>
-                                                {% endif %}
-                                            {% else %}
-                                                <tr>
-                                                    <td class="title-tr txt-left td-border-right {% if product.dateDiff|date("%m") > 0 %}title-right-offset{% endif %}">
-                                                        <div class="checkbox-style padding10-left">
-                                                            <input id="checkbox-{{ product.id }}"
-                                                                   name="product[{{ product.id }}]"
-                                                                   {% if product.id in ids|keys %}checked="checked"{% endif %}
-                                                                   value="{{ product.id }}" type="checkbox"/>
-                                                            <label for="checkbox-{{ product.id }}"><span
-                                                                        class="checkbox"></span></label>
-                                                        </div>
-
-                                                        <a href="#"
-                                                           class="product-item{% if product.documents == 0 %} blue{% endif %}">{{ product.title }}</a>
-
-                                                        {% if product.dateDiff|date("%m") > 2  and product.dateDiff|date("%m") < 6 %}
-                                                            <div class="product-item-time">
-                                                                <span class="color-orange"> 3 мес</span>
-                                                            </div>
-                                                        {% elseif  product.dateDiff|date("%m") > 5 %}
-                                                            <div class="product-item-time">
-                                                                <span class="color-orange"> 6 мес</span>
-                                                            </div>
-                                                        {% endif %}
-
-                                                        {#{% if product.ball == constant('AppBundle\\Entity\\ProductStock::RED_BALL') %}#}
-                                                        {#<span class="point-1 pointer"></span>#}
-                                                        {#{% elseif product.ball == constant('AppBundle\\Entity\\ProductStock::BLUE_BALL') %}#}
-                                                        {#<span class="point-2 pointer"></span>#}
-                                                        {#{% elseif product.ball == constant('AppBundle\\Entity\\ProductStock::GREEN_BALL') %}#}
-                                                        {#<span class="point-3 pointer"></span>#}
-                                                        {#{% endif %}#}
-                                                    </td>
-
-                                                    <td class="td-border-right stars-case">
-                                                        {#<div class="checkbox-style-star checkbox-style-star-blue">#}
-                                                        {#<input id="star.1.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star1 %}checked="checked"{% endif %}>#}
-                                                        {#<label for="star.1.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star1"></span></label>#}
-                                                        {#</div>#}
-                                                        {#<div class="checkbox-style-star checkbox-style-star-yellow">#}
-                                                        {#<input id="star.2.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star2 %}checked="checked"{% endif %} />#}
-                                                        {#<label for="star.2.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star2"></span></label>#}
-                                                        {#</div>#}
-                                                        {#<div class="checkbox-style-star checkbox-style-star-violet">#}
-                                                        {#<input id="star.3.{{ bunch.id }}.{{ product.id }}" type="checkbox" {% if product.star3 %}checked="checked"{% endif %}>#}
-                                                        {#<label for="star.3.{{ bunch.id }}.{{ product.id }}"><span class="checkbox" data-productid="{{ product.id }}" data-starname="star3"></span></label>#}
-                                                        {#</div>#}
-
-                                                    </td>
-                                                    <td width="88px">
-                                                        <input type="text" class="input-text input-qty" name="qty"
-                                                               value="{{ product.qty }}"/>
-                                                    </td>
-                                                    <td width="79px">
-                                                        {#<a href="#">0</a>#}
-                                                    </td>
-                                                    <td class="txt-left" width="108px">
-                                                        <a href="#">{{ product.priceByn|number_format(2, ',', '') }}</a>
-                                                    </td>
-                                                    <td width="101px">
-                                                        <a href="#">{{ product.price|number_format(2, ',', '') }}</a>
-                                                    </td>
-                                                    <td width="148px">
-                                                        <a href="#">{{ product.priceByn|number_format(2, ',', '') }}</a>
-                                                    </td>
-                                                    <td width="141px">
-                                                        <a href="#">{{ product.created|date("d-m-Y") }}</a>
-                                                    </td>
-                                                </tr>
-                                            {% endif %}
-
-
+                                            {% endfor %}
 
 
 
