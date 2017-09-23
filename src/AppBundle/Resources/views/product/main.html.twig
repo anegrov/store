@@ -189,7 +189,7 @@
                                 <td colspan="8">
                                     <table>
                                         <tbody>
-                                            {% for product in bunch.getProducts() %}
+                                            {% for product in bunch.getProducts() | usort %}
                                                 {% if product.qty > 0 %}
                                                     <tr>
                                                         <td class="title-tr txt-left td-border-right {% if product.dateDiff|date("%m") > 0 %}title-right-offset{% endif %}" >

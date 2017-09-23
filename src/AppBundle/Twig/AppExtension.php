@@ -14,18 +14,20 @@ class AppExtension extends \Twig_Extension
     public function getFilters()
     {
         return [
-//            new \Twig_SimpleFilter('usort', array($this, 'usortFilter'))
+            new \Twig_SimpleFilter('usort', array($this, 'usortFilter'))
         ];
     }
 
-    public function usortFilter($item)
+    public function usortFilter($items)
     {
-//        usort($item, function ($item1, $item2) {
-//            if ($item1['created'] == $item2['created']) return 0;
-//            return $item1['created'] < $item2['created'] ? -1 : 1;
-//        });
-//
-//        return $item;
+        $values = $items->toArray();
+
+        usort($values, function ($a, $b) {
+            if ($a->getCreated() == $b->getCreated()) return 0;
+            return $a->getCreated() > $b->getCreated() ? -1 : 1;
+        });
+
+        return $values;
     }
 
 
