@@ -1,4 +1,7 @@
+
+
 {% extends 'table.html.twig' %}
+
 
 {% block title %}Проданные{% endblock %}
 
@@ -193,7 +196,7 @@
 
                                     {# if in stock product is empty #}
                                     {% if productSale.qtyInStock == 0 and productSale.disabledRedBall == 0 %}
-                                        <div class=" pointer"><span class="point-1"></span></div>
+                                        <span class="point-1 pointer" style="width: 10px; height: 10px; top: 16px"></span>
                                     {% endif %}
                                 </td>
                                 <td>
