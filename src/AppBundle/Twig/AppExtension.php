@@ -18,13 +18,17 @@ class AppExtension extends \Twig_Extension
         ];
     }
 
-    public function usortFilter($items)
+    public function usortFilter($items, $sortRule)
     {
         $values = $items->toArray();
 
-        usort($values, function ($a, $b) {
+        usort($values, function ($a, $b) use ($sortRule) {
             if ($a->getCreated() == $b->getCreated()) return 0;
-            return $a->getCreated() > $b->getCreated() ? -1 : 1;
+            if ($sortRule === 'ASC'){
+                return $a->getCreated() < $b->getCreated() ? -1 : 1;
+            } else {
+                return $a->getCreated() > $b->getCreated() ? -1 : 1;
+            }
         });
 
         return $values;

@@ -215,7 +215,7 @@
                             <td colspan="8">
                                 <table>
                                     <tbody>
-                                    {% for product in bunch.getProducts() %}
+                                    {% for product in bunch.getProducts() | usort(terms.sortCol == "last-date" and terms.sortOrder == "ASC" ? "ASC" : "DESK") %}
                                         {% if product.qty > 0 %}
                                             {% if terms.priceForm is defined and terms.priceTo is defined %}
                                                 {% if product.priceByn >= terms.priceFrom and product.priceByn <= terms.priceTo %}

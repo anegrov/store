@@ -371,8 +371,8 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
                 $qb->orderBy('b.title', $order);
             }
             if ($terms['sortCol'] == 'last-date') {
-                //$qb->addSelect('MIN(p.created) AS last_date');
-                $qb->orderBy('last_date', $order);
+//                $qb->addSelect('MIN(p.created) AS last_date');
+                $qb->orderBy('DATE_FORMAT(MAX(p.created), \'%Y%m%d\')', $order);
             }
             if ($terms['sortCol'] == 'total') {
                 $qb->orderBy('b.total', $order);
@@ -400,7 +400,7 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
         }
         else {
             // default sort
-            $qb->orderBy('last_date', 'DESC');
+            $qb->orderBy('DATE_FORMAT(MAX(p.created), \'%Y%m%d\')', 'DESC');
         }
 
         return $qb;
