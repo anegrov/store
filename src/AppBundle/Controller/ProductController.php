@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Bunch;
 use AppBundle\Entity\ProductStock;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,13 +22,13 @@ class ProductController extends Controller
         $terms['limit'] = (isset($terms['limit'])) ? $terms['limit'] : 10;
 
         $cookies = $request->cookies;
-        if ( $cookies->has('limit-perpage') ) {
+        if ($cookies->has('limit-perpage')) {
             $terms['limit'] = $cookies->get('limit-perpage');
         }
 
         // get USD rate
         $rateHelper = $this->get(RateHelper::class);
-        if ( ! ($rate = $rateHelper->getRate('USD') ) ) {
+        if (!($rate = $rateHelper->getRate('USD'))) {
             $this->addFlash('notice',
                 array('status' => 'danger', 'message' => $rateHelper->getError())
             );
@@ -39,6 +40,10 @@ class ProductController extends Controller
         $repository = $em->getRepository('AppBundle:Bunch');
         $pagination = $repository->searchBy($terms, $this->get('knp_paginator'));
 
+
+
+
+
         $total = $repository->getTotal($terms);
 
         $repository = $em->getRepository('AppBundle:Provider');
@@ -47,29 +52,32 @@ class ProductController extends Controller
         $strIds = $request->cookies->get('stock-checked-ids', "");
         $ids = array_diff(explode(',', $strIds), ['']);
 
-        $returnIds=[];
-        foreach($ids as $key=>$str) {
+        $returnIds = [];
+        foreach ($ids as $key => $str) {
             $idQty = json_decode($str);
-            foreach ($idQty as $key=>$itm) {
+            foreach ($idQty as $key => $itm) {
                 $returnIds[$key] = $itm;
             }
         }
-
-
+foreach ($terms as $key=> $term){
+            if ($term == ""){
+                unset($terms[$key]);
+            }
+}
 
         return $this->render('AppBundle:product:main.html.twig', [
-            'items'     => $pagination,
-            'total'     => $total,
-            'terms'     => $terms,
+            'items' => $pagination,
+            'total' => $total,
+            'terms' => $terms,
             'providers' => $providers,
-            'ids'       => $returnIds,
-            'rate'      => $rate
+            'ids' => $returnIds,
+            'rate' => $rate
         ]);
     }
-    
+
     /**
      * namesAction
-     * 
+     *
      * Use in select2 ajax query for import
      * $results must have structure like this:
      * array (
@@ -83,7 +91,7 @@ class ProductController extends Controller
      *          array('text'=> <value>, 'children' => array(array('id'=> <value>, 'text' => <value>)))
      *    )
      * )
-     * 
+     *
      * @param Request $request
      * @return type
      */
@@ -129,8 +137,7 @@ class ProductController extends Controller
                     ]
                 ]
             ];
-        }
-        else {
+        } else {
             if ($withProduct) {
                 $results = [
                     'results' => [
@@ -174,8 +181,7 @@ class ProductController extends Controller
             /* @var $product \AppBundle\Entity\ProductStock */
             $item = $em->getRepository('AppBundle:ProductStock')
                 ->find($productId);
-        }
-        else {
+        } else {
             /* @var $product \AppBundle\Entity\ProductStock */
             $item = $em->getRepository('AppBundle:Bunch')
                 ->find($bunchId);
@@ -219,7 +225,7 @@ class ProductController extends Controller
             ->searchByTitle($title, $unless);
 
         return $this->render('AppBundle:product:_table_for_sale_products.html.twig', [
-            'items'     => $products
+            'items' => $products
         ]);
     }
 
@@ -246,20 +252,18 @@ class ProductController extends Controller
             return $this->json(['status' => 'error', 'message' => 'Bunch not found']);
         }
         if ($item->getBall() == ProductStock::RED_BALL) {
-            $item->setBall( ProductStock::BLUE_BALL );
-        }
-        elseif ( $item->getBall() == ProductStock::BLUE_BALL ) {
-            $item->setBall( ProductStock::GREEN_BALL );
-        }
-        elseif ( $item->getBall() == ProductStock::GREEN_BALL ) {
-            $item->setBall( NULL );
-        }elseif ($item->getBall() == NULL){
+            $item->setBall(ProductStock::BLUE_BALL);
+        } elseif ($item->getBall() == ProductStock::BLUE_BALL) {
+            $item->setBall(ProductStock::GREEN_BALL);
+        } elseif ($item->getBall() == ProductStock::GREEN_BALL) {
+            $item->setBall(NULL);
+        } elseif ($item->getBall() == NULL) {
             $item->setBall(ProductStock::RED_BALL);
         }
 
         $em->persist($item);
         $em->flush();
 
-        return $this->json([ 'status' => 'success', 'ball' => $item->getBall() ]);
+        return $this->json(['status' => 'success', 'ball' => $item->getBall()]);
     }
 }
