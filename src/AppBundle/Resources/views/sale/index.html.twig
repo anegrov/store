@@ -120,15 +120,6 @@
                                 </div>
                             </th>
                             <th class="td-sort">
-                                <h3>Прибыль $</h3>
-                                <div class="sort-case">
-                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'price-profit', 'sortOrder' : 'ASC'})) }}#table">
-                                        <span class="plus{% if terms.sortCol == "price-profit" %} b-blk{% endif %}" {% if terms.sortCol == "price-profit" and terms.sortOrder == "ASC" %}style="display:none"{% endif %}></span></a>
-                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'price-profit', 'sortOrder' : 'DESC'})) }}#table">
-                                        <span class="minus{% if terms.sortCol == "price-profit" %} b-blk{% endif %}" {% if terms.sortCol == "price-profit" and terms.sortOrder == "DESC" %}style="display:none"{% endif %}></span></a>
-                                </div>
-                            </th>
-                            <th class="td-sort">
                                 <h3>Прибыль руб.</h3>
                                 <div class="sort-case">
                                     <a href="{{ path(route, app.request.query|merge({'sortCol': 'price-profit-byn', 'sortOrder' : 'ASC'})) }}#table">
@@ -137,6 +128,16 @@
                                         <span class="minus{% if terms.sortCol == "price-profit-byn" %} b-blk{% endif %}" {% if terms.sortCol == "price-profit-byn" and terms.sortOrder == "DESC" %}style="display:none"{% endif %}></span></a>
                                 </div>
                             </th>
+                            <th class="td-sort">
+                                <h3>Прибыль $</h3>
+                                <div class="sort-case">
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'price-profit', 'sortOrder' : 'ASC'})) }}#table">
+                                        <span class="plus{% if terms.sortCol == "price-profit" %} b-blk{% endif %}" {% if terms.sortCol == "price-profit" and terms.sortOrder == "ASC" %}style="display:none"{% endif %}></span></a>
+                                    <a href="{{ path(route, app.request.query|merge({'sortCol': 'price-profit', 'sortOrder' : 'DESC'})) }}#table">
+                                        <span class="minus{% if terms.sortCol == "price-profit" %} b-blk{% endif %}" {% if terms.sortCol == "price-profit" and terms.sortOrder == "DESC" %}style="display:none"{% endif %}></span></a>
+                                </div>
+                            </th>
+
                             <th class="td-sort">
                                 <h3>Дата продажи</h3>
                                 <div class="sort-case">
@@ -167,11 +168,12 @@
                                 <span class="mark-lg">{{ (total.sale_price/rate)|number_format(2, '.', '') }}</span>
                             </td>
                             <td>
-                                <span class="mark-lg">{{ (total.profit)|number_format(2, '.', '') }}</span>
-                            </td>
-                            <td>
                                 <span class="mark-lg">{{ (total.profit_byn)|number_format(2, '.', '') }}</span>
                             </td>
+                            <td>
+                                <span class="mark-lg">{{ (total.profit)|number_format(2, '.', '') }}</span>
+                            </td>
+
                             <td></td>
                         </tr>
                         {% for item in items %}
@@ -191,7 +193,7 @@
 
                                     {# if in stock product is empty #}
                                     {% if productSale.qtyInStock == 0 and productSale.disabledRedBall == 0 %}
-                                        <span class="point-1 pointer"></span>
+                                        <div class=" pointer"><span class="point-1"></span></div>
                                     {% endif %}
                                 </td>
                                 <td>
@@ -210,11 +212,12 @@
                                     {{ (productSale.priceUsd)|number_format(2, '.', '') }}
                                 </td>
                                 <td>
-                                    {{ ((productSale.priceUsd)*productSale.qty - productSale.product.price*productSale.qty)|number_format(2, '.', '') }}
-                                </td>
-                                <td>
                                     {{ (productSale.price*productSale.qty - productSale.product.priceByn*productSale.qty)|number_format(2, '.', '') }}
                                 </td>
+                                <td>
+                                    {{ ((productSale.priceUsd)*productSale.qty - productSale.product.price*productSale.qty)|number_format(2, '.', '') }}
+                                </td>
+
                                 <td>
                                     {{ productSale.date|date("d-m-Y") }}
                                 </td>
