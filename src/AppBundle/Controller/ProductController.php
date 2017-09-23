@@ -41,9 +41,6 @@ class ProductController extends Controller
         $pagination = $repository->searchBy($terms, $this->get('knp_paginator'));
 
 
-
-
-
         $total = $repository->getTotal($terms);
 
         $repository = $em->getRepository('AppBundle:Provider');
@@ -59,11 +56,11 @@ class ProductController extends Controller
                 $returnIds[$key] = $itm;
             }
         }
-foreach ($terms as $key=> $term){
-            if ($term == ""){
+        foreach ($terms as $key => $term) {
+            if ($term == "") {
                 unset($terms[$key]);
             }
-}
+        }
 
         return $this->render('AppBundle:product:main.html.twig', [
             'items' => $pagination,
