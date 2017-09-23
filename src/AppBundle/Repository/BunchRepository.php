@@ -326,7 +326,7 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
 
         $qb->innerJoin(ProductStock::class, 'p', 'WITH', 'b.id=p.bunchId');
 
-        $qb->addSelect('DATE_FORMAT(MIN(p.created), \'%d-%m-%Y\') AS last_date');
+        $qb->addSelect('DATE_FORMAT(MAX(p.created), \'%d-%m-%Y\') AS last_date');
         $qb->groupBy('b.id');
 
         $qb->andWhere('b.total <> 0');
@@ -400,8 +400,7 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
         }
         else {
             // default sort
-            $qb->orderBy('last_date', 'ASC');
-            $qb->addOrderBy('b.id', 'ASC');
+            $qb->orderBy('last_date', 'DESC');
         }
 
         return $qb;
