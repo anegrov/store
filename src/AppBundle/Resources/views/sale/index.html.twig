@@ -352,6 +352,12 @@
                     }
                     jQuery.cookie("sale-checked-ids", curIds, { path: '/', expires: 7 });
                 }
+
+                curIds.forEach(function (t, i, arr) {
+                    if (t === "") {
+                        arr.splice(i, 1);
+                    }
+                });
                 jQuery('#checked-products').html(curIds.length);
 
             });
