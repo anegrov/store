@@ -1,3 +1,6 @@
+{% set sum_priceByn = 0 %}
+{% set sum_price = 0 %}
+{% set sum_priceSale = 0 %}
 <table {% if tableId is defined %}id="{{ tableId }}"{% endif %} class="table-search">
     <thead>
     <tr>
@@ -42,12 +45,20 @@
                 </td>
                 <td>
                     <span class="priceByn-purchase">{{ product.priceByn|number_format(2, '.', '') }}</span>
+                    {% set sum_priceByn = sum_priceByn + product.priceByn %}
+                </td>
                 </td>
                 <td>
                     <span class="price-purchase">{{ product.price|number_format(2, '.', '') }}</span>
+                    {% set sum_price = sum_price + product.price %}
                 </td>
                 <td>
                     <input class="input-text priceSale" type="text" pattern="\d+(\.\d{2})?" name="price[]" value="{% if price[key] is defined %}{{ price[key] }}{% else %}{{ product.priceByn|number_format(2, '.', '') }}{% endif %}" />
+                    {% if price[key] is defined %}
+                        {% set sum_priceSale = sum_priceSale + price[key] %}
+                    {% else %}
+                        {% set sum_priceSale = sum_priceSale + product.priceByn %}
+                    {% endif %}
                 </td>
                 <td><span class="profit">-</span></td>
                 <td>
@@ -61,6 +72,16 @@
                 </td>
             </tr>
         {% endfor %}
+        <tr>
+            <td class="align-right">Итого:</td>
+            <td></td>
+            <td>{{ sum_priceByn|number_format(2, '.', '') }}</td>
+            <td>{{ sum_price|number_format(2, '.', '') }}</td>
+            <td><span class="sum-price-sale">{{ sum_priceSale|number_format(2, '.', '') }}</span></td>
+            <td><span class="sum-profit">-</span></td>
+            <td></td>
+            <td class="td-border-right"></td>
+        </tr>
     {% else %}
         <tr>
             <td colspan="8">Товаров нет</td>
