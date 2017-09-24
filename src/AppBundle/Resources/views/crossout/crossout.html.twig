@@ -1,315 +1,344 @@
 {% extends 'base.html.twig' %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('bundles/app/ui/jquery-ui.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('bundles/app/ui/jquery-ui.min.css') }}"/>
 {% endblock %}
 
 {% block body %}
 
-<h1 class="title-lg">Списание</h1>
+    <h1 class="title-lg">Списание</h1>
 
-<div class="box">
-    <div class="page-case">
-        <section class="table-00">
-            <form action="{{ path('app_crossout_do') }}" method="post">
-                <table id="widget-crossout">
-                    <thead>
-                    <tr>
-                        <th class="title-td td-border-right" style="width:269px">
-                            <h3>Товары</h3>
-                        </th>
-                        <th class="td-border-right" style="width:88px">
-                            <h3>Колличество<br>шт.</h3>
-                        </th>
-                        {#<th class="td-price">#}
-                            {#<h3>Закупка<br>шт.</h3>#}
-                        {#</th>#}
-                        <th class="td-price td-border-right" style="width:85px">
-                            <h3>Цена продажи<br>руб.</h3>
-                        </th>
-                        <th class="td-price td-border-right"style="width:86px;">
-                            <h3>Закупка<br>руб.</h3>
-                        </th>
-                        <th class="td-price-input td-border-right" style="width:164px;">
-                            <h3>Цена списания<br>руб.</h3>
-                        </th>
-                        <th class="td-date-input td-border-right" style="width:104px;">
-                            <h3>Дата списания<br>руб./$</h3>
-                        </th>
-                        <th class="title-td td-border-right td-border-left" style="width:404px;">
-                            <h3>Списать</h3>
-                        </th>
-                        <th class="td-border-right" style="width:36px;">
-                            <h3></h3>
-                        </th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-
-                    {% set sum_qty = 0 %}
-                    {% set sum_purchase_price_byn = 0 %}
-                    {% set sum_purchase_price = 0 %}
-                    {% set sum_crossout_purchase_price_byn = 0 %}
-                    {% set sum_crossout_purchase_price = 0 %}
-                    {% set count = 0 %}
-                    {% for key,item in items %}
-                        {% set count = count + 1 %}
+    <div class="box">
+        <div class="page-case">
+            <section class="table-00">
+                <form action="{{ path('app_crossout_do') }}" method="post">
+                    <table id="widget-crossout">
+                        <thead>
                         <tr>
-                            <td class="title-tr txt-left td-border-right plus-cursor" style="width:269px;">
-                                {{ item.product.title }}
-                                <input type="hidden" name="product[{{ item.id }}][product_id]" value="{{ item.product.id }}" />
-                            </td>
-                            <td class="td-border-right" style="width:88px;">
-                                {{ item.qty }}
-                                {% set sum_qty = sum_qty + item.qty %}
-                            </td>
-                            {#<td class="td-price">#}
+                            <th class="title-td td-border-right" style="width:269px">
+                                <h3>Товары</h3>
+                            </th>
+                            <th class="td-border-right" style="width:88px">
+                                <h3>Колличество<br>шт.</h3>
+                            </th>
+                            {#<th class="td-price">#}
+                            {#<h3>Закупка<br>шт.</h3>#}
+                            {#</th>#}
+                            <th class="td-price td-border-right" style="width:85px">
+                                <h3>Цена продажи<br>руб.</h3>
+                            </th>
+                            <th class="td-price td-border-right" style="width:86px;">
+                                <h3>Закупка<br>руб.</h3>
+                            </th>
+                            <th class="td-price-input td-border-right" style="width:164px;">
+                                <h3>Цена списания<br>руб.</h3>
+                            </th>
+                            <th class="td-date-input td-border-right" style="width:104px;">
+                                <h3>Дата списания<br>руб./$</h3>
+                            </th>
+                            <th class="title-td td-border-right td-border-left" style="width:404px;">
+                                <h3>Списать</h3>
+                            </th>
+                            <th class="td-border-right" style="width:36px;">
+                                <h3></h3>
+                            </th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+
+                        {% set sum_qty = 0 %}
+                        {% set sum_purchase_price_byn = 0 %}
+                        {% set sum_purchase_price = 0 %}
+                        {% set sum_crossout_purchase_price_byn = 0 %}
+                        {% set sum_crossout_purchase_price = 0 %}
+                        {% set count = 0 %}
+                        {% for key,item in items %}
+                            {% set count = count + 1 %}
+                            <tr>
+                                <td class="title-tr txt-left td-border-right plus-cursor" style="width:269px;">
+                                    {{ item.product.title }}
+                                    <input type="hidden" name="product[{{ item.id }}][product_id]"
+                                           value="{{ item.product.id }}"/>
+                                </td>
+                                <td class="td-border-right" style="width:88px;">
+                                    {{ item.qty }}
+                                    {% set sum_qty = sum_qty + item.qty %}
+                                </td>
+                                {#<td class="td-price">#}
                                 {#{{ item.product.priceByn|number_format(2, '.', '') }}#}
                                 {#{% set sum_purchase_price_byn = sum_purchase_price_byn + item.product.priceByn %}#}
-                            {#</td>#}
-                            <td class="td-price td-border-right" style="width:85px;">
-                                {{ item.price|number_format(2, '.', '') }}
-                                {% set sum_purchase_price = sum_purchase_price + item.price %}
-                            </td>
-                            <td colspan="5" class="td-border-right td-table-container">
-                                <table class="sub-table-crossout">
-                                    <tr>
-                                        <td class="td-price td-border-right" style="width:85px;">
-                                            <span class="purchase-price">{{ item.price|number_format(2, '.', '') }}</span>
-                                            {% set sum_crossout_purchase_price_byn = sum_crossout_purchase_price_byn + item.price %}
-                                        </td>
-                                        <td class="td-price td-border-right" style="width:164px;padding-left:0">
-                                            <table class="sub-table-crossout-price" border="0">
-                                                <tr>
-                                                    <td class="td-total-crossout-purchase-price" style="width: 80px;">
-                                                        {{ item.price|number_format(2, '.', '') }}
-                                                    </td>
-                                                    <td class="td-crossout-price" style="width: 80px;">
-                                                        <input type="text" name="product[{{ item.id }}][crossout][price][]" class="input-text crossout-price" value="{{ item.price|number_format(2, '.', '') }}" />
-                                                        {% set sum_crossout_purchase_price = sum_crossout_purchase_price + (item.price) %}
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                        <td class="td-price td-border-right" style="width:104px;">
-                                            <input type="text" name="product[{{ item.id }}][crossout][date][]" class="input-text datepicker input-table-datepicker" value="{% if date[key] is defined %}{{ date[key] }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}" />
-                                        </td>
-                                        <td class="title-tr txt-left td-border-right" style="width:404px;">
-                                            <select name="product[{{ item.id }}][crossout][product_id][]" class="js-product-crossout" style="width: 350px;">
-                                                <option value="{{ item.id }}">{{ item.product.title }}</option>
-                                            </select>
-                                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                                        </td>
-                                        <td style="width:36px;">
-                                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
+                                {#</td>#}
+                                <td class="td-price td-border-right" style="width:85px;">
+                                    {{ item.price|number_format(2, '.', '') }}
+                                    {% set sum_purchase_price = sum_purchase_price + item.price %}
+                                </td>
+                                <td colspan="5" class="td-border-right td-table-container">
+                                    <table class="sub-table-crossout">
+                                        <tr>
+                                            <td class="td-price td-border-right" style="width:85px;">
+                                                <span class="purchase-price">{{ item.price|number_format(2, '.', '') }}</span>
+                                                {% set sum_crossout_purchase_price_byn = sum_crossout_purchase_price_byn + item.price %}
+                                            </td>
+                                            <td class="td-price td-border-right" style="width:164px;padding-left:0">
+                                                <table class="sub-table-crossout-price" border="0">
+                                                    <tr>
+                                                        <td class="td-total-crossout-purchase-price"
+                                                            style="width: 80px;">
+                                                            {{ item.price|number_format(2, '.', '') }}
+                                                        </td>
+                                                        <td class="td-crossout-price" style="width: 80px;">
+                                                            <input type="text"
+                                                                   name="product[{{ item.id }}][crossout][price][]"
+                                                                   class="input-text crossout-price"
+                                                                   value="{{ item.price|number_format(2, '.', '') }}"/>
+                                                            {% set sum_crossout_purchase_price = sum_crossout_purchase_price + (item.price) %}
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td class="td-price td-border-right" style="width:104px;">
+                                                <input type="text" name="product[{{ item.id }}][crossout][date][]"
+                                                       class="input-text datepicker input-table-datepicker"
+                                                       value="{% if date[key] is defined %}{{ date[key] }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"/>
+                                            </td>
+                                            <td class="title-tr txt-left td-border-right" style="width:404px;">
+                                                <select name="product[{{ item.id }}][crossout][product_id][]"
+                                                        class="js-product-crossout" style="width: 350px;">
+                                                    <option value="{{ item.id }}">{{ item.product.title }}</option>
+                                                </select>
+                                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                            </td>
+                                            <td style="width:36px;">
+                                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td class="align-right">Итого:</td>
+                            {#<td>{{ sum_purchase_price_byn|number_format(2, '.', '') }}</td>#}
+                            <td>{{ sum_qty|number_format(0, '.', '') }}</td>
+                            <td>{{ sum_purchase_price|number_format(2, '.', '') }}</td>
+                            <td>{{ sum_crossout_purchase_price_byn|number_format(2, '.', '') }}</td>
+                            <td class="charge-price">{{ sum_crossout_purchase_price|number_format(2, '.', '') }}</td>
+                            <td></td>
+                            <td></td>
+                            <td class="td-border-right"></td>
                         </tr>
-                    {% endfor %}
-                    <tr>
-                        <td class="align-right">Итого:</td>
-                        {#<td>{{ sum_purchase_price_byn|number_format(2, '.', '') }}</td>#}
-                        <td>{{ sum_qty|number_format(0, '.', '') }}</td>
-                        <td>{{ sum_purchase_price|number_format(2, '.', '') }}</td>
-                        <td>{{ sum_crossout_purchase_price_byn|number_format(2, '.', '') }}</td>
-                        <td>{{ sum_crossout_purchase_price|number_format(2, '.', '') }}</td>
-                        <td></td>
-                        <td></td>
-                        <td class="td-border-right"></td>
-                    </tr>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
 
-                <div class="text-right">
-                    <a href="{{ path('app_product_sale_index') }}"><button type="button" class="btn-base btn-wide">Отмена</button></a>
-                    <button type="submit" class="btn-base btn-wide">Списать</button>
-                </div>
-            </form>
-        </section>
+                    <div class="text-right">
+                        <a href="{{ path('app_product_sale_index') }}">
+                            <button type="button" class="btn-base btn-wide">Отмена</button>
+                        </a>
+                        <button type="submit" class="btn-base btn-wide">Списать</button>
+                    </div>
+                </form>
+            </section>
+        </div>
     </div>
-</div>
 
-<div id="dialog-form" title="Несписанные товары">
+    <div id="dialog-form" title="Несписанные товары">
 
-</div>
+    </div>
 
 {% endblock %}
 
 {% block javascripts %}
-<script type="text/javascript" src="{{ asset('bundles/app/ui/jquery-ui.min.js') }}"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        const loading = '<img id="img-loading" src="{{ asset('bundles/app/img/loading-07.gif') }}"/>';
-        function initCrossoutRow () {
-            $(".js-product-crossout").select2({
-                language: "ru",
-                minimumInputLength: 2,
-                tags: [],
-                ajax: {
-                    url: "{{ path('app_product_sale_ajax_select2_search') }}",
-                    dataType: 'json',
-                    type: "GET",
-                    quietMillis: 50,
-                    data: function (term) {
-                        return {
-                            term: term
-                        };
-                    },
-                    processResults : function(data){
-                        return {
-                            results: data.results
+    <script type="text/javascript" src="{{ asset('bundles/app/ui/jquery-ui.min.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            const loading = '<img id="img-loading" src="{{ asset('bundles/app/img/loading-07.gif') }}"/>';
+
+            function initCrossoutRow() {
+                $(".js-product-crossout").select2({
+                    language: "ru",
+                    minimumInputLength: 2,
+                    tags: [],
+                    ajax: {
+                        url: "{{ path('app_product_sale_ajax_select2_search') }}",
+                        dataType: 'json',
+                        type: "GET",
+                        quietMillis: 50,
+                        data: function (term) {
+                            return {
+                                term: term
+                            };
+                        },
+                        processResults: function (data) {
+                            return {
+                                results: data.results
+                            }
                         }
+                    }
+                });
+
+                $('#widget-crossout .datepicker').datepicker({
+                    format: 'dd-mm-yyyy',
+                    dateFormat: 'dd-mm-yy'
+                });
+            }
+
+            function recalcProductTrTable(tr) {
+                console.log(tr);
+                var total = 0;
+                tr.find("input.input-text.crossout-price").each(function () {
+                    total = total + $(this).val() * 1;
+                });
+                tr.find(".td-total-crossout-purchase-price").eq(0).html(total.toFixed(2));
+            }
+
+            $(document).on("select2:select", ".js-product-crossout", function (e) {
+                $(this).closest("tr").find(".input-text.crossout-price").val(e.params.data.price);
+                var total = 0;
+                $(this).closest(".sub-table-crossout").find("input.input-text.crossout-price").each(function () {
+                    total = total + $(this).val() * 1;
+                });
+                $(this).closest(".sub-table-crossout").find(".td-total-crossout-purchase-price").eq(0).html(total);
+            });
+
+            $(document).on('click', ".glyphicon-minus", function () {
+                $(this).closest("tr").remove();
+            });
+
+            $(document).on('click', ".glyphicon-plus", function () {
+                $(".js-product-crossout").select2("destroy");
+                $tr = $(this).closest("tr").clone();
+                $tr.find(".purchase-price").html("");
+                $tr.find(".td-price input.crossout-price").val("");
+                $tr.find("select").val("");
+                $tr.find(".glyphicon-plus").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+                $tr.find(".td-total-crossout-purchase-price").html("");
+                $(this).closest("tbody").append($tr);
+                initCrossoutRow();
+                autoSumEvent();
+            });
+
+            initCrossoutRow();
+
+
+            function openSearhForm() {
+                $("#dialog-form").html(loading);
+                $.ajax({
+                    url: "{{ path('app_not_crossout_list') }}",
+                    method: "GET",
+                    success: function (response) {
+                        $("#dialog-form").html(response);
+                    }
+                });
+            }
+
+            var dialog = $("#dialog-form").dialog({
+                autoOpen: false,
+                height: 700,
+                width: 1070,
+                modal: true,
+                buttons: {
+                    'Закрыть': function () {
+                        dialog.dialog("close");
                     }
                 }
             });
 
-            $('#widget-crossout .datepicker').datepicker({
-                format: 'dd-mm-yyyy',
-                dateFormat: 'dd-mm-yy'
+            $(document).on("click", ".glyphicon-search", function () {
+                dialog.parentTr = $(this).closest("tr");
+                dialog.dialog("open");
+                openSearhForm();
             });
-        }
 
-        function recalcProductTrTable(tr) {
-            console.log(tr);
-            var total = 0;
-            tr.find("input.input-text.crossout-price").each(function(){
-                total = total + $(this).val()*1;
+            $(document).on('submit', "#dialog-form #form-filter", function () {
+                $("#dialog-form").html(loading);
+                let data = $(this).serialize();
+                $.ajax({
+                    url: "{{ path('app_not_crossout_list') }}",
+                    method: "GET",
+                    data: data,
+                    success: function (response) {
+                        $("#dialog-form").html(response);
+                    }
+                });
+                return false;
             });
-            tr.find(".td-total-crossout-purchase-price").eq(0).html(total.toFixed(2));
-        }
 
-        $(document).on("select2:select", ".js-product-crossout", function (e) {
-            $(this).closest("tr").find(".input-text.crossout-price").val(e.params.data.price);
-            var total = 0;
-            $(this).closest(".sub-table-crossout").find("input.input-text.crossout-price").each(function(){
-                total = total + $(this).val()*1;
+            $(document).on('click', ".sort-case a, .pagination .page-item a", function () {
+                $("#dialog-form").html(loading);
+                let url = $(this).attr("href");
+                $.ajax({
+                    url: url,
+                    method: "GET",
+                    success: function (response) {
+                        $("#dialog-form").html(response);
+                    }
+                });
+                return false;
             });
-            $(this).closest(".sub-table-crossout").find(".td-total-crossout-purchase-price").eq(0).html(total);
-        });
 
-        $(document).on('click', ".glyphicon-minus", function(){
-            $(this).closest("tr").remove();
-        });
+            $(document).on('click', ".check-products", function () {
+                var length = $("#dialog-form .checkbox-style input:checked").length;
+                var count = 0;
+                $("#dialog-form .checkbox-style input:checked").each(function () {
+                    let price = $(this).closest("tr").find(".priceByn-sale").text() * 1;
+                    let title = $(this).closest("tr").find(".title-tr .product-title").text();
+                    let id = $(this).closest("tr").find(".title-tr input[type=hidden]").val();
 
-        $(document).on('click', ".glyphicon-plus", function(){
-            $(".js-product-crossout").select2("destroy");
-            $tr = $(this).closest("tr").clone();
-            $tr.find(".purchase-price").html("");
-            $tr.find(".td-price input.crossout-price").val("");
-            $tr.find("select").val("");
-            $tr.find(".glyphicon-plus").removeClass("glyphicon-plus").addClass("glyphicon-minus");
-            $tr.find(".td-total-crossout-purchase-price").html("");
-            $(this).closest("tbody").append($tr);
-            initCrossoutRow();
-        });
+                    if (length > 1 && count > 0) {
+                        // create tr block
+                        $(".js-product-crossout").select2("destroy");
+                        $tr = dialog.parentTr.clone();
+                        $tr.find(".purchase-price").html("");
+                        $tr.find(".td-price input.crossout-price").val("");
+                        $tr.find("select").val("");
+                        $tr.find(".glyphicon-plus").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+                        $tr.find(".td-total-crossout-purchase-price").html("");
 
-        initCrossoutRow();
+                        $tr.find("select.js-product-crossout")
+                            .append('<option value="' + id + '">' + title + '</option>')
+                            .val(id)
+                            .change();
 
+                        $tr.find(".input-text.crossout-price").val(price);
 
-        function openSearhForm() {
-            $("#dialog-form").html(loading);
-            $.ajax({
-                url: "{{ path('app_not_crossout_list') }}",
-                method: "GET",
-                success: function (response) {
-                    $("#dialog-form").html(response);
-                }
+                        dialog.parentTr.closest("tbody").append($tr);
+                    }
+                    else {
+                        dialog.parentTr.find(".input-text.crossout-price").val(price);
+                        dialog.parentTr.find(".js-product-crossout")
+                            .append('<option value="' + id + '">' + title + '</option>')
+                            .val(id)
+                            .change();
+                    }
+                    count++;
+                });
+
+                recalcProductTrTable(dialog.parentTr.closest(".sub-table-crossout"));
+                initCrossoutRow();
+
+                // destroy dialog
+                dialog.parentTr = null;
+                dialog.dialog("close");
             });
-        }
 
-        var dialog = $( "#dialog-form" ).dialog({
-            autoOpen: false,
-            height: 700,
-            width: 1070,
-            modal: true,
-            buttons: {
-                'Закрыть': function() {
-                    dialog.dialog( "close" );
-                }
+            function autoSumEvent() {
+
+
+                $('input.input-text.crossout-price').off().keyup(function (el) {
+                    var total = 0;
+                    $('input.input-text.crossout-price').each(function () {
+                        total = total + $(this).val() * 1;
+                    });
+
+                    $('.charge-price').html(total.toFixed(2));
+                })
             }
+
+            autoSumEvent()
+
+
+
         });
-
-        $(document).on("click", ".glyphicon-search", function() {
-            dialog.parentTr = $(this).closest("tr");
-            dialog.dialog( "open" );
-            openSearhForm();
-        });
-
-        $(document).on('submit', "#dialog-form #form-filter", function(){
-            $("#dialog-form").html(loading);
-            let data = $(this).serialize();
-            $.ajax({
-                url: "{{ path('app_not_crossout_list') }}",
-                method: "GET",
-                data: data,
-                success: function (response) {
-                    $("#dialog-form").html(response);
-                }
-            });
-            return false;
-        });
-
-        $(document).on('click', ".sort-case a, .pagination .page-item a", function(){
-            $("#dialog-form").html(loading);
-            let url = $(this).attr("href");
-            $.ajax({
-                url: url,
-                method: "GET",
-                success: function (response) {
-                    $("#dialog-form").html(response);
-                }
-            });
-            return false;
-        });
-
-        $(document).on('click', ".check-products", function(){
-            var length = $("#dialog-form .checkbox-style input:checked").length;
-            var count = 0;
-            $("#dialog-form .checkbox-style input:checked").each(function(){
-                let price = $(this).closest("tr").find(".priceByn-sale").text()*1;
-                let title = $(this).closest("tr").find(".title-tr .product-title").text();
-                let id = $(this).closest("tr").find(".title-tr input[type=hidden]").val();
-
-                if (length>1 && count > 0) {
-                    // create tr block
-                    $(".js-product-crossout").select2("destroy");
-                    $tr = dialog.parentTr.clone();
-                    $tr.find(".purchase-price").html("");
-                    $tr.find(".td-price input.crossout-price").val("");
-                    $tr.find("select").val("");
-                    $tr.find(".glyphicon-plus").removeClass("glyphicon-plus").addClass("glyphicon-minus");
-                    $tr.find(".td-total-crossout-purchase-price").html("");
-
-                    $tr.find("select.js-product-crossout")
-                        .append('<option value="' + id + '">' + title + '</option>')
-                        .val(id)
-                        .change();
-
-                    $tr.find(".input-text.crossout-price").val(price);
-
-                    dialog.parentTr.closest("tbody").append($tr);
-                }
-                else {
-                    dialog.parentTr.find(".input-text.crossout-price").val(price);
-                    dialog.parentTr.find(".js-product-crossout")
-                        .append('<option value="' + id + '">' + title + '</option>')
-                        .val(id)
-                        .change();
-                }
-                count++;
-            });
-
-            recalcProductTrTable(dialog.parentTr.closest(".sub-table-crossout"));
-            initCrossoutRow();
-
-            // destroy dialog
-            dialog.parentTr = null;
-            dialog.dialog("close");
-        });
-
-    });
-</script>
+    </script>
 {% endblock %}
