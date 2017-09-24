@@ -631,14 +631,14 @@ class ProductSaleRepository extends \Doctrine\ORM\EntityRepository
     {
         $date = new \DateTime();
         $qb = $this->createQueryBuilder('ps')
-            ->select('SUM(ps.price*ps.qty)/:rate AS total_price,
+            ->select('SUM(ps.priceUsd*ps.qty) AS total_price,
                             SUM(ps.qty) AS total_qty,
                             SUM(ps.price*ps.qty) AS total_price_byn,
                             YEAR(ps.date) AS year,
                             MONTH(ps.date) AS month')
             ->where('YEAR(ps.date) = :cur_year')
             ->setParameter('cur_year', $date->format('Y'))
-            ->setParameter('rate', $terms['rate'])
+
             ->groupBy('year, month');
 
         $tmp = $qb->getQuery()->getResult();

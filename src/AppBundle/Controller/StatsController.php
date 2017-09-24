@@ -63,7 +63,7 @@ class StatsController extends Controller
 
         $stockStatsByMonth = $productStockRepo->findStatsByMonth();
         $saleStatsByMonth = $productSaleRepo->findStatsByMonth($terms);
-        $crossoutStatsByMonth = $productSaleRepo->findStatsByMonth($terms);
+        $crossoutStatsByMonth = $productCrossoutRepo->findStatsByMonth($terms);
         $notCrossoutStatsByMonth = $productSaleRepo->findNotCrossoutStatsByMonth($terms);
 
         $involvedFunds = $em->getRepository('AppBundle:Config')

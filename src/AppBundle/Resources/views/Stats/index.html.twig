@@ -313,7 +313,7 @@
                 <td><h3>Сумма&nbsp;цен&nbsp;закупка<br>руб.</h3></td>
                 {% for i in 1..12 %}
                     {% if statsSaleByMonth[i] is defined %}
-                        <td>{{ statsSaleByMonth[i]['total_price']|number_format(2, '.', '') }}</td>
+                        <td>{{ statsSaleByMonth[i]['total_price_byn']|number_format(2, '.', '') }}</td>
                     {% else %}
                         <td>-</td>
                     {% endif %}
@@ -323,7 +323,7 @@
                 <td><h3>Сумма&nbsp;цен&nbsp;закупка<br>$</h3></td>
                 {% for i in 1..12 %}
                     {% if statsSaleByMonth[i] is defined %}
-                        <td>{{ (statsSaleByMonth[i]['total_price']/rate)|number_format(2, '.', '') }}</td>
+                        <td>{{ (statsSaleByMonth[i]['total_price'])|number_format(2, '.', '') }}</td>
                     {% else %}
                         <td>-</td>
                     {% endif %}

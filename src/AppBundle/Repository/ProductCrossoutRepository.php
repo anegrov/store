@@ -367,19 +367,33 @@ class ProductCrossoutRepository extends \Doctrine\ORM\EntityRepository
      *
      * @return array
      */
-    public function findStatsByMonth()
+    public function findStatsByMonth($terms = null)
     {
         $date = new \DateTime();
-        $qb = $this->createQueryBuilder('pc')
-            ->select('SUM(pc.price*pc.qty) AS total_price,
+
+        if ($terms){
+
+            $qb = $this->createQueryBuilder('pc')
+                ->select('SUM(pc.price*pc.qty)/:rate AS total_price,
+                            SUM(pc.qty) AS total_qty,
+                            SUM(pc.price*pc.qty) AS total_price_byn,
+                            YEAR(pc.date) AS year,
+                            MONTH(pc.date) AS month')
+                ->where('YEAR(pc.date) = :cur_year')
+                ->setParameter('cur_year', $date->format('Y'))
+                ->setParameter('rate', $terms['rate'])
+                ->groupBy('year, month');
+        }else {
+            $qb = $this->createQueryBuilder('pc')
+                ->select('SUM(pc.price*pc.qty) AS total_price,
                             SUM(pc.qty) AS total_qty,
                             SUM(pc.priceByn*pc.qty) AS total_price_byn,
                             YEAR(pc.created) AS year,
                             MONTH(pc.created) AS month')
-            ->where('YEAR(pc.created) = :cur_year')
-            ->setParameter('cur_year', $date->format('Y'))
-            ->groupBy('year, month');
-
+                ->where('YEAR(pc.created) = :cur_year')
+                ->setParameter('cur_year', $date->format('Y'))
+                ->groupBy('year, month');
+        }
         $tmp = $qb->getQuery()->getResult();
         $result = [];
         foreach ($tmp as $item) {
