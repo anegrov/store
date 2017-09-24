@@ -116,7 +116,7 @@
                         <td>{{ sum_qty|number_format(0, '.', '') }}</td>
                         <td>{{ sum_purchase_price|number_format(2, '.', '') }}</td>
                         <td>{{ sum_crossout_purchase_price_byn|number_format(2, '.', '') }}</td>
-                        <td>{{ sum_crossout_purchase_price|number_format(2, '.', '') }}</td>
+                        <td class="charge-price-sum">{{ sum_crossout_purchase_price|number_format(2, '.', '') }}</td>
                         <td></td>
                         <td></td>
                         <td class="td-border-right"></td>
@@ -324,7 +324,7 @@
                         total = total + $(this).val() * 1;
                     });
 
-                    $('.charge-price').html(total.toFixed(2));
+                    $('.charge-price-sum').html(total.toFixed(2));
                 })
             }
 
