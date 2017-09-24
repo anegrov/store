@@ -372,12 +372,12 @@ class SaleController extends Controller
         $repository = $em->getRepository('AppBundle:Provider');
         $providers = $repository->findAll();
 
-        if (!$request->isXmlHttpRequest()) {
+
             $strIds = $request->cookies->get('not-crossout-checked-ids', "");
             $ids = array_diff(explode(',', $strIds), ['']);
-        } else {
-            $ids = [];
-        }
+
+
+
 
         return $this->render('AppBundle:sale:not_crossout.html.twig', [
             'items' => $pagination,
