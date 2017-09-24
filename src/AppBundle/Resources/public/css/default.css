@@ -691,7 +691,7 @@ table.import-finish tr td{
     width: 10px;
     height: 10px;
 }
-.table-00 a.blue {
+.table-00 a.blue, .product-productSale.blue {
     color: #00c7db;
 }
 .width40 {
