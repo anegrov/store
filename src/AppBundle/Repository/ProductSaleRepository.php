@@ -148,11 +148,12 @@ class ProductSaleRepository extends \Doctrine\ORM\EntityRepository
      *
      * @param array $terms
      * @param $paginator
+     * @param null $alreadyChanged
      * @return mixed
      */
-    public function searchNotCrossoutBy(array $terms, $paginator)
+    public function searchNotCrossoutBy(array $terms, $paginator, $alreadyChanged = null)
     {
-        $query = $this->getQueryByTermsForNotCrossout($terms);
+        $query = $this->getQueryByTermsForNotCrossout($terms, $alreadyChanged);
         $pagination = $paginator->paginate($query, $terms['page'], $terms['limit']);
 
         return $pagination;
@@ -174,11 +175,12 @@ class ProductSaleRepository extends \Doctrine\ORM\EntityRepository
      * getQueryByTermsForNotCrossout
      *
      * @param $terms
-     * @param $page
-     * @param int $limit
+     * @param null $alreadyChanged
      * @return \Doctrine\ORM\QueryBuilder
+     * @internal param $page
+     * @internal param int $limit
      */
-    public function getQueryByTermsForNotCrossout($terms)
+    public function getQueryByTermsForNotCrossout($terms, $alreadyChanged = null)
     {
         /* @var $qb \Doctrine\ORM\QueryBuilder */
         $qb = $this->createQueryBuilder('ps')
@@ -189,6 +191,11 @@ class ProductSaleRepository extends \Doctrine\ORM\EntityRepository
         // crossout table: if product whithout documents then not display
         $qb->innerJoin(ProductStock::class, 'p', 'WITH', 'ps.productId=p.id');
         $qb->andWhere('p.documents = 1');
+
+        if ($alreadyChanged) {
+            $qb->andWhere('ps.id not in (:alreadyChanged)');
+            $qb->setParameter('alreadyChanged', $alreadyChanged);
+        }
 
         // filters data
         if (isset($terms['priceFrom']) && !empty($terms['priceFrom'])) {
