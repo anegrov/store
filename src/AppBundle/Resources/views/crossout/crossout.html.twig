@@ -319,12 +319,19 @@
 
 
                 $('input.input-text.crossout-price').off().keyup(function (el) {
+                    var totalBlock = 0;
                     var total = 0;
                     $('input.input-text.crossout-price').each(function () {
                         total = total + $(this).val() * 1;
                     });
 
+                    $(this).closest('.td-table-container').find('input.input-text.crossout-price').each(function () {
+                       totalBlock = totalBlock + $(this).val() * 1;
+                    });
+
+
                     $('.charge-price-sum').html(total.toFixed(2));
+                    $(this).closest('.td-table-container').find('.td-total-crossout-purchase-price:first').html(totalBlock.toFixed(2));
                 })
             }
 
