@@ -690,6 +690,7 @@ table.import-finish tr td{
     display: inline-block;
     width: 10px;
     height: 10px;
+    position: absolute;
 }
 .table-00 a.blue {
     color: #00c7db;

@@ -1900,7 +1900,7 @@ th.txt-center {
 .table-00 th,
 .table-00 td {
   position: relative;
-  text-align: center;
+  text-align: left;
 }
 
 .table-00 thead {
@@ -1940,9 +1940,9 @@ th.txt-center {
   border-bottom: 2px solid #c9ced3;
 }
 
-td:not(:first-child).txt-left {
-  padding-left: 20px;
-}
+/*td:not(:first-child).txt-left {*/
+  /*padding-left: 20px;*/
+/*}*/
 
 .table-00 tbody tr:nth-child(2n) {
   background-color: #f6f6f6;

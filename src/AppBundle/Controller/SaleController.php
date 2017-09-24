@@ -24,7 +24,7 @@ class SaleController extends Controller
         $terms['limit'] = (isset($terms['limit'])) ? $terms['limit'] : 10;
 
         $cookies = $request->cookies;
-        if ( $cookies->has('limit-perpage') ) {
+        if ($cookies->has('limit-perpage')) {
             $terms['limit'] = $cookies->get('limit-perpage');
         }
 
@@ -33,13 +33,12 @@ class SaleController extends Controller
 
         // get USD rate
         $rateHelper = $this->get(RateHelper::class);
-        if ( ! ($rate = $rateHelper->getRate('USD') ) ) {
+        if (!($rate = $rateHelper->getRate('USD'))) {
             $this->addFlash('notice',
                 array('status' => 'danger', 'message' => $rateHelper->getError())
             );
             return $this->redirectToRoute('app');
-        }
-        else {
+        } else {
             $terms['rate'] = $rate;
         }
 
@@ -58,13 +57,13 @@ class SaleController extends Controller
         $ids = array_diff(explode(',', $strIds), ['']);
 
         return $this->render('AppBundle:sale:index.html.twig', [
-            'items'     => $pagination,
-            'terms'     => $terms,
+            'items' => $pagination,
+            'terms' => $terms,
             'providers' => $providers,
-            'stats'     => $stats,
-            'total'     => $total,
-            'rate'      => $rate,
-            'ids'       => $ids
+            'stats' => $stats,
+            'total' => $total,
+            'rate' => $rate,
+            'ids' => $ids
         ]);
     }
 
@@ -89,19 +88,19 @@ class SaleController extends Controller
 
         $products = [];
         // clone products
-        foreach ($ids as $key=>$id) {
+        foreach ($ids as $key => $id) {
             foreach ($results as $item) {
                 if ($item->getId() == $id) {
                     if ($item->getQty() == 0) {
                         $this->addFlash('notice',
-                            array('status' => 'danger', 'message' => 'Продукт "'.$item->getTitle().'" отсутствует на складе!')
+                            array('status' => 'danger', 'message' => 'Продукт "' . $item->getTitle() . '" отсутствует на складе!')
                         );
                         return $this->redirectToRoute('app');
                     }
 
                     if ($item->getQty() < $qty[$key]) {
                         $this->addFlash('notice',
-                            array('status' => 'danger', 'message' => 'Количество превышает допустимое для продукта ('.$item->getTitle().')')
+                            array('status' => 'danger', 'message' => 'Количество превышает допустимое для продукта (' . $item->getTitle() . ')')
                         );
                         return $this->redirectToRoute('app');
                     }
@@ -119,7 +118,7 @@ class SaleController extends Controller
 
         // get USD rate
         $rateHelper = $this->get(RateHelper::class);
-        if ( ! ($rate = $rateHelper->getRate('USD')) ) {
+        if (!($rate = $rateHelper->getRate('USD'))) {
             $this->addFlash('notice',
                 array('status' => 'danger', 'message' => $rateHelper->getError())
             );
@@ -127,12 +126,12 @@ class SaleController extends Controller
         }
 
         return $this->render('AppBundle:sale:sale.html.twig', [
-            'items'     => $products,
-            'ids'       => $ids,
-            'qty'       => $qty,
-            'price'     => $price,
-            'date'      => $date,
-            'rate'      => $rate
+            'items' => $products,
+            'ids' => $ids,
+            'qty' => $qty,
+            'price' => $price,
+            'date' => $date,
+            'rate' => $rate
         ]);
 
     }
@@ -156,36 +155,34 @@ class SaleController extends Controller
         $products = [];
 
         // validate
-        foreach ($ids as $key=>$id) {
+        foreach ($ids as $key => $id) {
             if (empty($qty[$key])) {
                 $this->addFlash('notice',
                     array('status' => 'danger', 'message' => 'Не выбранно количество для продукта!')
                 );
-                return $this->redirectToRoute('app_product_check_sale', ['ids'=>$ids, 'qty' => $qty,'price' => $price, 'date'=>$date]);
-            }
-            else {
+                return $this->redirectToRoute('app_product_check_sale', ['ids' => $ids, 'qty' => $qty, 'price' => $price, 'date' => $date]);
+            } else {
                 // check available quantity
                 $product = $em->getRepository('AppBundle:ProductStock')
-                              ->find($id);
-                if ($product->getQty() < $qty[$key] ) {
+                    ->find($id);
+                if ($product->getQty() < $qty[$key]) {
                     $this->addFlash('notice',
-                        array('status' => 'danger', 'message' => 'Количество превышает допустимое для продукта ('.$product->getTitle().')')
+                        array('status' => 'danger', 'message' => 'Количество превышает допустимое для продукта (' . $product->getTitle() . ')')
                     );
-                    return $this->redirectToRoute('app_product_check_sale', ['ids'=>$ids, 'qty' => $qty,'price' => $price, 'date'=>$date]);
-                }
-                else {
+                    return $this->redirectToRoute('app_product_check_sale', ['ids' => $ids, 'qty' => $qty, 'price' => $price, 'date' => $date]);
+                } else {
                     // check all products, if products with equal id then sum quantity
                     $allQty = 0;
-                    foreach ($ids as $k=>$v) {
+                    foreach ($ids as $k => $v) {
                         if ($v == $id) {
                             $allQty += $qty[$k];
                         }
                     }
                     if ($allQty > $product->getQty()) {
                         $this->addFlash('notice',
-                            array('status' => 'danger', 'message' => 'Количество превышает допустимое для продукта ('.$product->getTitle().')')
+                            array('status' => 'danger', 'message' => 'Количество превышает допустимое для продукта (' . $product->getTitle() . ')')
                         );
-                        return $this->redirectToRoute('app_product_check_sale', ['ids'=>$ids, 'qty' => $qty,'price' => $price, 'date'=>$date]);
+                        return $this->redirectToRoute('app_product_check_sale', ['ids' => $ids, 'qty' => $qty, 'price' => $price, 'date' => $date]);
                     }
                 }
                 $products[$id] = $product;
@@ -194,30 +191,29 @@ class SaleController extends Controller
                 $this->addFlash('notice',
                     array('status' => 'danger', 'message' => 'Не выбранна дата для продукта!')
                 );
-                return $this->redirectToRoute('app_product_check_sale', ['ids'=>$ids, 'qty' => $qty,'price' => $price, 'date'=>$date]);
+                return $this->redirectToRoute('app_product_check_sale', ['ids' => $ids, 'qty' => $qty, 'price' => $price, 'date' => $date]);
             }
             if (empty($price[$key])) {
                 $this->addFlash('notice',
                     array('status' => 'danger', 'message' => 'Не выбранна цена продажи для продукта!')
                 );
-                return $this->redirectToRoute('app_product_check_sale', ['ids'=>$ids, 'qty' => $qty,'price' => $price, 'date'=>$date]);
+                return $this->redirectToRoute('app_product_check_sale', ['ids' => $ids, 'qty' => $qty, 'price' => $price, 'date' => $date]);
             }
         }
 
         // get USD rate
         $rateHelper = $this->get(RateHelper::class);
-        if ( ! ($rate = $rateHelper->getRate('USD') ) ) {
+        if (!($rate = $rateHelper->getRate('USD'))) {
             $this->addFlash('notice',
                 array('status' => 'danger', 'message' => $rateHelper->getError())
             );
             return $this->redirectToRoute('app');
-        }
-        else {
+        } else {
             $curRate = $rate;
         }
 
         $saleIds = [];
-        foreach ($ids as $key=>$id) {
+        foreach ($ids as $key => $id) {
             $productSale = new ProductSale();
             $productSale->setProductId($id);
             $productSale->setProduct($products[$id]);
@@ -225,17 +221,44 @@ class SaleController extends Controller
             $productSale->setBunch($products[$id]->getBunch());
             $productSale->setQty($qty[$key]);
             //price
-            if (strpos($price[$key],',') !== false) {
+            if (strpos($price[$key], ',') !== false) {
                 $arr = explode(',', $price[$key]);
-                $priceSale = number_format($arr[0].'.'.$arr[1], 2, '.', '');
+                $priceSale = number_format($arr[0] . '.' . $arr[1], 2, '.', '');
             } else {
                 $priceSale = $price[$key];
             }
             $productSale->setPrice($priceSale);
-            $productSale->setPriceUsd($priceSale/$curRate);
-            $productSale->setDisabledRedBall(false);
+            $productSale->setPriceUsd($priceSale / $curRate);
+
+            $bunch = $products[$id]->getBunch();
+
+            $productsRemaining = $bunch->getProducts();
+
+            $count = 0;
+            foreach ($productsRemaining as $item) {
+                $count += $item->getQty();
+            }
+
+
+            if ($count > 1) {
+                $productSale->setDisabledRedBall(true);
+            } else {
+                $productSale->setDisabledRedBall(false);
+                $productsSaleInBunch = $bunch->getProductsSale();
+
+                foreach ($productsSaleInBunch as $value) {
+                    $value->setDisabledRedBall(false);
+                }
+            }
+
+
+
+
+
+
+
             //date
-            $dateSale = \DateTime::createFromFormat('d-m-Y',$date[$key]);
+            $dateSale = \DateTime::createFromFormat('d-m-Y', $date[$key]);
             $productSale->setDate($dateSale);
 
             $em->persist($productSale);
@@ -250,8 +273,7 @@ class SaleController extends Controller
 
         if ($redirect == "crossout") {
             return $this->redirectToRoute('app_crossout', ['ids' => $saleIds]);
-        }
-        else {
+        } else {
             return $this->redirectToRoute('app_product_sale_index');
         }
     }
@@ -320,7 +342,7 @@ class SaleController extends Controller
         $terms['limit'] = (isset($terms['limit'])) ? $terms['limit'] : 10;
 
         $cookies = $request->cookies;
-        if ( $cookies->has('limit-perpage') ) {
+        if ($cookies->has('limit-perpage')) {
             $terms['limit'] = $cookies->get('limit-perpage');
         }
 
@@ -332,7 +354,7 @@ class SaleController extends Controller
 
         // get USD rate
         $rateHelper = $this->get(RateHelper::class);
-        if ( ! ($rate = $rateHelper->getRate('USD') ) ) {
+        if (!($rate = $rateHelper->getRate('USD'))) {
             $this->addFlash('notice',
                 array('status' => 'danger', 'message' => $rateHelper->getError())
             );
@@ -351,19 +373,18 @@ class SaleController extends Controller
         if (!$request->isXmlHttpRequest()) {
             $strIds = $request->cookies->get('not-crossout-checked-ids', "");
             $ids = array_diff(explode(',', $strIds), ['']);
-        }
-        else {
+        } else {
             $ids = [];
         }
 
         return $this->render('AppBundle:sale:not_crossout.html.twig', [
-            'items'     => $pagination,
-            'terms'     => $terms,
+            'items' => $pagination,
+            'terms' => $terms,
             'providers' => $providers,
-            'stats'     => $stats,
-            'total'     => $total,
-            'rate'      => $rate,
-            'ids'       => $ids
+            'stats' => $stats,
+            'total' => $total,
+            'rate' => $rate,
+            'ids' => $ids
         ]);
     }
 
@@ -408,14 +429,13 @@ class SaleController extends Controller
         $repo = $em->getRepository('AppBundle:ProductStock');
         $productStock = $repo->find($productId);
 
-        if ( !empty($productStock) && $qty <= $productStock->getQty() ) {
+        if (!empty($productStock) && $qty <= $productStock->getQty()) {
             return $this->json(['status' => 'success']);
-        }
-        else {
+        } else {
             $bunch = $productStock->getBunch();
             $products = $bunch->getProducts();
             $html = $this->render('AppBundle:product:_table_for_sale_products.html.twig', [
-                'items'     => $products
+                'items' => $products
             ]);
 
             return $this->json(['status' => 'error', 'html' => $html->getContent()]);
