@@ -631,14 +631,15 @@ class ProductSaleRepository extends \Doctrine\ORM\EntityRepository
     {
         $date = new \DateTime();
         $qb = $this->createQueryBuilder('ps')
-            ->select('SUM(ps.priceUsd*ps.qty) AS total_price,
+            ->select('SUM((ps.price - p.priceByn)*ps.qty)/:rate AS total_price,
                             SUM(ps.qty) AS total_qty,
-                            SUM(ps.price*ps.qty) AS total_price_byn,
+                            SUM((ps.price - p.priceByn)*ps.qty) AS total_price_byn,
                             YEAR(ps.date) AS year,
                             MONTH(ps.date) AS month')
+            ->innerJoin(ProductStock::class, 'p', 'WITH', 'ps.productId=p.id')
             ->where('YEAR(ps.date) = :cur_year')
             ->setParameter('cur_year', $date->format('Y'))
-
+            ->setParameter('rate', $terms['rate'])
             ->groupBy('year, month');
 
         $tmp = $qb->getQuery()->getResult();
@@ -692,10 +693,11 @@ class ProductSaleRepository extends \Doctrine\ORM\EntityRepository
         }
         $date = new \DateTime();
         $qb = $this->createQueryBuilder('ps');
-        $qb->select('SUM((ps.price*ps.qty)/:rate) AS total_price,
+        $qb->select('SUM(((ps.price - p.priceByn)*ps.qty)/:rate) AS total_price,
                             YEAR(ps.date) AS year,
                             MONTH(ps.date) AS month,
                             DAY(ps.date) AS day')
+           ->innerJoin(ProductStock::class, 'p', 'WITH', 'ps.productId=p.id')
            ->andWhere('MONTH(ps.date) = :month')
            ->andWhere('YEAR(ps.date) = :cur_year')
            ->setParameter('cur_year', $date->format('Y'))
