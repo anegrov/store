@@ -101,7 +101,7 @@
                                             <select name="product[{{ item.id }}][crossout][product_id][]" class="js-product-crossout" style="width: 350px;">
                                                 <option value="{{ item.id }}">{{ item.product.title }}</option>
                                             </select>
-                                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                            <span class="glyphicon glyphicon-search"></span>
                                         </td>
                                         <td style="width:36px;">
                                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -215,16 +215,22 @@
             initCrossoutRow();
 
 
-            function openSearhForm() {
-                $("#dialog-form").html(loading);
-                $.ajax({
-                    url: "{{ path('app_not_crossout_list') }}",
-                    method: "GET",
-                    success: function (response) {
-                        $("#dialog-form").html(response);
-                    }
-                });
+        function openSearhForm() {
+            var already_changed = [];
+            var selects = $('.js-product-crossout');
+            for (var i = 0; i < selects.length; i++) {
+                already_changed.push(selects[i].value);
             }
+            $("#dialog-form").html(loading);
+            $.ajax({
+                url: "{{ path('app_not_crossout_list') }}",
+                method: "GET",
+                success: function (response) {
+                    $("#dialog-form").html(response);
+                },
+                data: {alreadyChanged:already_changed}
+            });
+        }
 
             var dialog = $("#dialog-form").dialog({
                 autoOpen: false,

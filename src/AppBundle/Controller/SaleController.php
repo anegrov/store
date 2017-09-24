@@ -346,11 +346,13 @@ class SaleController extends Controller
             $terms['limit'] = $cookies->get('limit-perpage');
         }
 
+        $alreadyChanged = $request->get('alreadyChanged');
+
         /* @var $em \Doctrine\ORM\EntityManager */
         $em = $this->getDoctrine()->getEntityManager();
 
         $repository = $em->getRepository('AppBundle:ProductSale');
-        $pagination = $repository->searchNotCrossoutBy($terms, $this->get('knp_paginator'));
+        $pagination = $repository->searchNotCrossoutBy($terms, $this->get('knp_paginator'), $alreadyChanged);
 
         // get USD rate
         $rateHelper = $this->get(RateHelper::class);

@@ -77,12 +77,12 @@ class ProductSaleRepository extends \Doctrine\ORM\EntityRepository
             $qb->setParameter('price_to', $terms['priceTo']);
         }
         if (isset($terms['dateFrom']) && !empty($terms['dateFrom'])) {
-            $dateFrom = \DateTime::createFromFormat('Y.m.d', $terms['dateFrom']);
+            $dateFrom = \DateTime::createFromFormat('d-m-Y', $terms['dateFrom']);
             $qb->andWhere('ps.date >= :date_from');
             $qb->setParameter('date_from', $dateFrom->format('Y-m-d 00:00:00'));
         }
         if (isset($terms['dateTo']) && !empty($terms['dateTo'])) {
-            $dateTo = \DateTime::createFromFormat('Y.m.d', $terms['dateTo']);
+            $dateTo = \DateTime::createFromFormat('d-m-Y', $terms['dateTo']);
             $qb->andWhere('ps.date <= :date_to');
             $qb->setParameter('date_to', $dateTo->format('Y-m-d 23:59:59'));
         }
@@ -148,11 +148,12 @@ class ProductSaleRepository extends \Doctrine\ORM\EntityRepository
      *
      * @param array $terms
      * @param $paginator
+     * @param null $alreadyChanged
      * @return mixed
      */
-    public function searchNotCrossoutBy(array $terms, $paginator)
+    public function searchNotCrossoutBy(array $terms, $paginator, $alreadyChanged = null)
     {
-        $query = $this->getQueryByTermsForNotCrossout($terms);
+        $query = $this->getQueryByTermsForNotCrossout($terms, $alreadyChanged);
         $pagination = $paginator->paginate($query, $terms['page'], $terms['limit']);
 
         return $pagination;
@@ -174,11 +175,12 @@ class ProductSaleRepository extends \Doctrine\ORM\EntityRepository
      * getQueryByTermsForNotCrossout
      *
      * @param $terms
-     * @param $page
-     * @param int $limit
+     * @param null $alreadyChanged
      * @return \Doctrine\ORM\QueryBuilder
+     * @internal param $page
+     * @internal param int $limit
      */
-    public function getQueryByTermsForNotCrossout($terms)
+    public function getQueryByTermsForNotCrossout($terms, $alreadyChanged = null)
     {
         /* @var $qb \Doctrine\ORM\QueryBuilder */
         $qb = $this->createQueryBuilder('ps')
@@ -190,6 +192,11 @@ class ProductSaleRepository extends \Doctrine\ORM\EntityRepository
         $qb->innerJoin(ProductStock::class, 'p', 'WITH', 'ps.productId=p.id');
         $qb->andWhere('p.documents = 1');
 
+        if ($alreadyChanged) {
+            $qb->andWhere('ps.id not in (:alreadyChanged)');
+            $qb->setParameter('alreadyChanged', $alreadyChanged);
+        }
+
         // filters data
         if (isset($terms['priceFrom']) && !empty($terms['priceFrom'])) {
             $qb->andWhere('ps.price >= :price_from');
@@ -200,12 +207,20 @@ class ProductSaleRepository extends \Doctrine\ORM\EntityRepository
             $qb->setParameter('price_to', $terms['priceTo']);
         }
         if (isset($terms['dateFrom']) && !empty($terms['dateFrom'])) {
-            $dateFrom = \DateTime::createFromFormat('Y.m.d', $terms['dateFrom']);
+            if (strripos($terms['dateFrom'], '/')){
+                $dateFrom = \DateTime::createFromFormat('m/d/Y', $terms['dateFrom']);
+            } else {
+                $dateFrom = \DateTime::createFromFormat('d-m-Y', $terms['dateFrom']);
+            }
             $qb->andWhere('ps.date >= :date_from');
             $qb->setParameter('date_from', $dateFrom->format('Y-m-d 00:00:00'));
         }
         if (isset($terms['dateTo']) && !empty($terms['dateTo'])) {
-            $dateTo = \DateTime::createFromFormat('Y.m.d', $terms['dateTo']);
+            if (strripos($terms['dateTo'], '/')){
+                $dateTo = \DateTime::createFromFormat('m/d/Y', $terms['dateTo']);
+            } else {
+                $dateTo = \DateTime::createFromFormat('d-m-Y', $terms['dateTo']);
+            }
             $qb->andWhere('ps.date <= :date_to');
             $qb->setParameter('date_to', $dateTo->format('Y-m-d 23:59:59'));
         }
@@ -242,7 +257,7 @@ class ProductSaleRepository extends \Doctrine\ORM\EntityRepository
         }
         else {
             // default: sort by date
-            $qb->orderBy('ps.date, ps.id', 'ASC');
+            $qb->orderBy('ps.date', 'DESC');
         }
 
         return $qb;
