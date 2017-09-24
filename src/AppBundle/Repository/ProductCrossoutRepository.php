@@ -214,6 +214,7 @@ class ProductCrossoutRepository extends \Doctrine\ORM\EntityRepository
 
         // current quarter
         $quarter = ceil(date('n', time()) / 3);
+
         $quarter_mounth_end = $quarter*3;
         $quarter_mounth_start = $quarter*3 - 3;
 
@@ -226,7 +227,7 @@ class ProductCrossoutRepository extends \Doctrine\ORM\EntityRepository
         $quarter_date_end->setTime(23,59,59);
 
         $qb = $this->createQueryBuilder('pc')
-            ->select('SUM(ps.price*ps.qty) AS sum_price, SUM(ps.qty) AS sum_qty')
+            ->select('SUM(pc.price*ps.qty) AS sum_price, SUM(ps.qty) AS sum_qty')
             ->innerJoin(ProductSale::class,'ps', 'WITH', 'pc.productSaleId=ps.id')
             //->groupBy('ps.productId')
             ->where('pc.date > :quarter_date_start AND pc.date < :quarter_date_end')
@@ -241,6 +242,8 @@ class ProductCrossoutRepository extends \Doctrine\ORM\EntityRepository
             $stats['cur_quarter_price'] = 0;
             $stats['cur_quarter_qty'] = 0;
         }
+
+
 
         // prev quarter
         $quarter = ceil(date('n', time()) / 3)-1;
