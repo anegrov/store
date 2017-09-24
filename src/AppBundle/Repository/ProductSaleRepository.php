@@ -77,12 +77,12 @@ class ProductSaleRepository extends \Doctrine\ORM\EntityRepository
             $qb->setParameter('price_to', $terms['priceTo']);
         }
         if (isset($terms['dateFrom']) && !empty($terms['dateFrom'])) {
-            $dateFrom = \DateTime::createFromFormat('Y.m.d', $terms['dateFrom']);
+            $dateFrom = \DateTime::createFromFormat('d-m-Y', $terms['dateFrom']);
             $qb->andWhere('ps.date >= :date_from');
             $qb->setParameter('date_from', $dateFrom->format('Y-m-d 00:00:00'));
         }
         if (isset($terms['dateTo']) && !empty($terms['dateTo'])) {
-            $dateTo = \DateTime::createFromFormat('Y.m.d', $terms['dateTo']);
+            $dateTo = \DateTime::createFromFormat('d-m-Y', $terms['dateTo']);
             $qb->andWhere('ps.date <= :date_to');
             $qb->setParameter('date_to', $dateTo->format('Y-m-d 23:59:59'));
         }
@@ -207,12 +207,20 @@ class ProductSaleRepository extends \Doctrine\ORM\EntityRepository
             $qb->setParameter('price_to', $terms['priceTo']);
         }
         if (isset($terms['dateFrom']) && !empty($terms['dateFrom'])) {
-            $dateFrom = \DateTime::createFromFormat('Y.m.d', $terms['dateFrom']);
+            if (strripos($terms['dateFrom'], '/')){
+                $dateFrom = \DateTime::createFromFormat('m/d/Y', $terms['dateFrom']);
+            } else {
+                $dateFrom = \DateTime::createFromFormat('d-m-Y', $terms['dateFrom']);
+            }
             $qb->andWhere('ps.date >= :date_from');
             $qb->setParameter('date_from', $dateFrom->format('Y-m-d 00:00:00'));
         }
         if (isset($terms['dateTo']) && !empty($terms['dateTo'])) {
-            $dateTo = \DateTime::createFromFormat('Y.m.d', $terms['dateTo']);
+            if (strripos($terms['dateTo'], '/')){
+                $dateTo = \DateTime::createFromFormat('m/d/Y', $terms['dateTo']);
+            } else {
+                $dateTo = \DateTime::createFromFormat('d-m-Y', $terms['dateTo']);
+            }
             $qb->andWhere('ps.date <= :date_to');
             $qb->setParameter('date_to', $dateTo->format('Y-m-d 23:59:59'));
         }
@@ -249,7 +257,7 @@ class ProductSaleRepository extends \Doctrine\ORM\EntityRepository
         }
         else {
             // default: sort by date
-            $qb->orderBy('ps.date, ps.id', 'ASC');
+            $qb->orderBy('ps.date', 'DESC');
         }
 
         return $qb;
