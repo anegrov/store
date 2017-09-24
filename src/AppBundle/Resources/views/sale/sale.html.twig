@@ -147,6 +147,23 @@
             priceByn = jQuery(this).closest("tr").find(".priceSale").val();
             jQuery(this).closest("tr").find(".profit").html( (qty*(priceByn-priceBynPurchase)).toFixed(2) + '/' + (qty*(priceByn-priceBynPurchase)/rate).toFixed(2) );
             jQuery(this).closest("tr").find(".profit").text();
+
+            var sumSale = 0;
+            var profitLeft = 0;
+            var profitRight = 0;
+            var priceSale = $('.priceSale');
+            var profit = $('.profit');
+
+            priceSale.each(function (index) {
+                sumSale = sumSale + parseFloat(priceSale[index].value);
+                profitLeft = profitLeft + parseFloat(profit[index].innerText.split('/')[0]);
+                profitRight = profitRight + parseFloat(profit[index].innerText.split('/')[1]);
+
+            });
+
+            $('.sum-price-sale')[0].innerHTML = sumSale.toFixed(2);
+            $('.sum-profit')[0].innerHTML = profitLeft.toFixed(2) + '/' + profitRight.toFixed(2);
+
         });
 
         jQuery(".priceSale").change();

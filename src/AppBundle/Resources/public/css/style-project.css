@@ -2464,3 +2464,7 @@ th.txt-center {
 .modal-body table td {
   padding: 0 15px;
 }
+
+.sum-price-sale {
+  text-align: left;
+}
