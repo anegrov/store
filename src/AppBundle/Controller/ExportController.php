@@ -253,6 +253,7 @@ class ExportController extends Controller
         $objPHPExcel->getActiveSheet()->setCellValue('D'.$rowCount,'Диапазон цен,$');
         $objPHPExcel->getActiveSheet()->setCellValue('E'.$rowCount,'Цена последнего товара, руб.');
         $objPHPExcel->getActiveSheet()->setCellValue('F'.$rowCount,'Дата, поставки последнего');
+        $objPHPExcel->getActiveSheet()->setCellValue('G'.$rowCount,'Вес');
 
         foreach ($items as $item) {
             if (is_array($item)) {
@@ -263,45 +264,49 @@ class ExportController extends Controller
                 $bunch = $item;
             }
 
-            $rowCount++;
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$rowCount, $bunch->getTitle());
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$rowCount, $bunch->getTotal());
-            if ($bunch->getMaxPriceByn() != $bunch->getMinPriceByn()) {
-                $diapazonPrice = $bunch->getMinPriceByn() - $bunch->getMaxPriceByn();
-            } else {
-                $diapazonPrice = $bunch->getMinPriceByn();
-            }
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$rowCount, $diapazonPrice);
-            if ($bunch->getMaxPriceByn() != $bunch->getMinPriceByn()) {
-                $diapazonPrice = $bunch->getMinPrice() - $bunch->getMaxPrice();
-            } else {
-                $diapazonPrice = $bunch->getMinPrice();
-            }
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$rowCount, $diapazonPrice);
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$rowCount, $bunch->getLastProductPrice());
-            $lastDate = (isset($lastDate)) ? $lastDate : $bunch->getLastProduct()->getCreated()->format('Y-m-d');
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$rowCount, $lastDate);
-
-            $objPHPExcel->getActiveSheet()->getStyle("A{$rowCount}:F{$rowCount}")->getFill()->applyFromArray(array(
-                'type' => \PHPExcel_Style_Fill::FILL_SOLID,
-                'startcolor' => array(
-                    'rgb' => 'e4e7e8'
-                )
-            ));
+//            $rowCount++;
+//            $objPHPExcel->getActiveSheet()->setCellValue('A'.$rowCount, $bunch->getTitle());
+//            $objPHPExcel->getActiveSheet()->setCellValue('B'.$rowCount, $bunch->getTotal());
+//            if ($bunch->getMaxPriceByn() != $bunch->getMinPriceByn()) {
+//                $diapazonPrice = $bunch->getMinPriceByn() - $bunch->getMaxPriceByn();
+//            } else {
+//                $diapazonPrice = $bunch->getMinPriceByn();
+//            }
+//            $objPHPExcel->getActiveSheet()->setCellValue('C'.$rowCount, $diapazonPrice);
+//            if ($bunch->getMaxPriceByn() != $bunch->getMinPriceByn()) {
+//                $diapazonPrice = $bunch->getMinPrice() - $bunch->getMaxPrice();
+//            } else {
+//                $diapazonPrice = $bunch->getMinPrice();
+//            }
+//            $objPHPExcel->getActiveSheet()->setCellValue('D'.$rowCount, $diapazonPrice);
+//            $objPHPExcel->getActiveSheet()->setCellValue('E'.$rowCount, $bunch->getLastProductPrice());
+//            $lastDate = (isset($lastDate)) ? $lastDate : $bunch->getLastProduct()->getCreated()->format('Y-m-d');
+//            $objPHPExcel->getActiveSheet()->setCellValue('F'.$rowCount, $lastDate);
+//            $objPHPExcel->getActiveSheet()->setCellValue('G'.$rowCount, $item['weight']*$bunch->getTotal());
+//
+//            $objPHPExcel->getActiveSheet()->getStyle("A{$rowCount}:G{$rowCount}")->getFill()->applyFromArray(array(
+//                'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+//                'startcolor' => array(
+//                    'rgb' => 'e4e7e8'
+//                )
+//            ));
 
             foreach ($bunch->getProducts() as $product)
             {
-                $rowCount++;
-                $objPHPExcel->getActiveSheet()->setCellValue('A'.$rowCount, $product->getTitle());
-                $objPHPExcel->getActiveSheet()->setCellValue('B'.$rowCount, $product->getQty());
-                $objPHPExcel->getActiveSheet()->setCellValue('C'.$rowCount, $product->getPriceByn());
-                $objPHPExcel->getActiveSheet()->setCellValue('D'.$rowCount, $product->getPrice());
-                $objPHPExcel->getActiveSheet()->setCellValue('E'.$rowCount, $product->getPrice());
-                $objPHPExcel->getActiveSheet()->setCellValue('F'.$rowCount, $product->getCreated()->format('Y-m-d'));
+                if ($product->getQty()) {
+                    $rowCount++;
+                    $objPHPExcel->getActiveSheet()->setCellValue('A' . $rowCount, $product->getTitle());
+                    $objPHPExcel->getActiveSheet()->setCellValue('B' . $rowCount, $product->getQty());
+                    $objPHPExcel->getActiveSheet()->setCellValue('C' . $rowCount, $product->getPriceByn());
+                    $objPHPExcel->getActiveSheet()->setCellValue('D' . $rowCount, $product->getPrice());
+                    $objPHPExcel->getActiveSheet()->setCellValue('E' . $rowCount, $product->getPrice());
+                    $objPHPExcel->getActiveSheet()->setCellValue('F' . $rowCount, $product->getCreated()->format('Y-m-d'));
+                    $objPHPExcel->getActiveSheet()->setCellValue('G' . $rowCount, $product->getWeight());
+                }
             }
         }
 
-        $objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getFill()->applyFromArray(array(
+        $objPHPExcel->getActiveSheet()->getStyle('A1:G1')->getFill()->applyFromArray(array(
             'type' => \PHPExcel_Style_Fill::FILL_SOLID,
             'startcolor' => array(
                 'rgb' => 'c8cfd4'
@@ -321,9 +326,11 @@ class ExportController extends Controller
         $objPHPExcel->getActiveSheet()->getStyle('E1')->getAlignment()->setWrapText(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10.9);
         $objPHPExcel->getActiveSheet()->getStyle('F1')->getAlignment()->setWrapText(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10.9);
+        $objPHPExcel->getActiveSheet()->getStyle('G1')->getAlignment()->setWrapText(true);
 
-        $objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getAlignment()->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:G1')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:G1')->getAlignment()->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
         // create the writer
         $writer = $this->get('phpexcel')->createWriter($objPHPExcel, 'Excel2007');
