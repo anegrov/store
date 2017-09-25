@@ -83,6 +83,19 @@
                 <option value="{{ provider.id }}" {% if terms.providerId is defined and terms.providerId == provider.id %}selected="selected"{% endif %}>{{ provider.title }}</option>
             {% endfor %}
         </select>
+
+        <select name="ball" class="select-base select-color select-coming">
+            <option style="color: #00bdd6;" value="0"  selected="selected">Приход</option>
+            <option {% if terms.ball is defined %}{% if terms.ball == 1 %}selected="selected" {% endif %}{% endif %}  style="color: #00bdd6;"   value="1">Без пометки </option>
+            <option {% if terms.ball is defined %}{% if terms.ball == "red" %} selected="selected"{% endif %}{% endif %}  style="font-size: 30px;color: #ff5000;"  value="red">•</option>
+            <option {% if terms.ball is defined %}{% if terms.ball == "blue" %} selected="selected"{% endif %}{% endif %} style="font-size: 30px;color: #8b7ef8;"  value="blue">•</option>
+            <option {% if terms.ball is defined %}{% if terms.ball == "green" %} selected="selected"{% endif %}{% endif %} style="font-size: 30px;color: #6bc43c;"  value="green">•</option>
+
+        </select>
+        <select name="provider" class="select-base select-color">
+            <option value="" selected="selected">Служебные метки</option>
+
+        </select>
         <button id="filter-button" type="submit" class="btn-base v-align-top">Фильтровать</button>
     </div>
 </form>

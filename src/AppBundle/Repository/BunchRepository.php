@@ -337,6 +337,17 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
             $qb->andWhere('p.documents = :documents');
             $qb->setParameter('documents', $terms['documents']);
         }
+
+        if (isset($terms['ball']) && $terms['ball'] != "" ) {
+
+            if ($terms['ball'] == 1){
+                $qb->andWhere('b.ball is NULL');
+            }elseif($terms['ball']) {
+
+                $qb->andWhere('b.ball = :ball');
+                $qb->setParameter('ball', $terms['ball']);
+            }
+        }
         if (isset($terms['priceFrom']) && !empty($terms['priceFrom'])) {
             $qb->andWhere('p.priceByn >= :price_from');
             $qb->setParameter('price_from', $terms['priceFrom']);

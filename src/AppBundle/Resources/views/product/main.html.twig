@@ -139,11 +139,11 @@
                                 <a href="#" class="product-item">{{ bunch.title }}</a>
                                 {% if bunch.lastProduct is defined and bunch.lastProduct.dateDiff|date("%m") > 2 and bunch.lastProduct.dateDiff|date("%m") < 6 %}
                                     <div class="product-item-time">
-                                        <span class="color-orange">3 мес</span>
+                                        <span style="padding-right: 15px;" class="color-orange">3 мес</span>
                                     </div>
                                 {% elseif bunch.lastProduct is defined and bunch.lastProduct.dateDiff|date("%m") > 5 %}
                                     <div class="product-item-time">
-                                        <span class="color-orange">6 мес</span>
+                                        <span style="padding-right: 15px;" class="color-orange">6 мес</span>
                                     </div>
                                 {% endif %}
 
@@ -546,6 +546,16 @@
 {% block javascripts %}
     <script type="text/javascript">
         $(function () {
+            var color;
+            color = $('.select-coming').find('[value = '+$('.select-coming').val()+']').css('color');
+            $('.select-coming').css('color',color);
+
+            $('.select-coming').off().on('change', function () {
+                var color;
+    color = $(this).find('[value = '+$(this).val()+']').css('color');
+    $(this).css('color',color);
+            });
+
 
             $(".ckeckbox-all-group").on('click', function () {
                 var input = $(this).closest(".checkbox-style").find("input");

@@ -38,6 +38,7 @@ class ProductController extends Controller
         /* @var $em \Doctrine\ORM\EntityManager */
         $em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository('AppBundle:Bunch');
+
         $pagination = $repository->searchBy($terms, $this->get('knp_paginator'));
 
 
