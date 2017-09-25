@@ -63,13 +63,16 @@ class ProductController extends Controller
             }
         }
 
+        $productFilter = true;
+
         return $this->render('AppBundle:product:main.html.twig', [
             'items' => $pagination,
             'total' => $total,
             'terms' => $terms,
             'providers' => $providers,
             'ids' => $returnIds,
-            'rate' => $rate
+            'rate' => $rate,
+            'productFilter'=>$productFilter
         ]);
     }
 

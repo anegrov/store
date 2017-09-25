@@ -83,7 +83,7 @@
                 <option value="{{ provider.id }}" {% if terms.providerId is defined and terms.providerId == provider.id %}selected="selected"{% endif %}>{{ provider.title }}</option>
             {% endfor %}
         </select>
-
+{% if productFilter is defined %}
         <select name="ball" class="select-base select-color select-coming">
             <option style="color: #00bdd6;" value="0"  selected="selected">Приход</option>
             <option {% if terms.ball is defined %}{% if terms.ball == 1 %}selected="selected" {% endif %}{% endif %}  style="color: #00bdd6;"   value="1">Без пометки </option>
@@ -92,10 +92,20 @@
             <option {% if terms.ball is defined %}{% if terms.ball == "green" %} selected="selected"{% endif %}{% endif %} style="font-size: 30px;color: #6bc43c;"  value="green">•</option>
 
         </select>
-        <select name="provider" class="select-base select-color">
-            <option value="" selected="selected">Служебные метки</option>
+        <select name="stars" class="select-base select-color">
+            <option value="all" selected="selected">Служебные метки</option>
+            <option value="000" style="font-size: 20px;" {% if terms.stars is defined %}{% if terms.stars == "000" %} selected="selected"{% endif %}{% endif %}>&#9734; &#9734; &#9734;</option>
+            <option value="100" style="font-size: 20px;" {% if terms.stars is defined %}{% if terms.stars == "100" %} selected="selected"{% endif %}{% endif %} >&#9733; &#9734; &#9734;</option>
+            <option value="110" style="font-size: 20px;" {% if terms.stars is defined %}{% if terms.stars == "110" %} selected="selected"{% endif %}{% endif %} >&#9733; &#9733; &#9734;</option>
+            <option value="111" style="font-size: 20px;" {% if terms.stars is defined %}{% if terms.stars == "111" %} selected="selected"{% endif %}{% endif %} >&#9733; &#9733; &#9733;</option>
+            <option value="011" style="font-size: 20px;" {% if terms.stars is defined %}{% if terms.stars == "011" %} selected="selected"{% endif %}{% endif %} >&#9734; &#9733; &#9733;</option>
+            <option value="001" style="font-size: 20px;" {% if terms.stars is defined %}{% if terms.stars == "001" %} selected="selected"{% endif %}{% endif %} >&#9734; &#9734; &#9733;</option>
+            <option value="010" style="font-size: 20px;" {% if terms.stars is defined %}{% if terms.stars == "010" %} selected="selected"{% endif %}{% endif %} >&#9734; &#9733; &#9734;</option>
+
+            <option value="" style="font-size: 20px;" {% if terms.stars is defined %}{% if terms.stars == "101" %} selected="selected"{% endif %}{% endif %} >&#9733; &#9734; &#9733;</option>
 
         </select>
+        {% endif %}
         <button id="filter-button" type="submit" class="btn-base v-align-top">Фильтровать</button>
     </div>
 </form>

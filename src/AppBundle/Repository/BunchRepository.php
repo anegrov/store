@@ -338,15 +338,28 @@ class BunchRepository extends \Doctrine\ORM\EntityRepository
             $qb->setParameter('documents', $terms['documents']);
         }
 
-        if (isset($terms['ball']) && $terms['ball'] != "" ) {
+        if (isset($terms['ball']) && $terms['ball'] != "") {
 
-            if ($terms['ball'] == 1){
+            if ($terms['ball'] == 1) {
                 $qb->andWhere('b.ball is NULL');
-            }elseif($terms['ball']) {
+            } elseif ($terms['ball']) {
 
                 $qb->andWhere('b.ball = :ball');
                 $qb->setParameter('ball', $terms['ball']);
             }
+        }
+
+
+        if (isset($terms['stars']) && $terms['stars'] != "" && $terms['stars'] != "all") {
+
+
+            $qb->andWhere('b.star1 = :star1');
+            $qb->setParameter('star1', $terms['stars'][0]);
+            $qb->andWhere('b.star2 = :star2');
+            $qb->setParameter('star2', $terms['stars'][1]);
+            $qb->andWhere('b.star3 = :star3');
+            $qb->setParameter('star3', $terms['stars'][2]);
+
         }
         if (isset($terms['priceFrom']) && !empty($terms['priceFrom'])) {
             $qb->andWhere('p.priceByn >= :price_from');
