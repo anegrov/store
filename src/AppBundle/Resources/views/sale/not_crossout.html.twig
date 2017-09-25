@@ -222,7 +222,7 @@
 
             $("#check-for-crossout").on('click', function(){
                 var query = '';
-                let cookieIds = jQuery.cookie("not-crossout-checked-ids");
+                let cookieIds = jQuery.cookie({% if flag is null %}"not-crossout-checked-ids"{% else %}"not-crossout-checked-ids-popup"{% endif %});
                 if ( cookieIds != undefined) {
                     var curIds = cookieIds.split(',');
                 }
@@ -252,7 +252,7 @@
             });
 
             jQuery(".checkbox-style input").on('change', function(){
-                let cookieIds = jQuery.cookie("not-crossout-checked-ids");
+                let cookieIds = jQuery.cookie({% if flag is null %}"not-crossout-checked-ids"{% else %}"not-crossout-checked-ids-popup"{% endif %});
                 if ( cookieIds != undefined) {
                     var curIds = cookieIds.split(',');
                 }
@@ -276,7 +276,7 @@
                             return value != selectId;
                         });
                     }
-                    jQuery.cookie("not-crossout-checked-ids", curIds, { path: '/', expires: 7 });
+                    jQuery.cookie({% if flag is null %}"not-crossout-checked-ids"{% else %}"not-crossout-checked-ids-popup"{% endif %}, curIds, { path: '/', expires: 7 });
                 }
 
                 curIds.forEach(function (t, i, arr) {
