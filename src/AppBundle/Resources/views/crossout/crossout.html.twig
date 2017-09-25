@@ -35,7 +35,8 @@
                             </th>
                             <th class="td-date-input td-border-right" style="width:104px;">
                                 <h3>Дата списания<br>руб./$</h3>
-                                <input class="common-datepicker input-text datepicker input-table-datepicker" type="text" name="date[]" value="{{ "now"|date("d-m-Y") }}" />
+                                <input class="common-datepicker input-text datepicker input-table-datepicker"
+                                       type="text" name="date[]" value="{{ "now"|date("d-m-Y") }}"/>
                             </th>
                             <th class="title-td td-border-right td-border-left" style="width:404px;">
                                 <h3>Списать</h3>
@@ -55,75 +56,84 @@
                         {% set sum_crossout_purchase_price = 0 %}
                         {% set count = 0 %}
                         {% for key,item in items %}
-                            {% set count = count + 1 %}
-                            <tr>
-                                <td class="title-tr txt-left td-border-right plus-cursor" style="width:269px;">
-                                    {{ item.product.title }}
-                                    <input type="hidden" name="product[{{ item.id }}][product_id]"
-                                           value="{{ item.product.id }}"/>
-                                </td>
-                                <td class="td-border-right" style="width:88px;">
-                                    {{ item.qty }}
-                                    {% set sum_qty = sum_qty + item.qty %}
-                                </td>
-                                {#<td class="td-price">#}
-                                {#{{ item.product.priceByn|number_format(2, '.', '') }}#}
-                                {#{% set sum_purchase_price_byn = sum_purchase_price_byn + item.product.priceByn %}#}
-                            {#</td>#}
-                            <td class="td-price td-border-right" style="width:85px;">
-                                {{ item.price|number_format(2, '.', '') }}
-                                {% set sum_purchase_price = sum_purchase_price + item.price %}
-                            </td>
-                            <td colspan="5" class="td-border-right td-table-container">
-                                <table class="sub-table-crossout">
-                                    <tr>
-                                        <td class="td-price td-border-right" style="width:85px;">
-                                            <span class="purchase-price">{{ item.product.priceByn|number_format(2, '.', '') }}</span>
-                                            {% set sum_crossout_purchase_price_byn = sum_crossout_purchase_price_byn + item.product.priceByn %}
-                                        </td>
-                                        <td class="td-price td-border-right" style="width:164px;padding-left:0">
-                                            <table class="sub-table-crossout-price" border="0">
-                                                <tr>
-                                                    <td class="td-total-crossout-purchase-price" style="width: 80px;">
-                                                        {{ item.price|number_format(2, '.', '') }}
-                                                    </td>
-                                                    <td class="td-crossout-price" style="width: 80px;">
-                                                        <input type="text" name="product[{{ item.id }}][crossout][price][]" class="input-text crossout-price" value="{{ item.price|number_format(2, '.', '') }}" />
-                                                        {% set sum_crossout_purchase_price = sum_crossout_purchase_price + (item.price) %}
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                        <td class="td-price td-border-right" style="width:104px;">
-                                            <input type="text" name="product[{{ item.id }}][crossout][date][]" class="input-text datepicker input-table-datepicker" value="{% if date[key] is defined %}{{ date[key] }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}" />
-                                        </td>
-                                        <td class="title-tr txt-left td-border-right" style="width:404px;">
-                                            <select name="product[{{ item.id }}][crossout][product_id][]" class="js-product-crossout" style="width: 350px;">
-                                                <option value="{{ item.id }}">{{ item.product.title }}</option>
-                                            </select>
-                                            <span class="glyphicon glyphicon-search"></span>
-                                        </td>
-                                        <td style="width:36px;">
-                                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
+                            {% for i in 0..(item.qty-1) %}
+                                {% set count = count + 1 %}
+                                <tr>
+                                    <td class="title-tr txt-left td-border-right plus-cursor" style="width:269px;">
+                                        {{ item.product.title }}
+                                        <input type="hidden" name="product[{{ item.id }}][product_id]"
+                                               value="{{ item.product.id }}"/>
+                                    </td>
+                                    <td class="td-border-right" style="width:88px;">
+                                        1
+                                        {% set sum_qty = sum_qty + 1 %}
+                                    </td>
+                                    {#<td class="td-price">#}
+                                    {#{{ item.product.priceByn|number_format(2, '.', '') }}#}
+                                    {#{% set sum_purchase_price_byn = sum_purchase_price_byn + item.product.priceByn %}#}
+                                    {#</td>#}
+                                    <td class="td-price td-border-right" style="width:85px;">
+                                        {{ item.price|number_format(2, '.', '') }}
+                                        {% set sum_purchase_price = sum_purchase_price + item.price %}
+                                    </td>
+                                    <td colspan="5" class="td-border-right td-table-container">
+                                        <table class="sub-table-crossout">
+                                            <tr>
+                                                <td class="td-price td-border-right" style="width:85px;">
+                                                    <span class="purchase-price">{{ item.product.priceByn|number_format(2, '.', '') }}</span>
+                                                    {% set sum_crossout_purchase_price_byn = sum_crossout_purchase_price_byn + item.product.priceByn %}
+                                                </td>
+                                                <td class="td-price td-border-right" style="width:164px;padding-left:0">
+                                                    <table class="sub-table-crossout-price" border="0">
+                                                        <tr>
+                                                            <td class="td-total-crossout-purchase-price"
+                                                                style="width: 80px;">
+                                                                {{ item.price|number_format(2, '.', '') }}
+                                                            </td>
+                                                            <td class="td-crossout-price" style="width: 80px;">
+                                                                <input type="text"
+                                                                       name="product[{{ item.id }}][crossout][price][]"
+                                                                       class="input-text crossout-price"
+                                                                       value="{{ item.price|number_format(2, '.', '') }}"/>
+                                                                {% set sum_crossout_purchase_price = sum_crossout_purchase_price + (item.price) %}
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                                <td class="td-price td-border-right" style="width:104px;">
+                                                    <input type="text" name="product[{{ item.id }}][crossout][date][]"
+                                                           class="input-text datepicker input-table-datepicker"
+                                                           value="{% if date[key] is defined %}{{ date[key] }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"/>
+                                                </td>
+                                                <td class="title-tr txt-left td-border-right" style="width:404px;">
+                                                    <select name="product[{{ item.id }}][crossout][product_id][]"
+                                                            class="js-product-crossout" style="width: 350px;">
+                                                        <option value="{{ item.id }}">{{ item.product.title }}</option>
+                                                    </select>
+                                                    <span class="glyphicon glyphicon-search"></span>
+                                                </td>
+                                                <td style="width:36px;">
+                                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                        <tr>
+                            <td class="align-right">Итого:</td>
+                            {#<td>{{ sum_purchase_price_byn|number_format(2, '.', '') }}</td>#}
+                            <td>{{ sum_qty|number_format(0, '.', '') }}</td>
+                            <td>{{ sum_purchase_price|number_format(2, '.', '') }}</td>
+                            <td>{{ sum_crossout_purchase_price_byn|number_format(2, '.', '') }}</td>
+                            <td class="charge-price-sum">{{ sum_crossout_purchase_price|number_format(2, '.', '') }}</td>
+                            <td></td>
+                            <td></td>
+                            <td class="td-border-right"></td>
                         </tr>
-                    {% endfor %}
-                    <tr>
-                        <td class="align-right">Итого:</td>
-                        {#<td>{{ sum_purchase_price_byn|number_format(2, '.', '') }}</td>#}
-                        <td>{{ sum_qty|number_format(0, '.', '') }}</td>
-                        <td>{{ sum_purchase_price|number_format(2, '.', '') }}</td>
-                        <td>{{ sum_crossout_purchase_price_byn|number_format(2, '.', '') }}</td>
-                        <td class="charge-price-sum">{{ sum_crossout_purchase_price|number_format(2, '.', '') }}</td>
-                        <td></td>
-                        <td></td>
-                        <td class="td-border-right"></td>
-                    </tr>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
 
                     <div class="text-right">
                         <a href="{{ path('app_product_sale_index') }}">
@@ -215,22 +225,22 @@
             initCrossoutRow();
 
 
-        function openSearhForm() {
-            var already_changed = [];
-            var selects = $('.js-product-crossout');
-            for (var i = 0; i < selects.length; i++) {
-                already_changed.push(selects[i].value);
+            function openSearhForm() {
+                var already_changed = [];
+                var selects = $('.js-product-crossout');
+                for (var i = 0; i < selects.length; i++) {
+                    already_changed.push(selects[i].value);
+                }
+                $("#dialog-form").html(loading);
+                $.ajax({
+                    url: "{{ path('app_not_crossout_list') }}",
+                    method: "GET",
+                    success: function (response) {
+                        $("#dialog-form").html(response);
+                    },
+                    data: {alreadyChanged: already_changed}
+                });
             }
-            $("#dialog-form").html(loading);
-            $.ajax({
-                url: "{{ path('app_not_crossout_list') }}",
-                method: "GET",
-                success: function (response) {
-                    $("#dialog-form").html(response);
-                },
-                data: {alreadyChanged:already_changed}
-            });
-        }
 
             var dialog = $("#dialog-form").dialog({
                 autoOpen: false,
@@ -333,7 +343,7 @@
                     });
 
                     $(this).closest('.td-table-container').find('input.input-text.crossout-price').each(function () {
-                       totalBlock = totalBlock + $(this).val() * 1;
+                        totalBlock = totalBlock + $(this).val() * 1;
                     });
 
 
@@ -343,7 +353,6 @@
             }
 
             autoSumEvent()
-
 
 
         });
