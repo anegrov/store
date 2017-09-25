@@ -683,6 +683,7 @@
                 form.attr('action', url);
                 form.append('<input type="hidden" name="export" value="step1" />');
                 form.submit();
+                jQuery(this).closest('form').attr('action', '{{ path("app") }}');
             });
 
             jQuery(function () {
