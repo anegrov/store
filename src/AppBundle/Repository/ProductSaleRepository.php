@@ -651,6 +651,30 @@ class ProductSaleRepository extends \Doctrine\ORM\EntityRepository
         return $result;
     }
 
+    public function findSaleStatsByMonth($terms)
+    {
+        $date = new \DateTime();
+        $qb = $this->createQueryBuilder('ps')
+            ->select('SUM(ps.priceUsd*ps.qty) AS total_price,
+                            SUM(ps.qty) AS total_qty,
+                            SUM(ps.price*ps.qty) AS total_price_byn,
+                            YEAR(ps.date) AS year,
+                            MONTH(ps.date) AS month')
+            ->where('YEAR(ps.date) = :cur_year')
+            ->setParameter('cur_year', $date->format('Y'))
+
+            ->groupBy('year, month');
+
+        $tmp = $qb->getQuery()->getResult();
+        $result = [];
+        foreach ($tmp as $item) {
+            $result[$item['month']] = $item;
+        }
+
+        return $result;
+    }
+
+
     /**
      * findStatsByMounth
      *
