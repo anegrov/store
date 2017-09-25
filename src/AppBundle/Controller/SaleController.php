@@ -252,11 +252,6 @@ class SaleController extends Controller
             }
 
 
-
-
-
-
-
             //date
             $dateSale = \DateTime::createFromFormat('d-m-Y', $date[$key]);
             $productSale->setDate($dateSale);
@@ -371,13 +366,19 @@ class SaleController extends Controller
 
         $repository = $em->getRepository('AppBundle:Provider');
         $providers = $repository->findAll();
+        $flag = null;
+        $ids = [];
+        if (!$alreadyChanged) {
+        
+                $strIds = $request->cookies->get('not-crossout-checked-ids', "");
+                $ids = array_diff(explode(',', $strIds), ['']);
 
 
-            $strIds = $request->cookies->get('not-crossout-checked-ids', "");
+        } else {
+            $flag = 1;
+            $strIds = $request->cookies->get('not-crossout-checked-ids-popup', "");
             $ids = array_diff(explode(',', $strIds), ['']);
-
-
-
+        }
 
         return $this->render('AppBundle:sale:not_crossout.html.twig', [
             'items' => $pagination,
@@ -386,7 +387,8 @@ class SaleController extends Controller
             'stats' => $stats,
             'total' => $total,
             'rate' => $rate,
-            'ids' => $ids
+            'ids' => $ids,
+            'flag'=>$flag
         ]);
     }
 
