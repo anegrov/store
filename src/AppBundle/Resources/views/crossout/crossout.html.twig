@@ -158,6 +158,14 @@
         $(document).ready(function () {
             const loading = '<img id="img-loading" src="{{ asset('bundles/app/img/loading-07.gif') }}"/>';
 
+            jQuery(document).on("change", ".common-datepicker" ,function(){
+                jQuery(".page-case .table-00 .datepicker").each(function(){
+                    if (!jQuery(this).hasClass(".common-datepicker")) {
+                        jQuery(this).val( jQuery(".common-datepicker").val() );
+                    }
+                });
+            });
+
             function initCrossoutRow() {
                 $(".js-product-crossout").select2({
                     language: "ru",
