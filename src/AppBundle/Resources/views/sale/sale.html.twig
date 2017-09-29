@@ -112,8 +112,10 @@
 
         jQuery("#add-products").on('click', function () {
             jQuery(".table-search .checkbox-style input:checked").closest("tr").each(function(){
+
                 var row = jQuery(this).clone();
-                jQuery("#table-sale").append(row);
+                $(this).remove();
+                jQuery("#table-sale").find('tr:last').before(row);
                 jQuery("#table-sale").find(row).find(".checkbox-style span.checkbox").click();
             });
         });
