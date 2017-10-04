@@ -46,11 +46,13 @@ class ProductStockChecker {
     {
         $repository = $this->em->getRepository('AppBundle:Bunch');
         $productRepository = $this->em->getRepository('AppBundle:ProductStock');
+
+
         foreach ($data as $row=>$values)
         {
             foreach ($values as $col=>$val)
             {
-                if ($row > 2 && $col == 'Наименование')
+                if ($col == 'Наименование')
                 {
                     $result = $repository->findOneByTitle($val);
                     if (!empty($result)) {
@@ -72,6 +74,7 @@ class ProductStockChecker {
                 }
             }
         }
+
         
         return $this->data;
     }

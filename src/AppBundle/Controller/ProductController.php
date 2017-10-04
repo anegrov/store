@@ -65,6 +65,14 @@ class ProductController extends Controller
 
         $productFilter = true;
 
+        $dateStart = false;
+        $dateEnd = false;
+        if (isset($terms['dateFrom'])) {
+            $dateStart = new \DateTime($terms['dateFrom']);
+        }
+        if (isset($terms['dateTo'])) {
+            $dateEnd = new \DateTime($terms['dateTo']);
+        }
         return $this->render('AppBundle:product:main.html.twig', [
             'items' => $pagination,
             'total' => $total,
@@ -72,7 +80,9 @@ class ProductController extends Controller
             'providers' => $providers,
             'ids' => $returnIds,
             'rate' => $rate,
-            'productFilter'=>$productFilter
+            'productFilter' => $productFilter,
+            'start'=>$dateStart,
+            'end'=>$dateEnd
         ]);
     }
 

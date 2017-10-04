@@ -93,10 +93,31 @@ class ImportController extends Controller
             // read excel file uploaded by user
             $excelReader = $this->get(ExcelReader::class);
             $data = $excelReader->read($file);
-            $data = $excelReader->validate($data, $rate, $rateHelper);
+            $newData = [];
+            foreach ($data as $item){
+                if ($item['Количество'] > 1 ){
+                    $a = $item['Количество'];
+
+                    $item['Количество'] = 1;
+                    for ($i =1; $i<=$a; $i++){
+
+                        $newData[]=$item;
+                    }
+
+
+                }else{
+
+                    $newData[] = $item;
+                }
+
+
+            }
+            $newData = $excelReader->validate($newData, $rate, $rateHelper);
+
+
             
             // get USD rate
-            if ( ! ($data = $rateHelper->applyCurrencyToArray('USD', $data, ['Цена, руб.', 'Стоимость, руб.'], ['Цена, $', 'Стоимость, $'])) )
+            if ( ! ($newData = $rateHelper->applyCurrencyToArray('USD', $newData, ['Цена, руб.', 'Стоимость, руб.'], ['Цена, $', 'Стоимость, $'])) )
             {
                 $this->addFlash('notice',
                     array('status' => 'danger', 'message' => $rateHelper->getError())
@@ -131,14 +152,22 @@ class ImportController extends Controller
                     'has_documents' => $has_documents
                 ]);
             }
-           
+
+
+
+
+
+
             $checker = $this->get(ProductStockChecker::class);
-            $checkedData = $checker->check($data);
+            $checkedData = $checker->check($newData);
             $filename = $checker->saveDataToTmpFile($directory);
             $this->container->get('session')->set('excelData', $filename);
             
             $provider = $this->getDoctrine()->getRepository('AppBundle:Provider')
                     ->find($provider_id);
+
+
+
 
             return $this->render('AppBundle:import:step3.html.twig', [
                 'provider' => $provider,
@@ -177,6 +206,8 @@ class ImportController extends Controller
         $checkedData = $checker->loadDataFromTmpFile($filename);
         $checkedDataSlice = array_slice($checkedData['new'], 0, self::LIMIT);
         $count = ceil(count($checkedData['new'])/self::LIMIT);
+
+
 
         return $this->render('AppBundle:import:step4.html.twig', [
             'provider_id' => $provider_id,
