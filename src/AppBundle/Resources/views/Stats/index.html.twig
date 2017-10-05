@@ -8,25 +8,25 @@
         <ul>
             <li>
                 <div class="info-body">
-                    <p>КАССА - <span class="color-blue" style="font-size: 14px;">{{ totalStock.price_byn|number_format(2, '.', '') }} руб.</span>/{{ totalStock.price|number_format(2, '.', '') }} $</p>
+                    <p>КАССА - <span class="color-blue" style="font-size: 14px;">{{ totalStock.price_byn|round(2, 'common')|number_format(2, '.', '') }} руб.</span>/{{ totalStock.price|round(2, 'common')|number_format(2, '.', '') }} $</p>
                     <p>В НАЛИЧИИ - {{ totalStock.qty }} шт.</p>
                 </div>
             </li>
             <li>
                 <div class="info-body">
-                    <p>НЕ СПИСАННЫЕ - <span class="color-blue" style="font-size: 14px;">{{ totalNotCrossout.purchase_price_byn|number_format(2, '.', '') }} руб.</span>/{{ totalNotCrossout.purchase_price|number_format(2, '.', '') }} $</p>
+                    <p>НЕ СПИСАННЫЕ - <span class="color-blue" style="font-size: 14px;">{{ totalNotCrossout.purchase_price_byn|round(2, 'common')|number_format(2, '.', '') }} руб.</span>/{{ totalNotCrossout.purchase_price|round(2, 'common')|number_format(2, '.', '') }} $</p>
                     <p>НЕДОСТАЧА - {{ totalNotCrossout.qty }} шт.</p>
                 </div>
             </li>
             <li>
                 <div class="info-body">
-                    <p>СОБСТВЕННЫЕ СРЕДСТВА - <span id="own_funds">{{ (totalStock.price - involvedFunds)|round(2, 'floor')|number_format(2, '.', '') }}</span> $</p>
+                    <p>СОБСТВЕННЫЕ СРЕДСТВА - <span id="own_funds">{{ (totalStock.price - involvedFunds)|round(2, 'common')|number_format(2, '.', '') }}</span> $</p>
                     <p>ПРИВЛЕЧЕННЫЕ СРЕДСТВА -  <input id="involved_funds" type="text" pattern="\d+(\.\d{2})?" name="involved_funds" value="{{ involvedFunds }}" />$</p>
                 </div>
             </li>
             <li>
                 <div class="info-body">
-                    <p>ПРИБЫЛЬ - <span class="color-blue" style="font-size: 14px;">{{ totalSale.profit_byn|number_format(2, '.', '') }} руб.</span>/{{ totalSale.profit|number_format(2, '.', '') }} $</p>
+                    <p>ПРИБЫЛЬ - <span class="color-blue" style="font-size: 14px;">{{ totalSale.profit_byn|round(2, 'common')|number_format(2, '.', '') }} руб.</span>/{{ totalSale.profit|round(2, 'common')|number_format(2, '.', '') }} $</p>
                     <p>ВСЕГО - {{ totalSale.qty }} шт.</p>
                 </div>
             </li>
@@ -48,7 +48,7 @@
                                 <h4>Текущий месяц</h4>
                             </div>
                             <div class="info-body">
-                                <p>{{ statsSale.cur_mounth_price|number_format(2, '.', '') }}руб/{{ (statsSale.cur_mounth_price/rate)|number_format(2, '.', '') }}$</p>
+                                <p>{{ statsSale.cur_mounth_price|round(2, 'common')|number_format(2, '.', '') }}руб/{{ (statsSale.cur_mounth_price/rate)|round(2, 'common')|number_format(2, '.', '') }}$</p>
                                 <p>{{ statsSale.cur_mounth_qty }}шт</p>
                             </div>
                         </li>
@@ -57,7 +57,7 @@
                                 <h4>Прошлый месяц</h4>
                             </div>
                             <div class="info-body">
-                                <p>{{ statsSale.prev_mounth_price|number_format(2, '.', '') }}руб/{{ (statsSale.prev_mounth_price/rate)|number_format(2, '.', '') }}$</p>
+                                <p>{{ statsSale.prev_mounth_price|round(2, 'common')|number_format(2, '.', '') }}руб/{{ (statsSale.prev_mounth_price/rate)|round(2, 'common')|number_format(2, '.', '') }}$</p>
                                 <p>{{ statsSale.prev_mounth_qty }}шт</p>
                             </div>
                         </li>
@@ -66,7 +66,7 @@
                                 <h4>год</h4>
                             </div>
                             <div class="info-body">
-                                <p>{{ statsSale.cur_year_price_byn|number_format(2, '.', '') }}руб/{{ (statsSale.cur_year_price_byn/rate)|number_format(2, '.', '') }}$</p>
+                                <p>{{ statsSale.cur_year_price_byn|round(2, 'common')|number_format(2, '.', '') }}руб/{{ (statsSale.cur_year_price_byn/rate)|round(2, 'common')|number_format(2, '.', '') }}$</p>
                                 <p>{{ statsSale.cur_year_qty }}шт</p>
                             </div>
                         </li>
@@ -87,7 +87,7 @@
                                 <h4>Текущий месяц</h4>
                             </div>
                             <div class="info-body">
-                                <p>{{ statsCrossout.cur_mounth_price|number_format(2, '.', '') }}руб/{{ (statsCrossout.cur_mounth_price/rate)|number_format(2, '.', '') }}$</p>
+                                <p>{{ statsCrossout.cur_mounth_price|round(2, 'common')|number_format(2, '.', '') }}руб/{{ (statsCrossout.cur_mounth_price/rate)|round(2, 'common')|number_format(2, '.', '') }}$</p>
                                 <p>{{ statsCrossout.cur_mounth_qty }}шт</p>
                             </div>
                         </li>
@@ -96,7 +96,7 @@
                                 <h4>Прошлый месяц</h4>
                             </div>
                             <div class="info-body">
-                                <p>{{ statsCrossout.prev_mounth_price|number_format(2, '.', '') }}руб/{{ (statsCrossout.prev_mounth_price/rate)|number_format(2, '.', '') }}$</p>
+                                <p>{{ statsCrossout.prev_mounth_price|round(2, 'common')|number_format(2, '.', '') }}руб/{{ (statsCrossout.prev_mounth_price/rate)|round(2, 'common')|number_format(2, '.', '') }}$</p>
                                 <p>{{ statsCrossout.prev_mounth_qty }}шт</p>
                             </div>
                         </li>
@@ -105,7 +105,7 @@
                                 <h4>год</h4>
                             </div>
                             <div class="info-body">
-                                <p>{{ statsCrossout.cur_year_price_byn|number_format(2, '.', '') }}руб/{{ (statsCrossout.cur_year_price_byn/rate)|number_format(2, '.', '') }}$</p>
+                                <p>{{ statsCrossout.cur_year_price_byn|round(2, 'common')|number_format(2, '.', '') }}руб/{{ (statsCrossout.cur_year_price_byn/rate)|round(2, 'common')|number_format(2, '.', '') }}$</p>
                                 <p>{{ statsCrossout.cur_year_qty }}шт</p>
                             </div>
                         </li>
@@ -162,31 +162,31 @@
                     {% set total_weeks_stock_qty = 0 %}
                     {% for i in 1..5 %}
                         {% if statsWeeksStock[i] is defined %}
-                            <td colspan="2">{{ statsWeeksStock[i]['total_price_byn']|number_format(2, '.', '') }} руб.</td>
+                            <td colspan="2">{{ statsWeeksStock[i]['total_price_byn']|round(2, 'common')|number_format(2, '.', '') }} руб.</td>
                             {% set total_weeks_stock_byn = total_weeks_stock_byn + statsWeeksStock[i]['total_price_byn'] %}
                             {% set total_weeks_stock_qty = total_weeks_stock_qty + statsWeeksStock[i]['total_qty'] %}
                         {% else %}
                             <td colspan="2">-</td>
                         {% endif %}
                     {% endfor %}
-                    <td class="td-total" colspan="2">{{ total_weeks_stock_byn|number_format(2, '.', '') }} руб.</td>
+                    <td class="td-total" colspan="2">{{ total_weeks_stock_byn|round(2, 'common')|number_format(2, '.', '') }} руб.</td>
                 </tr>
                 <tr>
                     {% set total_weeks_stock = 0 %}
                     {% for i in 1..5 %}
                         {% if statsWeeksStock[i] is defined %}
-                            <td colspan="2">{{ statsWeeksStock[i]['total_price']|number_format(2, '.', '') }} $</td>
+                            <td colspan="2">{{ statsWeeksStock[i]['total_price']|round(2, 'common')|number_format(2, '.', '') }} $</td>
                             {% set total_weeks_stock = total_weeks_stock + statsWeeksStock[i]['total_price'] %}
                         {% else %}
                             <td colspan="2">-</td>
                         {% endif %}
                     {% endfor %}
-                    <td class="td-total" colspan="2">{{ total_weeks_stock|number_format(2, '.', '') }} $</td>
+                    <td class="td-total" colspan="2">{{ total_weeks_stock|round(2, 'common')|number_format(2, '.', '') }} $</td>
                 </tr>
                 <tr>
                     {% for i in 1..5 %}
                         {% if statsWeeksStock[i] is defined %}
-                            <td colspan="2">{{ (statsWeeksStock[i]['total_qty'])|number_format(2, '.', '') }} шт.</td>
+                            <td colspan="2">{{ (statsWeeksStock[i]['total_qty'])|round(2, 'common')|number_format(2, '.', '') }} шт.</td>
                         {% else %}
                             <td colspan="2">-</td>
                         {% endif %}
@@ -244,29 +244,29 @@
                 {% set total_weeks_not_crossout_qty = 0 %}
                 {% for i in 1..5 %}
                     {% if statsWeeksNotCrossout[i] is defined %}
-                        <td colspan="2">{{ statsWeeksNotCrossout[i]['total_price']|number_format(2, '.', '') }} руб.</td>
+                        <td colspan="2">{{ statsWeeksNotCrossout[i]['total_price']|round(2, 'common')|number_format(2, '.', '') }} руб.</td>
                         {% set total_weeks_not_crossout = total_weeks_not_crossout + statsWeeksNotCrossout[i]['total_price'] %}
                         {% set total_weeks_not_crossout_qty = total_weeks_not_crossout_qty + statsWeeksNotCrossout[i]['total_qty'] %}
                     {% else %}
                         <td colspan="2">-</td>
                     {% endif %}
                 {% endfor %}
-                <td class="td-total" colspan="2">{{ total_weeks_not_crossout|number_format(2, '.', '') }} руб.</td>
+                <td class="td-total" colspan="2">{{ total_weeks_not_crossout|round(2, 'common')|number_format(2, '.', '') }} руб.</td>
             </tr>
             <tr>
                 {% for i in 1..5 %}
                     {% if statsWeeksNotCrossout[i] is defined %}
-                        <td colspan="2">{{ (statsWeeksNotCrossout[i]['total_price']/rate)|number_format(2, '.', '') }} $</td>
+                        <td colspan="2">{{ (statsWeeksNotCrossout[i]['total_price']/rate)|round(2, 'common')|number_format(2, '.', '') }} $</td>
                     {% else %}
                         <td colspan="2">-</td>
                     {% endif %}
                 {% endfor %}
-                <td class="td-total" colspan="2">{{ (total_weeks_not_crossout|number_format(2, '.', '')/rate)|number_format(2, '.', '') }} $</td>
+                <td class="td-total" colspan="2">{{ (total_weeks_not_crossout|round(2, 'common')|number_format(2, '.', '')/rate)|round(2, 'common')|number_format(2, '.', '') }} $</td>
             </tr>
             <tr>
                 {% for i in 1..5 %}
                     {% if statsWeeksNotCrossout[i] is defined %}
-                        <td colspan="2">{{ (statsWeeksNotCrossout[i]['total_qty'])|number_format(2, '.', '') }} шт.</td>
+                        <td colspan="2">{{ (statsWeeksNotCrossout[i]['total_qty'])|round(2, 'common')|number_format(2, '.', '') }} шт.</td>
                     {% else %}
                         <td colspan="2">-</td>
                     {% endif %}
@@ -313,7 +313,7 @@
                 <td><h3>Сумма&nbsp;цен&nbsp;закупка<br>руб.</h3></td>
                 {% for i in 1..12 %}
                     {% if statsSaleByMonth[i] is defined %}
-                        <td>{{ statsSaleByMonth[i]['total_price_byn']|number_format(2, '.', '') }}</td>
+                        <td>{{ statsSaleByMonth[i]['total_price_byn']|round(2, 'common')|number_format(2, '.', '') }}</td>
                     {% else %}
                         <td>-</td>
                     {% endif %}
@@ -323,7 +323,7 @@
                 <td><h3>Сумма&nbsp;цен&nbsp;закупка<br>$</h3></td>
                 {% for i in 1..12 %}
                     {% if statsSaleByMonth[i] is defined %}
-                        <td>{{ (statsSaleByMonth[i]['total_price'])|number_format(2, '.', '') }}</td>
+                        <td>{{ (statsSaleByMonth[i]['total_price'])|round(2, 'common')|number_format(2, '.', '') }}</td>
                     {% else %}
                         <td>-</td>
                     {% endif %}
@@ -369,7 +369,7 @@
                 <td><h3>Сумма&nbsp;цен&nbsp;закупка<br>руб.</h3></td>
                 {% for i in 1..12 %}
                     {% if statsCrossoutByMonth[i] is defined %}
-                        <td>{{ statsCrossoutByMonth[i]['total_price_byn']|number_format(2, '.', '') }}</td>
+                        <td>{{ statsCrossoutByMonth[i]['total_price_byn']|round(2, 'common')|number_format(2, '.', '') }}</td>
                     {% else %}
                         <td>-</td>
                     {% endif %}
@@ -379,7 +379,7 @@
                 <td><h3>$</h3></td>
                 {% for i in 1..12 %}
                     {% if statsCrossoutByMonth[i] is defined %}
-                        <td>{{ statsCrossoutByMonth[i]['total_price']|number_format(2, '.', '') }}</td>
+                        <td>{{ statsCrossoutByMonth[i]['total_price']|round(2, 'common')|number_format(2, '.', '') }}</td>
                     {% else %}
                         <td>-</td>
                     {% endif %}
