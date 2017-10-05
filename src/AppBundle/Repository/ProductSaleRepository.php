@@ -614,7 +614,7 @@ class ProductSaleRepository extends \Doctrine\ORM\EntityRepository
             ->innerJoin(ProductStock::class, 'p', 'WITH', 'ps.productId=p.id')
             ->where('p.title LIKE :title')
             ->andWhere('p.documents = 1')
-            ->setParameter('title', $title . '%')
+            ->setParameter('title', '%' . $title . '%')
             ->orderBy('ps.price', 'DESC')
             ->getQuery()
             ->getResult();
