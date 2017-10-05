@@ -263,6 +263,7 @@
             });
 
             $(document).on("click", ".glyphicon-search", function () {
+                $.removeCookie("not-crossout-checked-ids-popup", {path: '/'});
                 dialog.parentTr = $(this).closest("tr");
                 dialog.dialog("open");
                 openSearhForm();
@@ -296,6 +297,8 @@
             });
 
             $(document).on('click', ".check-products", function () {
+                $.removeCookie("not-crossout-checked-ids-popup", {path: '/'});
+
                 var length = $("#dialog-form .checkbox-style input:checked").length;
                 var count = 0;
                 $("#dialog-form .checkbox-style input:checked").each(function () {
