@@ -20,7 +20,7 @@
             </li>
             <li>
                 <div class="info-body">
-                    <p>СОБСТВЕННЫЕ СРЕДСТВА - <span id="own_funds">{{ (totalStock.price - involvedFunds)|number_format(2, '.', '') }}</span> $</p>
+                    <p>СОБСТВЕННЫЕ СРЕДСТВА - <span id="own_funds">{{ (totalStock.price - involvedFunds)|round(2, 'floor')|number_format(2, '.', '') }}</span> $</p>
                     <p>ПРИВЛЕЧЕННЫЕ СРЕДСТВА -  <input id="involved_funds" type="text" pattern="\d+(\.\d{2})?" name="involved_funds" value="{{ involvedFunds }}" />$</p>
                 </div>
             </li>
