@@ -296,7 +296,7 @@
                 return false;
             });
 
-            $(document).on('click', ".check-products", function () {
+            $(document).off('click', ".check-products").on('click', ".check-products", function () {
                 $.removeCookie("not-crossout-checked-ids-popup", {path: '/'});
 
                 var length = $("#dialog-form .checkbox-style input:checked").length;
@@ -308,7 +308,16 @@
 
                     if (length > 1 && count > 0) {
                         // create tr block
-                        $(".js-product-crossout").select2("destroy");
+                        try {
+
+                            $(".js-product-crossout").select2("destroy");
+
+                        } catch (err) {
+
+                         console.log(err);
+
+                        }
+
                         $tr = dialog.parentTr.clone();
                         $tr.find(".purchase-price").html("");
                         $tr.find(".td-price input.crossout-price").val("");
@@ -334,6 +343,7 @@
                     }
                     count++;
                 });
+
 
                 recalcProductTrTable(dialog.parentTr.closest(".sub-table-crossout"));
                 initCrossoutRow();
