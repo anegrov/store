@@ -301,22 +301,11 @@ class SaleController extends Controller
         $productsSale = $this->getDoctrine()->getRepository('AppBundle:ProductSale')
             ->findSimilarNames($name);
 
-        $productsResults = [];
-        foreach ($productsSale as $product) {
-            $data = [
-                'id' => $product->getId(),
-                'text' => $product->getProduct()->getTitle() . ' (' . $product->getPrice() . ' руб.)',
-                'price' => $product->getPrice()
-            ];
-
-            $productsResults[] = $data;
-        }
-
         $results = [
             'results' => [
                 [
                     'text' => 'Продукты',
-                    'children' => $productsResults
+                    'children' => $productsSale
                 ]
             ]
         ];

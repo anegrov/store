@@ -611,13 +611,14 @@ class ProductSaleRepository extends \Doctrine\ORM\EntityRepository
     public function findSimilarNames($title)
     {
         $result = $this->createQueryBuilder('ps')
+            ->select("ps.id, ps.price, CONCAT(p.title, ' (' , ps.price,' руб.)' ) as text, p.priceByn as purchasePriceByn")
             ->innerJoin(ProductStock::class, 'p', 'WITH', 'ps.productId=p.id')
             ->where('p.title LIKE :title')
             ->andWhere('p.documents = 1')
             ->setParameter('title', '%' . $title . '%')
             ->orderBy('ps.price', 'DESC')
             ->getQuery()
-            ->getResult();
+            ->getArrayResult();
 
         return $result;
     }
