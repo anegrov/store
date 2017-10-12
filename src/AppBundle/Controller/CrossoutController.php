@@ -159,13 +159,15 @@ class CrossoutController extends Controller
                 // foreach product which we want replace instead $productSale
                 foreach($item['crossout']['product_id'] as $key=>$productId) {
                     $crossout = new ProductCrossout();
-                    $crossout->setProductSaleId($productSale->getId());
-                    $crossout->setProductSale($productSale);
+
+                    $crossout->setProductSaleCrossoutId($productSale->getId());
+                    $crossout->setProductSaleCrossout($productSale);
 
                     // product which we want replace instead $productSale
                     $product = $repository->find($productId);
-                    $crossout->setProductSaleCrossoutId($product->getId());
-                    $crossout->setProductSaleCrossout($product);
+
+                    $crossout->setProductSaleId($product->getId());
+                    $crossout->setProductSale($product);
 
                     $crossout->setQty($productSale->getQty());
                     $crossout->setPrice($item['crossout']['price'][$key]);

@@ -27,8 +27,8 @@
                             <th class="td-price td-border-right" style="width:86px;">
                                 <h3>Закупка<br>руб.</h3>
                             </th>
-                            <th class="td-price-input td-border-right" style="width:220px;">
-                                <h3>Цена списания<br>руб.</h3>
+                            <th style="width:220px;padding-bottom: 0px;padding-top: 0px;" class="td-price-input td-border-right" style="width:220px;">
+                                <table style="border: 0px; margin-bottom: 0px; text-align: center"><tr style="background-color: #e4e7e8; border-bottom: none; text-align: center"><td ><h3 >Цена списания<br>руб.</h3></td><td style="border-left: 2px solid #c9ced3"><h3>Закупка<br>списываемого<br>руб.</h3></td></tr></table>
                             </th>
                             <th class="td-date-input td-border-right" style="width:104px;">
                                 <h3>Дата списания</h3>
@@ -81,10 +81,10 @@
                                                     <table class="sub-table-crossout-price" border="0">
                                                         <tr>
                                                             <td class="td-total-crossout-purchase-price"
-                                                                style="width: 80px;">
+                                                                style="width: 34px;">
                                                                 {{ item.price|number_format(2, '.', '') }}
                                                             </td>
-                                                            <td class="td-crossout-price" style="width: 80px;">
+                                                            <td class="td-crossout-price" style="width: 15px;">
                                                                 <input type="text" style="margin-top: -2px"
                                                                        name="product[{{ item.id }}][crossout][price][]"
                                                                        class="input-text crossout-price"
@@ -92,7 +92,7 @@
                                                                 {% set sum_crossout_purchase_price = sum_crossout_purchase_price + (item.price) %}
                                                             </td>
                                                             <td class="td-purchase-price"
-                                                                style="width: 80px;">
+                                                                style="width: 80px; ">
                                                                 {{ item.product.priceByn|number_format(2, '.', '') }}
                                                             </td>
                                                         </tr>
@@ -110,7 +110,7 @@
                                                     </select>
                                                     <span class="glyphicon glyphicon-search"></span>
                                                 </td>
-                                                <td style="width:36px;">
+                                                <td style="width:36px; ">
                                                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                                 </td>
                                             </tr>

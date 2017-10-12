@@ -232,6 +232,7 @@
                 for(var i=0;i<curIds.length;i++){
                     query += 'ids[]=' + curIds[i] + '&';
                 }
+                jQuery.removeCookie("not-crossout-checked-ids", { path: '/' });
                 location.href='{{ path('app_crossout') }}' + '?' + query;
                 return false;
             });

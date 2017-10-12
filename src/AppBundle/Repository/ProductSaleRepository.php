@@ -782,4 +782,14 @@ class ProductSaleRepository extends \Doctrine\ORM\EntityRepository
         }
         return $result;
     }
+
+
+    public function getByIds($ids){
+        return $this
+            ->createQueryBuilder('product_sale')
+            ->andWhere('product_sale.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+    }
 }
