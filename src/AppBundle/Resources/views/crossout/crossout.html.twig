@@ -24,11 +24,14 @@
                             <th class="td-price td-border-right" style="width:85px">
                                 <h3>Цена продажи<br>руб.</h3>
                             </th>
-                            <th class="td-price td-border-right" style="width:86px;">
+                            <th class="td-price td-border-right" style="width:83px;">
                                 <h3>Закупка<br>руб.</h3>
                             </th>
-                            <th style="width:220px;padding-bottom: 0px;padding-top: 0px;" class="td-price-input td-border-right" style="width:220px;">
-                                <table style="border: 0px; margin-bottom: 0px; text-align: center"><tr style="background-color: #e4e7e8; border-bottom: none; text-align: center"><td ><h3 >Цена списания<br>руб.</h3></td><td style="border-left: 2px solid #c9ced3"><h3>Закупка<br>списываемого<br>руб.</h3></td></tr></table>
+                            <th class="td-price-input td-border-right" style="width:160px;">
+                                <h3>Цена списания<br>руб.</h3>
+                            </th>
+                            <th class="td-price-input td-border-right" style="width:100px;">
+                                <h3>Закупка<br>списываемого<br>товара<br>руб.</h3>
                             </th>
                             <th class="td-date-input td-border-right" style="width:104px;">
                                 <h3>Дата списания</h3>
@@ -70,36 +73,37 @@
                                         {{ item.price|number_format(2, '.', '') }}
                                         {% set sum_purchase_price = sum_purchase_price + item.price %}
                                     </td>
-                                    <td colspan="5" class="td-border-right td-table-container">
+                                    <td colspan="6" class="td-border-right td-table-container">
                                         <table class="sub-table-crossout">
                                             <tr>
-                                                <td class="td-price td-border-right" style="width:85px;">
+                                                <td class="td-price td-border-right" style="width:84px;">
                                                     <span class="purchase-price">{{ item.product.priceByn|number_format(2, '.', '') }}</span>
                                                     {% set sum_crossout_purchase_price_byn = sum_crossout_purchase_price_byn + item.product.priceByn %}
                                                 </td>
-                                                <td class="td-price td-border-right" style="width:220px;padding-left:10px">
+                                                <td class="td-price td-border-right" style="width:160px;padding-left:10px">
                                                     <table class="sub-table-crossout-price" border="0">
                                                         <tr>
                                                             <td class="td-total-crossout-purchase-price"
-                                                                style="width: 34px;">
+                                                                style="width: 80px;">
                                                                 {{ item.price|number_format(2, '.', '') }}
                                                             </td>
-                                                            <td class="td-crossout-price" style="width: 15px;">
+                                                            <td class="td-crossout-price" style="width: 80px;">
                                                                 <input type="text" style="margin-top: -2px"
                                                                        name="product[{{ item.id }}][crossout][price][]"
                                                                        class="input-text crossout-price"
                                                                        value="{{ item.price|number_format(2, '.', '') }}"/>
                                                                 {% set sum_crossout_purchase_price = sum_crossout_purchase_price + (item.price) %}
                                                             </td>
-                                                            <td class="td-purchase-price"
-                                                                style="width: 80px; ">
-                                                                {{ item.product.priceByn|number_format(2, '.', '') }}
-                                                            </td>
                                                         </tr>
                                                     </table>
                                                 </td>
+
+                                                <td class="td-purchase-price td-border-right"
+                                                    style="width: 101px;">
+                                                    {{ item.product.priceByn|number_format(2, '.', '') }}
+                                                </td>
                                                 <td class="td-price td-border-right" style="width:104px;">
-                                                    <input type="text" name="product[{{ item.id }}][crossout][date][]"
+                                                    <input type="text" name="product[{{ item.id }}][crossout][date][]" style="margin-top: -3px"
                                                            class="input-text datepicker input-table-datepicker"
                                                            value="{% if date[key] is defined %}{{ date[key] }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"/>
                                                 </td>
@@ -110,7 +114,7 @@
                                                     </select>
                                                     <span class="glyphicon glyphicon-search"></span>
                                                 </td>
-                                                <td style="width:36px; ">
+                                                <td style="width:36px;">
                                                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                                 </td>
                                             </tr>
@@ -128,6 +132,7 @@
                             <td>
                             {#количество - {{ sum_qty|number_format(0, '.', '') }}#}
                             </td>
+                            <td></td>
                             <td></td>
                             <td class="td-border-right"></td>
                         </tr>
@@ -317,7 +322,7 @@
 
                         } catch (err) {
 
-                         console.log(err);
+                            console.log(err);
 
                         }
 

@@ -723,9 +723,9 @@ span.glyphicon.glyphicon-minus,
 span.glyphicon.glyphicon-search {
     cursor: pointer;
 }
-.plus-cursor {
-    cursor: url('/bundles/app/img/plus.png'), url('/bundles/app/img/plus.png'), auto;
-}
+/*.plus-cursor {*/
+    /*cursor: url('/bundles/app/img/plus.png'), url('/bundles/app/img/plus.png'), auto;*/
+/*}*/
 .align-right {
     text-align: right;
 }
