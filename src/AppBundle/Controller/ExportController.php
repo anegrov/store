@@ -124,8 +124,8 @@ class ExportController extends Controller
         $objPHPExcel->getActiveSheet()->setCellValue('B'.$rowCount,'Количесвто, шт.');
         $objPHPExcel->getActiveSheet()->setCellValue('C'.$rowCount,'Закупка, руб.');
         $objPHPExcel->getActiveSheet()->setCellValue('D'.$rowCount,'Закупка, $');
-        $objPHPExcel->getActiveSheet()->setCellValue('E'.$rowCount,'Продажа, руб.');
-        $objPHPExcel->getActiveSheet()->setCellValue('F'.$rowCount,'Продажа, $');
+        $objPHPExcel->getActiveSheet()->setCellValue('F'.$rowCount,'Продажа, руб.');
+        $objPHPExcel->getActiveSheet()->setCellValue('E'.$rowCount,'Продажа, $');
         if ($table == 'crossout') {
             $objPHPExcel->getActiveSheet()->setCellValue('G'.$rowCount,'Цена списания, руб.');
             $objPHPExcel->getActiveSheet()->setCellValue('H'.$rowCount,'Дата списания');
@@ -148,8 +148,8 @@ class ExportController extends Controller
             $objPHPExcel->getActiveSheet()->setCellValue('B'.$rowCount, $product->getQty());
             $objPHPExcel->getActiveSheet()->setCellValue('C'.$rowCount, $product->getPurchasePriceByn());
             $objPHPExcel->getActiveSheet()->setCellValue('D'.$rowCount, $product->getPurchasePrice());
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$rowCount, $product->getPrice());
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$rowCount, $product->getPrice()/$rate);
+            $objPHPExcel->getActiveSheet()->setCellValue('E'.$rowCount, round($product->getPrice()/$rate,2));
+            $objPHPExcel->getActiveSheet()->setCellValue('F'.$rowCount, $product->getPrice());
 
             if ($table == 'crossout') {
                 $objPHPExcel->getActiveSheet()->setCellValue('G'.$rowCount, $product->getPrice());
